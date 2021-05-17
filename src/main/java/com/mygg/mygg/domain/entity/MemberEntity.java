@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -47,7 +48,7 @@ public class MemberEntity {
     private int authority = 1;
 
     @Column(length = 100, nullable = true)
-    private String join_date;
+    private LocalDateTime join_date;
 
     @Column(length = 100, nullable = true)
     private String role;
@@ -65,7 +66,11 @@ public class MemberEntity {
         this.location = location;
         this.photo = photo;
         this.authority = 1;
-        this.join_date = join_date;
         this.role =role;
+    }
+
+    @PrePersist
+    public void Join_date() {
+        this.join_date = LocalDateTime.now();
     }
 }
