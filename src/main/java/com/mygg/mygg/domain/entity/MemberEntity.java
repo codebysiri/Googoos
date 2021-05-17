@@ -43,8 +43,8 @@ public class MemberEntity {
     @Column(length = 100, nullable = true)
     private String photo;
 
-    @Column(length = 100, nullable = true)
-    private String authority;
+    @Column(length = 100, nullable = false)
+    private int authority = 1;
 
     @Column(length = 100, nullable = true)
     private String join_date;
@@ -64,7 +64,7 @@ public class MemberEntity {
         this.age = age;
         this.location = location;
         this.photo = photo;
-        this.authority = authority;
+        this.authority = 1;
         this.join_date = join_date;
         this.role =role;
     }

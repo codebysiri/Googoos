@@ -29,6 +29,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
+	compile'org.springframework.boot:spring-boot-starter-validation'
 	compile 'javax.validation:validation-api:2.0.1.Final'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.4'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
