@@ -1,0 +1,111 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="market">
+
+    <insert id="insertService" parameterType="MarketVO">
+	<![CDATA[
+        INSERT
+        INTO MARKET
+        (
+            TYPE
+        , TITLE
+        , CONTENT
+        , REG_DATE
+        , UPDATE_DATE
+        , LOCATION
+        , JM_STATE
+        , PRICE
+        , ID
+        , CATEGORY
+        , RV_STATE
+        , CH_STATE
+        , SV_STATE
+        )
+        VALUES (
+                   #{type}
+               , #{title}
+               , #{content}
+               , NOW()
+               , NOW()
+               , #{location}
+               , #{jmState}
+               , #{price}
+               , #{id}
+               , #{category}
+               , #{rvState}
+               , #{chState}
+               , #{svState}
+               )
+        ]]>
+	</insert>
+    <!--
+    <insert id="dddd" parameterType="MarketVO">
+        <selectKey keyProperty="SERVICE_NO" resultType="Int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    -->
+    <select id="selectMarketList" parameterType="MarketVO" resultType="MarketVO">
+		<![CDATA[
+        SELECT SERVICE_NO
+             , TYPE
+             , TITLE
+             , CONTENT
+             , REG_DATE
+             , UPDATE_DATE
+             , LOCATION
+             , JM_STATE
+             , PRICE
+             , ID
+             , CATEGORY
+             , RV_STATE
+             , CH_STATE
+             , SV_STATE
+        FROM MARKET
+        ]]>
+	</select>
+    <!-- 	 WHERE SERVICE_NO -->
+    <select id="selectServiceDetail" parameterType="MarketVO" resultType="MarketVO">
+		<![CDATA[
+        SELECT SERVICE_NO
+             , TYPE
+             , TITLE
+             , CONTENT
+             , REG_DATE
+             , UPDATE_DATE
+             , LOCATION
+             , JM_STATE
+             , PRICE
+             , ID
+             , CATEGORY
+             , RV_STATE
+             , CH_STATE
+             , SV_STATE
+        FROM MARKET
+        WHERE SERVICE_NO = #{serviceNo}
+        ]]>
+	</select>
+
+    <update id="serviceUpdate" parameterType="MarketVO">
+        UPDATE MARKET
+        SET TYPE = #{type}
+          , TITLE = #{title}
+          , CONTENT = #{content}
+          , LOCATION = #{location}
+          , JM_STATE = #{jmState}
+          , PRICE = #{price}
+          , CATEGORY = #{category}
+          , RV_STATE = #{rvState}
+          , CH_STATE = #{chState}
+          , SV_STATE = #{svState}
+          , UPDATE_DATE = NOW()
+        WHERE SERVICE_NO = #{serviceNo}
+    </update>
+
+    <delete id="serviceDelete" parameterType="MarketVO">
+        DELETE
+        FROM MARKET
+        WHERE SERVICE_NO = #{serviceNo}
+    </delete>
+
+</mapper>

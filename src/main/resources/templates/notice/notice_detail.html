@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/content-styles.css}" type="text/css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <!--  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+    <!--  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>-->
+    <title>Title</title>
+</head>
+<style>
+    .container{
+        display: flex;
+        justify-content: center;
+    }
+    .items{
+        width:1000px;
+        background: silver;
+    }
+    #content{
+        border:1px solid;
+        background: white;
+        padding:20px;
+    }
+</style>
+<body>
+
+<div class="container .ck-content ck-content">
+    <div class="items">
+        <div th:text="${notice.title}"></div>
+        <div th:text="${notice.writer}"></div>
+        <div id="content" th:text="${notice.content}"></div>
+        <div th:text="${#strings.substring(notice.regdate,0,16)}"></div>
+        <div>
+            <input type="button" value="목록" onclick="location.href='/notice'">
+            <input type="button" id="deleteBtn" value="삭제" >
+            <input type="button" id="updateBtn" value="수정">
+        </div>
+    </div>
+</div>
+<script defer>
+    const content = document.getElementById('content');
+    const text = content.innerText;
+    content.innerHTML = text;
+
+    const updateBtn = document.getElementById('updateBtn');
+    updateBtn.addEventListener('click', () => {
+        location.href = '/notice/update/[[${notice.board_id}]]';
+    });
+
+    const deleteBtn = document.getElementById('deleteBtn');
+    deleteBtn.addEventListener('click', () => {
+        $.post("/notice/delete/[[${notice.board_id}]]")
+            .done((data) => {
+                location.href = "/notice";
+            });
+    });
+
+</script>
+</body>
+</html>

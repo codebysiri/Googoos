@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Market List</title>
+    <link rel="stylesheet" th:href="@{/css/content-styles.css}" type="text/css">
+
+    <!-- include libraries(jQuery, bootstrap) -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+</head>
+<body>
+<h2>Market List</h2>
+<a th:href="@{/market/serviceRegistPage}">서비스등록</a>
+<!-- 서비스들이 쭉 나열되는 곳 -->
+
+<table>
+    <!-- th:each 반복처리 marketList에 변수들이 담겨있음. 각 구성요소를 접근할 때 market 변수 사용
+         자식태그들은 market변수를 이용해서 각 요소의 속성에 접근 -->
+    <tr th:each="market : ${marketList}">
+        <td>
+            <!-- 제목누르면 상세보기로 넘어가기 serviceNo를 넘겨주면서 -->
+            제목
+            <a th:href="@{/market/serviceDetail(serviceNo=${market.serviceNo})}"
+               th:text="${market.title}" th:field="*{market.title}">
+            </a>
+        </td>
+        <td th:text="${market.content}">내용</td>
+        <td th:text="${market.type}">타입</td>
+        <td th:text="${market.price}">가격</td>
+        <td th:text="${market.category}">카테고리</td>
+    </tr>
+</table>
+
+</body>
+</html>

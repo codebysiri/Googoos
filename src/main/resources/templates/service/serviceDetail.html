@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ServiceDetail</title>
+
+    <link rel="stylesheet" th:href="@{/css/content-styles.css}" type="text/css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- serviceUpdate에서 입력한 값들이 여기서 보이는것. -->
+<h2>ServiceDetail</h2>
+
+<form id="serviceUpdateForm" th:action="@{/market/serviceUpdate}" th:method="post" th:object="${serviceInfo}">
+    <table>
+        <!-- 객체를 지정해주면 앞에 market.으로 접근하지 않아도 된다. -->
+        <tr>
+            <td th:text="*{title}">제목</td>
+            <td th:text="*{content}">내용</td>
+            <td th:text="*{type}">타입</td>
+            <td th:text="*{price}">가격</td>
+            <td th:text="*{category}" th:filed="*{category}">카테고리</td>
+        </tr>
+    </table>
+    <input type="submit" value="수정">
+    <input type="hidden" th:value="*{serviceNo}" th:field="*{serviceNo}">
+</form>
+<a th:href="@{/}">메인</a>
+<a th:href="@{/market/marketListPage}">마켓 리스트</a>
+<!--
+<script>
+    $('input:checkbox[name="checkbox_name"]').is(":checked") == true
+</script>
+ -->
+</body>
+</html>

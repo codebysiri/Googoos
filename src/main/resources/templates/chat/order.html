@@ -1,0 +1,202 @@
+<!doctype html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+<style>
+    .button{
+        width:20px;
+        height: 10px;
+        background:#DED369;
+        color:#192F01;
+        font-weight: bold;
+        box-shadow: 0px 10px 30px -15px rgba(0,0,0,0.39);
+    }
+    .button:hover{
+        cursor: pointer;
+    }
+    .button_wait{
+        width:20px;
+        height: 10px;
+        background:gray;
+        color:white;
+        font-weight: bold;
+        box-shadow: 0px 10px 30px -15px rgba(0,0,0,0.39);
+    }
+    .chat:hover{
+        cursor: pointer;
+        background: lightseagreen;
+    }
+    .chats{
+        display:flex;
+        justify-content: center;
+    }
+    .chat_items{
+        width:400px;
+    }
+</style>
+<body>
+<div>
+    <input type="text" th:value="${session.userId}" id="user" disabled>
+    <input type="text" th:value="${lists[0].price}"  id="price" disabled>
+    <input type="text" th:value="${lists[0].title}" id="title" disabled>
+
+    <th:block th:if="${lists[0].status == 0 && !session.userId.equals('userB')}">
+        <span class="button" id="request">요청하기</span>
+    </th:block>
+
+    <th:block th:if="${lists[0].status == 1 && !session.userId.equals('userB')}">
+        <span class="button_wait" id="request_wait">요청대기</span>
+    </th:block>
+
+    <th:block th:if="${lists[0].status == 1 && session.userId.equals('userB')}">
+        <span class="button" id="accept">수락하기</span>
+    </th:block>
+
+    <th:block th:if="${lists[0].status == 2 && session.userId.equals('userB')}">
+        <span class="button_wait" id="accept_wait">결제대기</span>
+    </th:block>
+
+    <th:block th:if="${lists[0].status == 2 && !session.userId.equals('userB')}">
+        <span class="button" id="pay">결제하기</span>
+    </th:block>
+
+    <th:block th:if="${lists[0].status == 3}">
+        <span class="button_wait" id="reserved">예약완료</span>
+    </th:block>
+</div>
+
+<div class="chats">
+    <div style="border:1px solid" class="chat_items">
+        <div  th:each="list :${lists}" class="chat">
+            <div th:text="${list.nickname}" class="list"></div>
+            <div th:text="${list.comment}" class="list"></div>
+            <div th:text="${list.regdate}" class="list"></div>
+            <hr style="margin-bottom: 0">
+        </div>
+    </div>
+</div>
+
+<script defer>
+
+    let IMP = window.IMP;
+    IMP.init('imp98956250')
+    if(document.getElementById('pay')){
+        const pay = document.getElementById('pay');
+        pay.addEventListener('click',()=>{
+            const title = document.getElementById('title').value;
+            const price = document.getElementById('price').value;
+            const user = document.getElementById('user').value;
+
+            IMP.request_pay({
+                pg : 'kakao', // version 1.1.0부터 지원.
+                pay_method : 'card',
+                merchant_uid : 'merchant_' + new Date().getTime(),
+                name : title,
+                amount : price,
+                buyer_name : user,
+                m_redirect_url : 'https://localhost:8080/result'
+            }, function(rsp) {
+                if ( rsp.success ) {
+                    var msg = '결제가 완료되었습니다.';
+                    msg += '고유ID : ' + rsp.imp_uid;
+                    msg += '상점 거래ID : ' + rsp.merchant_uid;
+                    msg += '결제 금액 : ' + rsp.paid_amount;
+                    msg += '카드 승인번호 : ' + rsp.apply_num;
+
+                    let json = {status:[[${lists[0].status+1}]]}
+                    let jsonStr = JSON.stringify(json)
+                    console.log(jsonStr);
+
+                    $.ajax({
+                        url: `/test/request`,
+                        method: 'POST',
+                        data : jsonStr,
+                        contentType: "application/json; charset=utf-8",
+                        success : function (res) {
+                            location.reload();
+                        },
+                        error: function (xhr) {
+                            alert("fail");
+                        }
+                    });
+
+
+                } else {
+                    var msg = '결제에 실패하였습니다.';
+                    msg += '에러내용 : ' + rsp.error_msg;
+                }
+                alert(msg);
+            });
+
+        });
+    }
+    let chat = document.querySelectorAll('.chat');
+    console.log(chat);
+    for(part of chat){
+        if(part.innerText.indexOf('userA')){
+            part.style.textAlign = 'right';
+        }else{
+            console.log('ㅈㅉ');
+        }
+        console.log("part",part.innerText);
+    }
+
+    if(document.getElementById('request')){
+        let request = document.getElementById('request')
+        request.addEventListener('click', () => {
+
+            let json = {status:[[${lists[0].status+1}]]}
+            let jsonStr = JSON.stringify(json)
+            console.log(jsonStr);
+
+            $.ajax({
+                url: `/test/request`,
+                method: 'POST',
+                data : jsonStr,
+                contentType: "application/json; charset=utf-8",
+                success : function (res) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert("fail");
+                }
+            });
+        });
+    }
+
+    if(document.getElementById('accept')){
+        let request = document.getElementById('accept')
+        request.addEventListener('click', () => {
+
+            let json = {status:[[${lists[0].status+1}]]}
+            let jsonStr = JSON.stringify(json)
+            console.log(jsonStr);
+
+            $.ajax({
+                url: `/test/request`,
+                method: 'POST',
+                data : jsonStr,
+                contentType: "application/json; charset=utf-8",
+                success : function (res) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert("fail");
+                }
+            });
+        });
+    }
+
+
+
+
+</script>
+</body>
+</html>

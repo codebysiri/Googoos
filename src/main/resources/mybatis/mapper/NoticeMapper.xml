@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mygg.mygg.domain.repository.NoticeRepository">
+
+    <select id="getNotices" resultType="java.util.HashMap" parameterType="Integer">
+        SELECT * FROM noticeBoard ORDER BY board_id DESC LIMIT 20 OFFSET #{board_page};
+    </select>
+
+    <select id="getNotice" resultType="java.util.HashMap" parameterType="int">
+        SELECT * FROM noticeBoard WHERE board_id= #{board_id};
+    </select>
+
+    <insert id="insertNotice" parameterType="java.util.HashMap">
+        INSERT INTO noticeBoard(title,content,writer) VALUES(#{title},#{content},#{writer})
+    </insert>
+
+    <update id="updateNotice" parameterType="java.util.HashMap">
+        UPDATE noticeBoard SET title=#{title},content=#{content} WHERE board_id= #{board_id}
+    </update>
+
+    <delete id="deleteNotice" parameterType="int">
+        DELETE FROM noticeBoard WHERE board_id=#{board_id}
+    </delete>
+
+    <select id="searchNotices" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT * FROM noticeBoard WHERE title LIKE CONCAT('%',#{value},'%') ORDER BY board_id DESC
+    </select>
+
+    <select id="getTotal" resultType="Double">
+        SELECT count(*) AS total FROM noticeBoard
+    </select>
+</mapper>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<style>
+    .table{
+        border:1px solid;
+        width: 1000px;
+    }
+    thead{
+        border-bottom: 1px solid gray;
+    }
+    .notice{
+        border:1px solid;
+    }
+    #search{
+        border:1px solid lightgray;
+    }
+    .container{
+        display: flex;
+        justify-content: center;
+    }
+</style>
+<body>
+
+<div class="serchArea">
+    <input type="text" placeholder="검색어를 입력해주세요"  id="search">
+    <input type="button" value="검색" id="searchBtn">
+</div>
+
+<div class="container">
+    <table class="table" id="table">
+
+        <thead>
+        <tr>
+            <th>No</th>
+            <th style="width:60%;">Title</th>
+            <th>Wrtier</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+
+        <tbody class="tbody" id="tbody">
+        <tr th:each="notice :${notices}" class="notice">
+            <td th:text="${notice.board_id}" ></td>
+            <td  ><a th:href="@{/notice/detail/{id}(id=${notice.board_id})}" th:text="${notice.title}"></a></td>
+            <td th:text="${notice.writer}" ></td>
+            <td th:text="${#strings.substring(notice.regdate,0,10)}" ></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <input type="button" id="write" value="작성">
+</div>
+
+<div class="container">
+    <th:block th:each="num : ${#numbers.sequence(1,totalPage)}">
+        <span>
+          <a th:href="@{/notice/{num}(num=${num})}" th:text="${num}"></a>
+        </span>
+    </th:block>
+</div>
+
+<script>
+    const write_btn = document.getElementById('write');
+    write_btn.addEventListener('click', () => {
+        location.href = '/notice/write';
+    });
+
+    const search = document.getElementById('search');
+    const search_btn = document.getElementById('searchBtn');
+    search_btn.addEventListener('click', searchValue);
+    search.addEventListener('keydown', enterkey);
+
+    function enterkey(){
+        if(window.event.keyCode == 13){
+            searchValue();
+        }
+    }
+
+    function searchValue(){
+        let searchValue = search.value;
+
+        $.post('/notice/search', {value:searchValue})
+            .done((data) =>{
+                let html="";
+                const tbody = document.getElementById('tbody');
+                for(onearr of data){
+                    html = html +'<tr>' +
+                        '<td>'+onearr.board_id+'</td>' +
+                        '<td><a href="/notice/detail/'+onearr.board_id+'">'+onearr.title+'</a></td>' +
+                        '<td>'+onearr.writer+'</td>' +
+                        '<td>'+onearr.regdate.substring(0,10)+'</td>' +
+                        '</tr>';
+                }
+                tbody.innerHTML=html;
+            });
+    }
+</script>
+</body>
+</html>
