@@ -3,14 +3,19 @@ package com.mygg.mygg.controller;
 import com.mygg.mygg.dto.MemberDto;
 import com.mygg.mygg.service.MemberService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @AllArgsConstructor
 public class MemberController {
     private MemberService memberService;
+    private final HttpServletRequest servletRequest;
 
     // 메인 페이지
     @GetMapping("/")
@@ -33,10 +38,8 @@ public class MemberController {
     }
 
     // 로그인 페이지
-    @GetMapping("/user/login")
-    public String dispLogin() {
-        return "/member/login";
-    }
+
+
 
     // 로그인 결과 페이지
     @GetMapping("/user/login/result")
