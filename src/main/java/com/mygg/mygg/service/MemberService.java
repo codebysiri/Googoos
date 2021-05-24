@@ -22,7 +22,9 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class MemberService implements UserDetailsService {
+
     private MemberRepository memberRepository;
+
 
     @Transactional
     public Long joinUser(MemberDto memberDto) {
