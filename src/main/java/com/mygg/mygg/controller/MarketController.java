@@ -29,7 +29,7 @@ public class MarketController {
      * 기능 - 서비스 목록들
      글 등록을 하고 저장까지 완료가 되면 바로 이 화면으로 넘어온다.
      * URL이름 - marketListPage
-     * 화면이름 - marketList.html
+     * 화면이름 - marketListPageList.html
      * Method - public String marketListPage(Model model, HttpServletResponse response, HttpServletRequest request, HttpSession session)
      * Parameter(매개변수 ID/PW , 없으면 N/A)
      - MarketVO marketVO, Model model

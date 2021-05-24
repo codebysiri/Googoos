@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mygg.mygg.mybatis.mapper.MemberMapper">
+
+    <insert id="register">
+        INSERT INTO member (
+                             id
+                           , email
+                           , password
+                           , name
+                           , nickname
+                           , phone_number
+                           , gender
+                           , age
+                           , location
+                           , photo
+                           , authority
+                           , join_date
+                           , role
+                           , createdDate
+                                 } VALUES {
+                                 #{id}
+                           , #{email}
+                           , #{password}
+                           , #{name}
+                           , #{nickname}
+                           , #{phone_number}
+                           , #{gender}
+                           , #{age}
+                           , #{location}
+                           , #{photo}
+                           , #{authority}
+                           , #{photo}
+                           , #{authority}
+                           , #{join_date}
+                           , #{role}
+                           , #{createdDate}
+    </insert>
+
+    <select id="login" resultMap="memberVOResultMap">
+        SELECT
+            *
+        FROM member
+        WHERE email = #{member}
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
+
