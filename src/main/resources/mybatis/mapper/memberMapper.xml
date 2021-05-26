@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.mygg.mygg.mybatis.mapper.MemberMapper">
+<mapper namespace="com.mygg.mygg.dao.MemberDAO">
 
     <insert id="register">
         INSERT INTO member (
@@ -40,19 +40,10 @@
                            , #{createdDate}
     </insert>
 
-    <select id="login" resultMap="memberVOResultMap">
+    <select id="login" parameterType="com.mygg.mygg.dto.LoginDTO" resultType="java.util.HashMap">
         SELECT
             *
         FROM member
-        WHERE email = #{member}
+        WHERE email = #{email}
     </select>
 </mapper>
-
-
-
-
-
-
-
-
-

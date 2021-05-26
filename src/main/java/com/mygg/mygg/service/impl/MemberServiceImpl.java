@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -25,7 +26,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberVO login(LoginDTO loginDTO) throws Exception {
+    public Map<String, String> login(LoginDTO loginDTO) throws Exception {
         return memberDAO.login(loginDTO);
     }
+
 }

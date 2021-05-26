@@ -6,47 +6,47 @@
 </head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
 <style>
-    .container{
-        display: flex;
-        justify-content: center;
-    }
-    .user{
-        background: lavender;
-        border-radius: 10px;
-        width:400px;
-        height:250px;
-    }
+  .container{
+    display: flex;
+    justify-content: center;
+  }
+  .user{
+    background: lavender;
+    border-radius: 10px;
+    width:400px;
+    height:250px;
+  }
 </style>
 <body>
 <div class="container">
-    <div class="user">
-        <div>
-            <input type="text" id="id">
-            <input type="button" id="button" value="버튼">
-        </div>
+  <div class="user">
+    <div>
+      <input type="text" id="id">
+      <input type="button" id="button" value="버튼">
     </div>
+  </div>
 </div>
 <script>
-    let id = document.getElementById('id');
-    let button = document.getElementById('button');
+let id = document.getElementById('id');
+let button = document.getElementById('button');
 
-    button.addEventListener('click', () => {
-        let jsonStr = JSON.stringify({id:id.value});
+button.addEventListener('click', () => {
+  let jsonStr = JSON.stringify({id:id.value});
 
-        $.ajax({
-            url: `/`,
-            method: 'POST',
-            data : jsonStr,
-            contentType: "application/json; charset=utf-8",
-            success : function (res) {
-                location.href = '/test'
-            },
-            error: function (xhr) {
-                alert("fail");
-            }
-        });
+  $.ajax({
+    url: `/`,
+    method: 'POST',
+    data : jsonStr,
+    contentType: "application/json; charset=utf-8",
+    success : function (res) {
+      location.href = '/test'
+    },
+    error: function (xhr) {
+      alert("fail");
+    }
+  });
 
-    });
+});
 </script>
 </body>
 </html>

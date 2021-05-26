@@ -10,35 +10,35 @@ import com.mygg.mygg.vo.MarketVO;
 
 @Repository("marketDAO")
 public class MarketDAO extends AbstractDAO {
-    private static final Logger logger = LoggerFactory.getLogger(MarketDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(MarketDAO.class);
 
-    // 쿼리 "namespace.id", 값
-    // 리스트
-    public List<MarketVO> marketList() throws Exception {
+	// 쿼리 "namespace.id", 값
+	// 리스트
+	public List<MarketVO> marketList() throws Exception {
 
-        @SuppressWarnings("unchecked")
-        List<MarketVO> marketList = (List<MarketVO>) selectList("market.selectMarketList");
+		@SuppressWarnings("unchecked")
+		List<MarketVO> marketList = (List<MarketVO>) selectList("market.selectMarketList");
 
-        return marketList;
-    }
+		return marketList;
+	}
 
-    // 상세보기
-    public MarketVO serviceDetail(int serviceNo) throws Exception {
-        return (MarketVO) select("market.selectServiceDetail", serviceNo);
-    }
+	// 상세보기
+	public MarketVO serviceDetail(int serviceNo) throws Exception {
+		return (MarketVO) select("market.selectServiceDetail", serviceNo);
+	}
 
-    // 등록
-    public int serviceSave(MarketVO marketVO) throws Exception {
-        return (int) insert("market.insertService", marketVO);
-    }
+	// 등록
+	public int serviceSave(MarketVO marketVO) throws Exception {
+		return (int) insert("market.insertService", marketVO);
+	}
 
-    // 수정
-    public int serviceUpdateSave(MarketVO serviceNo) throws Exception {
-        return (int) update("market.serviceUpdate", serviceNo);
-    }
+	// 수정
+	public int serviceUpdateSave(MarketVO serviceNo) throws Exception {
+		return (int) update("market.serviceUpdate", serviceNo);
+	}
 
-    // 삭제
-    public int serviceDelete(MarketVO serviceNo) throws Exception {
-        return (int) delete("market.serviceDelete", serviceNo);
-    }
+	// 삭제
+	public int serviceDelete(MarketVO serviceNo) throws Exception {
+		return (int) delete("market.serviceDelete", serviceNo);
+	}
 }

@@ -9,5 +9,7 @@ public class MyggApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MyggApplication.class, args);
 	}
-
+	
+	
+	
 }

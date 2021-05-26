@@ -1,62 +1,204 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/css/content-styles.css}" type="text/css">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-    <!--  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
-    <!--  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>-->
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/css/content-styles.css}" type="text/css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<!--  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+<!--  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>-->
+  <title>Title</title>
 </head>
 <style>
-    .container{
-        display: flex;
-        justify-content: center;
-    }
-    .items{
-        width:1000px;
-        background: silver;
-    }
-    #content{
-        border:1px solid;
-        background: white;
-        padding:20px;
-    }
+  .container{
+    display: flex;
+    justify-content: center;
+  }
+  .items{
+    width:1000px;
+    background: silver;
+  }
+  #content{
+    border:1px solid;
+    background: white;
+    padding:20px;
+  }
+  .reply_items{
+    padding:20px;
+  }
+  .reply_item{
+    border-bottom:1px solid antiquewhite;
+  }
+  .reply_write, .reply_content{
+    padding:10px;
+  }
+  #replyName{
+    padding:3px 3px 3px 10px;
+  }
+  .reply_date, .reply_delete, .reply_update{
+    padding-left:5px;
+  }
+  .reply_delete, .reply_update{
+    color:#E0475B;
+    cursor: pointer;
+  }
+  .reply_editor{
+    display:none;
+  }
+  .reply_item:hover{
+    transition: all 0.5s;
+    background: lightgray;
+  }
 </style>
 <body>
+<div class="container">
 
-<div class="container .ck-content ck-content">
-    <div class="items">
-        <div th:text="${notice.title}"></div>
-        <div th:text="${notice.writer}"></div>
-        <div id="content" th:text="${notice.content}"></div>
-        <div th:text="${#strings.substring(notice.regdate,0,16)}"></div>
-        <div>
-            <input type="button" value="목록" onclick="location.href='/notice'">
-            <input type="button" id="deleteBtn" value="삭제" >
-            <input type="button" id="updateBtn" value="수정">
-        </div>
+  <div class="items">
+
+    <div th:text="${notice.title}"></div>
+    <div>
+      <span th:text="${notice.writer}"></span>
+      <span th:text="${#strings.substring(notice.regdate,0,16)}"></span>
     </div>
+    <div id="content" th:text="${notice.content}"></div>
+
+    <div class="reply_items">
+
+      <div class="reply_contents" id="replyContents">
+                    <!--          댓글이 들어가는 곳 입니다.          -->
+      </div>
+
+      <div class="reply_write">
+        <input type="text" id="replyText" placeholder="댓글을 입력하세요" style="width:90%; height: 70px;">
+        <input type="button" id="replyBtn" value="작성">
+      </div>
+
+    </div>
+
+    <div>
+      <input type="button" value="목록" onclick="location.href='/notice'">
+      <input type="button" id="deleteBtn" value="삭제" >
+      <input type="button" id="updateBtn" value="수정">
+    </div>
+  </div>
 </div>
 <script defer>
-    const content = document.getElementById('content');
-    const text = content.innerText;
-    content.innerHTML = text;
+  const content = document.getElementById('content');
+  const text = content.innerText;
+  content.innerHTML = text;
 
-    const updateBtn = document.getElementById('updateBtn');
-    updateBtn.addEventListener('click', () => {
-        location.href = '/notice/update/[[${notice.board_id}]]';
-    });
+  const updateBtn = document.getElementById('updateBtn');
+  updateBtn.addEventListener('click', () => {
+    location.href = '/notice/update/[[${notice.board_id}]]';
+  });
 
-    const deleteBtn = document.getElementById('deleteBtn');
-    deleteBtn.addEventListener('click', () => {
-        $.post("/notice/delete/[[${notice.board_id}]]")
+  const deleteBtn = document.getElementById('deleteBtn');
+  deleteBtn.addEventListener('click', () => {
+    $.post("/notice/delete/[[${notice.board_id}]]")
             .done((data) => {
-                location.href = "/notice";
+              location.href = "/notice";
             });
+  });
+
+  const replyBtn = document.getElementById('replyBtn');
+  const replyText = document.getElementById('replyText');
+  replyBtn.addEventListener('click', () => {
+    let value = replyText.value;
+    let valueObj = {content: value, writer_id:'1', board_id:'[[${notice.board_id}]]'};
+    let valueStr = JSON.stringify(valueObj);
+    $.ajax(
+      {
+        type: 'POST'
+        , url: '/notice/insetReply'
+        , contentType: 'application/json; charset=UTF-8'
+        , data: valueStr
+        , success : ()=>{
+          replyText.value="";
+          replyText.focus();
+          getReplies();
+        }
+      });
+  });
+
+  function getReplies(){
+    $.post('/notice/reply/[[${notice.board_id}]]',(replies)=>{
+      let html = "";
+      for(reply of replies){
+        html = html + '<div class="reply_item">' +
+                '<div id="replyName" class="reply_name">' +
+                '<span class="reply_no" style="display:none;">'+ reply.reply_id +'</span>' +
+                '<span class="reply_id">' + reply.nickname + '</span>' +
+                '<span class="reply_date">' + reply.regdate + '</span>' +
+                '<span class="reply_editor">' +
+                '<span class="reply_update">수정</span>' +
+                '<span class="reply_delete">삭제</span>' +
+                '</span>' +
+                '</div>' +
+                '<div id="replyContent" class="reply_content">' +
+                '<span class="reply_message">' + reply.content + '</span>' +
+                '</div>' +
+                '</div>';
+      }
+      const replyItems = document.getElementById('replyContents');
+      replyItems.innerHTML=html;
+
+      editorEvent();
+
     });
+  }
+
+  function editorEvent(){
+    let reply_item = document.querySelectorAll('.reply_item');
+    let reply_editor = document.querySelectorAll('.reply_editor');
+    let reply_update = document.querySelectorAll('.reply_update');
+    let reply_delete = document.querySelectorAll('.reply_delete');
+    let reply_message = document.querySelectorAll('.reply_message');
+    let reply_no = document.querySelectorAll('.reply_no');
+
+
+    for(let i = 0 ; i < reply_item.length ; i++){
+      reply_item[i].addEventListener('mouseover',() => {
+        reply_editor[i].style.display = 'inline';
+      });
+      reply_item[i].addEventListener('mouseout', () => {
+        reply_editor[i].style.display = 'none';
+      });
+
+      reply_update[i].addEventListener('click', () => {
+        reply_message[i].innerHTML = '<input type="text" id="reply_content" style="width:90%; height: 70px" value="' + reply_message[i].innerText + '">' +
+                '<input type="button" value="수정하기" onclick="reply_updateBtn('+reply_no[i].innerHTML+')">';
+      });
+      reply_delete[i].addEventListener('click', () => {
+        reply_deleteBtn(reply_no[i].innerHTML);
+      });
+
+    }
+  }
+
+  function reply_updateBtn(reply_id){
+    let reply_content = document.getElementById('reply_content').value;
+    let jsonObj = {reply_id: reply_id, reply_content: reply_content};
+    let jsonStr = JSON.stringify(jsonObj);
+    $.ajax({
+      type : 'POST'
+      ,url:'/notice/reply/update'
+      ,data: jsonStr
+      , contentType: 'application/json; charset=UTF-8'
+      ,success : () => getReplies()
+   });
+  }
+
+  function reply_deleteBtn(reply_id){
+    console.log(reply_id)
+    $.ajax({
+      type : 'POST'
+      , url:'/notice/reply/delete'
+      , data: reply_id
+      , contentType: 'application/json; charset=UTF-8'
+      ,success : () => getReplies()
+  });
+  }
 
 </script>
 </body>

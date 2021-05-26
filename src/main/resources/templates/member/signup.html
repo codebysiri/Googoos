@@ -9,7 +9,6 @@
 <hr>
 
 <form action="/user/signup" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
     <input type="text" name="email" placeholder="이메일 입력해주세요"><br>
     <input type="password" name="password" placeholder="비밀번호"><br>

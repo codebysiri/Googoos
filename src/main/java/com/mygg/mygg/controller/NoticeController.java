@@ -24,7 +24,7 @@ public class NoticeController {
             model.addAttribute("notices",noticeService.getNotices((board_page-1)*10*2));
             model.addAttribute("totalPage", totalPage);
         }else{
-            board_page = 1;
+           board_page = 1;
             model.addAttribute("notices",noticeService.getNotices((board_page-1)*10*2));
             model.addAttribute("totalPage", totalPage);
         }

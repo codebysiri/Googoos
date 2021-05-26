@@ -1,38 +1,104 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>ServiceDetail</title>
+	<head>
+		<meta charset="UTF-8">
+		<title>ServiceDetail</title>
+		
+  		<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+  		<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+	</head>
+	<body>
+	<!-- serviceUpdate에서 입력한 값들이 여기서 보이는것. -->
+		<h2>ServiceDetail</h2>
+		<form id="serviceUpdateForm" th:action="@{/market/serviceUpdate}" th:object="${serviceInfo}"> 
+			<table border="1">
+				<colgroup>
+					<col width="20%" />
+					<col width="*" />
+					<col width="10%" />
+					<col width="10%" />
+					<col width="30%" />
+				</colgroup>
+				<thead align="center">
+					<tr>
+						<td>제목</td>
+						<td>내용</td>
+						<td>타입</td>
+						<td>가격</td>
+						<td>카테고리</td>
+					</tr>
+				</thead>
+				<!-- 객체를 지정해주면 앞에 market.으로 접근하지 않아도 된다. -->
+				<tbody align="center">
+					<tr>
+						<td th:text="*{title}"></td>
+						<td th:utext="*{content}"></td>
+						<td th:text="*{type}"></td>
+						<td th:text="*{#numbers.formatDecimal(price, 0, 'COMMA', 0, 'POINT')}" align="right"></td>
+						<td th:text="*{category}" th:filed="*{category}"></td>
+					</tr>
+				</tbody>
+			</table>
+			<input type="hidden" th:value="*{serviceNo}" th:field="*{serviceNo}">
+	 	</form> 
+			
+		<!-- <input type="button" id="updateBtn" value="수정" class="serviceUpdate"><br/> -->
+		<!--  th:value="${serviceInfo.serviceNo}" -->
+		<input type="button" id="updateBtn" value="수정" />
+		<input type="button" id="deleteBtn" value="삭제" />
+		<input type="button" id="mainBtn" value="메인" />
+		<input type="button" id="listBtn" value="마켓 리스트" />
 
-    <link rel="stylesheet" th:href="@{/css/content-styles.css}" type="text/css">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-</head>
-<body>
-<!-- serviceUpdate에서 입력한 값들이 여기서 보이는것. -->
-<h2>ServiceDetail</h2>
-
-<form id="serviceUpdateForm" th:action="@{/market/serviceUpdate}" th:method="post" th:object="${serviceInfo}">
-    <table>
-        <!-- 객체를 지정해주면 앞에 market.으로 접근하지 않아도 된다. -->
-        <tr>
-            <td th:text="*{title}">제목</td>
-            <td th:text="*{content}">내용</td>
-            <td th:text="*{type}">타입</td>
-            <td th:text="*{price}">가격</td>
-            <td th:text="*{category}" th:filed="*{category}">카테고리</td>
-        </tr>
-    </table>
-    <input type="submit" value="수정">
-    <input type="hidden" th:value="*{serviceNo}" th:field="*{serviceNo}">
-</form>
-<a th:href="@{/}">메인</a>
-<a th:href="@{/market/marketListPage}">마켓 리스트</a>
-<!--
-<script>
-    $('input:checkbox[name="checkbox_name"]').is(":checked") == true
-</script>
- -->
-</body>
+		<script>
+			$('#updateBtn').on('click', function() {
+				var form = $('#serviceUpdateForm')[0];
+				form.submit();
+			});
+		
+			$('#mainBtn').on('click', function() {
+				location.href = "/";
+			});
+			
+			$('#listBtn').on('click', function() {
+				location.href = "/market/marketListPage";
+			});
+		
+			// 버튼을 딱 누르면 실행을 할거에오
+			$('#deleteBtn').on('click', function() {
+				// 상세보기 해당 번호를 serviceDelete URL로 보낸다.
+ 				var form = $('#serviceUpdateForm')[0];
+ 				var formData = new FormData(form);
+				
+				/**
+				 * url : 전송할 서버 주소
+				 * type : 전송방식 (get/post)
+				 * data : 전송할 데이터 ※ form.serialize() ? >> form 안에 데이터를 json 형태로 변환
+				 * success : 전송 후, 응답이 성공일 경우 수행할 기능 작성 
+				 * error : 전송 후, 응답이 실패일 경우 수행할 기능 작성
+			     */
+				$.ajax({
+					url  : "/market/serviceDelete"
+			      , type : "POST"
+			      , data : formData
+			      , success : function(data) {
+						if(data.returnCnt > 0) {
+							alert("정상적으로 삭제되었습니다.");
+							
+							// 처리가 완료되면 marketList로 이동한다.
+							location.href = "/market/marketListPage";
+						} else {
+							alert("오류가 발생했습니다. 다시 시도해주시기 바랍니다.");
+						}
+					},
+					error : function(xhr, status) {
+						alert("오류가 발생했습니다. :: " + status);
+					},
+					cache : false,
+					contentType : false,
+					processData : false
+				});
+			})
+		</script>
+	</body>
 </html>

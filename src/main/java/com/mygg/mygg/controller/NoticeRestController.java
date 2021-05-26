@@ -33,6 +33,27 @@ public class NoticeRestController {
         return noticeService.searchNotices(searchValue);
     }
 
+    @PostMapping("/notice/reply/{board_id}")
+    public List<Map<String,Object>> getReply(@PathVariable("board_id") int board_id){
+        return noticeService.getReply(board_id);
+    }
+
+    @PostMapping("/notice/insetReply")
+    public int insertReply(@RequestBody Map<String,String> json){
+        System.out.println(json);
+        return noticeService.insertReply(json);
+    }
+
+    @PostMapping("/notice/reply/update")
+    public int updateReply(@RequestBody Map<String,String> json){
+        return noticeService.updateReply(json);
+    }
+
+    @PostMapping("/notice/reply/delete")
+    public int deleteReply(@RequestBody int reply_id){
+        return noticeService.deleteReply(reply_id);
+    }
+
     @PostMapping(value = "/uploadImage", produces = "application/json")
     public JsonObject uploadSummernoteImageFile(@RequestParam("file")MultipartFile multipartFile){
 
@@ -64,4 +85,5 @@ public class NoticeRestController {
 
         return jsonObject;
     }
+
 }
