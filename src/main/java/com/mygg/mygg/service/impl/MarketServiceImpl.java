@@ -3,7 +3,6 @@ package com.mygg.mygg.service.impl;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.mygg.mygg.dao.MarketDAO;
 import com.mygg.mygg.service.MarketService;
 import com.mygg.mygg.vo.MarketVO;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("marketService")
 public class MarketServiceImpl implements MarketService {

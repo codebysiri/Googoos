@@ -10,47 +10,21 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Entity
 @Table(name = "member")
 public class MemberEntity {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+
     private Long id;
-
-    @Column(length = 20, nullable = false)
     private String email;
-
-    @Column(length = 100, nullable = false)
     private String password;
-
-    @Column(length = 100, nullable = false)
     private String name;
-
-    @Column(length = 100, nullable = false)
     private String nickname;
-
-    @Column(length = 100, nullable = false)
     private String phone_number;
-
-    @Column(length = 100, nullable = false)
     private String gender;
-
-    @Column(length = 100, nullable = false)
     private int age;
-
-    @Column(length = 100, nullable = false)
     private String location;
-
-    @Column(length = 100, nullable = true)
     private String photo;
-
-    @Column(length = 100, nullable = false)
     private int authority = 1;
-
-    @Column(length = 100, nullable = true)
     private LocalDateTime join_date;
-
-    @Column(length = 100, nullable = true)
     private String role;
 
     @Builder
