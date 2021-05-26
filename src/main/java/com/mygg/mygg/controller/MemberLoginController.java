@@ -33,36 +33,30 @@ public class MemberLoginController {
     }
 
 
+    // login session
     @PostMapping("/user/login")
     public String loginPOST(LoginDTO dto, HttpServletRequest request) throws Exception {
 
         HttpSession session = request.getSession();
         System.out.println(dto.getEmail());
-        Map<String,String> member_inform = memberService.login(dto);
-        System.out.println(member_inform);
-        if(member_inform.get("email").equals(dto.getEmail()) && member_inform.get("password").equals(dto.getPassword())){
-        session.setAttribute("memberId",member_inform.get("id"));
-            System.out.println("세션이 들어갔습니다");
-            return "member/loginSuccess";
+        Map<String,String> memberInform = memberService.login(dto);
+        System.out.println(memberInform);
+        if(memberInform.get("email").equals(dto.getEmail()) && memberInform.get("password").equals(dto.getPassword())){
+        session.setAttribute("memberId",memberInform.get("id"));
+            System.out.println("세션 생성");
+            return "/member/loginSuccess";
         }else{
             System.out.println("비밀번호가 틀립니다.");
-          return "redirect:/";
+          return "redirect:./";
         }
     }
 
-    // login 처리
-//    @RequestMapping(value = "/loginPost", method = RequestMethod.POST)
-//    public void loginPOST(LoginDTO loginDTO, HttpSession httpSession, Model model) throws Exception {
-//        MemberVO memberVO = memberService.login(loginDTO);
-//
-//        if (memberVO == null || !BCrypt.checkpw(loginDTO.getPassword(), memberVO.getPassword())) {
-//            return;
-//        }
-//
-//        model.addAttribute("member", memberVO);
-//    }
-
-
+    // logout
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpSession session) throws Exception {
+        session.invalidate();
+        return "/member/logout";
+    }
 
 }
 
