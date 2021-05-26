@@ -3,6 +3,7 @@ package com.mygg.mygg.service.impl;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,5 +63,15 @@ public class MarketServiceImpl implements MarketService {
         return marketDAO.serviceDetail(serviceNo);
     }
 
+    // 서비스 삭제하기
+    @Override
+    @Transactional
+    public MarketVO serviceDelete(MarketVO marketVO) throws Exception {
+        // 삭제 건수
+        int returnCnt = marketDAO.serviceDelete(marketVO);
 
+        marketVO.setReturnCnt(returnCnt);
+
+        return marketVO;
+    }
 }

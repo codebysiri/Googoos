@@ -1,10 +1,12 @@
 package com.mygg.mygg.vo;
 
-import java.security.Timestamp;
+
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.sql.Timestamp;
 
 @Getter
 @Setter

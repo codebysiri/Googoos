@@ -2,10 +2,11 @@ package com.mygg.mygg.dao;
 
 import java.util.List;
 
-import com.mygg.mygg.vo.MarketVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
+import com.mygg.mygg.vo.MarketVO;
 
 @Repository("marketDAO")
 public class MarketDAO extends AbstractDAO {
@@ -34,5 +35,10 @@ public class MarketDAO extends AbstractDAO {
     // 수정
     public int serviceUpdateSave(MarketVO serviceNo) throws Exception {
         return (int) update("market.serviceUpdate", serviceNo);
+    }
+
+    // 삭제
+    public int serviceDelete(MarketVO serviceNo) throws Exception {
+        return (int) delete("market.serviceDelete", serviceNo);
     }
 }

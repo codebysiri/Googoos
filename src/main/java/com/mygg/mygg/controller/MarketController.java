@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.mygg.mygg.service.MarketService;
-import com.mygg.mygg.vo.MarketVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -13,7 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.mygg.mygg.service.MarketService;
+import com.mygg.mygg.vo.MarketVO;
 
 @Controller
 @RequestMapping("/market/")
@@ -29,7 +32,7 @@ public class MarketController {
      * 기능 - 서비스 목록들
      글 등록을 하고 저장까지 완료가 되면 바로 이 화면으로 넘어온다.
      * URL이름 - marketListPage
-     * 화면이름 - marketListPageList.html
+     * 화면이름 - marketList.html
      * Method - public String marketListPage(Model model, HttpServletResponse response, HttpServletRequest request, HttpSession session)
      * Parameter(매개변수 ID/PW , 없으면 N/A)
      - MarketVO marketVO, Model model
@@ -88,13 +91,6 @@ public class MarketController {
         logger.info("## serviceSave {} :: " + marketVO.toString());
         logger.info("##################################################");
 
-        // 카테고리 배열
-        String[] categorys= new String[40];
-        for(int i = 0; i < categorys.length; i ++) {
-
-
-        }
-
         return marketService.serviceSave(marketVO);
     }
 
@@ -114,7 +110,7 @@ public class MarketController {
      - serviceNo로 찾아와서 상세보기 해야함.
      */
     @RequestMapping("serviceDetail")
-    public String serviceDetail(@ModelAttribute("serviceNo") MarketVO marketVO, Model model) throws Exception {
+    public String serviceDetail(@ModelAttribute("marketVO") MarketVO marketVO, Model model) throws Exception {
 
         logger.info("##################################################");
         logger.info("## serviceDetail {} :: " + marketVO.toString());
@@ -136,7 +132,7 @@ public class MarketController {
      * 쿼리(DB 작업 insert, select, update, delete)
      */
     @RequestMapping("serviceUpdate")
-    public String serviceUpdate(@ModelAttribute("serviceNo") MarketVO marketVO, Model model) throws Exception {
+    public String serviceUpdate(@ModelAttribute("marketVO") MarketVO marketVO, Model model) throws Exception {
 
         logger.info("##################################################");
         logger.info("## serviceUpdate {} :: " + marketVO.toString());
@@ -163,15 +159,10 @@ public class MarketController {
      */
 
     @RequestMapping("serviceDelete")
-    public String serviceDelete(@ModelAttribute("serviceNo") MarketVO marketVO, Model model) throws Exception{
+    @ResponseBody
+    public MarketVO serviceDelete(MarketVO marketVO) throws Exception{
 
-        return "redirect:/";
+        return marketService.serviceDelete(marketVO);
     }
-
-//	 @RequestMapping(value = "", method=RequestMethod.POST)
-//	 @ResponseBody
-//	 public void Category(@RequestParam(value = "categorys[]") List<String> categorys) {
-//
-//	 }
 
 }
