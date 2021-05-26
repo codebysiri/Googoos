@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
-public class MemberDto {
+public class MemberDTO {
     private Long id;
     private String email;
     private String password;
@@ -21,11 +21,8 @@ public class MemberDto {
     private int age;
     private String location;
     private String photo;
-    private String authority;
-    private String join_date;
+    private int authority = 1;
     private String role;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
 
     public MemberEntity toEntity(){
         return MemberEntity.builder()
@@ -39,14 +36,13 @@ public class MemberDto {
                 .age(age)
                 .location(location)
                 .photo(photo)
-                .authority(authority)
-                .join_date(join_date)
+                .authority("1")
                 .role(role)
                 .build();
     }
 
     @Builder
-    public MemberDto(Long id, String email, String password, String name, String nickname, String phone_number, String gender, int age, String location, String photo, String authority, String join_date, String role) {
+    public MemberDTO(Long id, String email, String password, String name, String nickname, String phone_number, String gender, int age, String location, String photo, String authority, String join_date, String role) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -57,8 +53,7 @@ public class MemberDto {
         this.age = age;
         this.location = location;
         this.photo = photo;
-        this.authority = authority;
-        this.join_date = join_date;
-        this.role =role;
+        this.authority = 1;
+        this.role = role;
     }
 }
