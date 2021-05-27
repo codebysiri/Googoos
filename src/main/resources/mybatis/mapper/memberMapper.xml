@@ -12,7 +12,7 @@
                            , #{gender}, #{age}, #{location}, #{photo}, #{authority}, #{role})
     </insert>
 
-    <select id="login" parameterType="com.mygg.mygg.dto.LoginDTO" resultType="java.util.HashMap">
+    <select id="login" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="java.util.HashMap">
         SELECT
             *
         FROM member
