@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>내정보</title>
@@ -7,5 +7,12 @@
 <body>
 <h1>내정보 확인 페이지입니다.</h1>
 <hr>
+    <h3>
+        <span th:text="${session.nickname}"></span>님의 마이페이지
+    </h3>
+    <h4>
+        활동지역
+    </h4>
+        <span th:text="${session.location}"></span>
 </body>
 </html>

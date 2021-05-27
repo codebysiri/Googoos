@@ -1,7 +1,6 @@
 package com.mygg.mygg.service.impl;
 
 import com.mygg.mygg.dao.MemberDAO;
-import com.mygg.mygg.dto.LoginDTO;
 import com.mygg.mygg.dto.MemberDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,7 @@ public class MemberDAOImpl implements MemberDAO {
     }
 
     @Override
-    public Map<String, String> login(LoginDTO loginDTO) {
+    public Map<String, String> login(MemberDTO memberDTO) {
         return null;
     }
 }
