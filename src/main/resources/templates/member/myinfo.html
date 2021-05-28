@@ -5,14 +5,54 @@
     <title>내정보</title>
 </head>
 <body>
-<h1>내정보 확인 페이지입니다.</h1>
+<h1>
+    <span th:text="${session.nickname}"></span> 님의 마이페이지
+</h1>
 <hr>
-    <h3>
-        <span th:text="${session.nickname}"></span>님의 마이페이지
-    </h3>
-    <h4>
-        활동지역
-    </h4>
-        <span th:text="${session.location}"></span>
+
+<table>
+
+    <thead>
+    <tr> <h3> 기본 정보</h3>
+        <th>프로필 사진</th>
+        <th>닉네임</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <td th:text="${session.photo}"></td>
+        <td th:text="${session.nickname}"> </td>
+    </tr>
+    </tbody>
+
+</table>
+
+<hr>
+
+
+<table>
+
+    <thead>
+    <h3> 활동 내역</h3>
+    <tr>
+        <th>활동 지역</th>
+        <th>레벨</th>
+        <th>활동 카테고리</th>
+        <th>마일리지</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <td th:text="${session.location}"></td>
+        <td th:text="${session.level}"></td>
+        <td > 아직 연동 안함 </td>
+        <td th:text="${session.mileage}"></td>
+    </tr>
+    </tbody>
+
+</table>
+
 </body>
 </html>

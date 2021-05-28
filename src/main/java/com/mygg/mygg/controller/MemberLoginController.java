@@ -38,8 +38,10 @@ public class MemberLoginController {
         // System.out.println(memberInform);
         if(memberInform.get("email").equals(memberDTO.getEmail()) && memberInform.get("password").equals(memberDTO.getPassword())){
             session.setAttribute("memberId", memberInform.get("id"));
+            session.setAttribute("photo", memberInform.get("photo"));
             session.setAttribute("nickname", memberInform.get("nickname"));
             session.setAttribute("location", memberInform.get("location"));
+
             // System.out.println("세션 생성");
             return "/member/loginSuccess";
         }else{
