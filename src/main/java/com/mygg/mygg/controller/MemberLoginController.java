@@ -53,8 +53,12 @@ public class MemberLoginController {
     // logout
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpSession session) throws Exception {
-        session.invalidate();
-        return "/member/logout";
+        if (session.getAttribute("id") != null) {
+            session.invalidate();
+            return "/member/logout";
+        } else {
+            return "/member/denied";
+        }
     }
 
 }
