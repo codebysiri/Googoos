@@ -27,7 +27,7 @@ public class MyPageController {
     public String myPage(MyPageDTO myPageDTO, HttpSession httpSession) throws Exception {
 
         Map<String, String> memberActivity = memberService.activity(myPageDTO);
-
+        //System.out.println(memberActivity);
         if(memberActivity.get("id") != null) {
             httpSession.setAttribute("level", memberActivity.get("level"));
             httpSession.setAttribute("wish", memberActivity.get("wish"));

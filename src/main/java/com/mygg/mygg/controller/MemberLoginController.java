@@ -37,7 +37,7 @@ public class MemberLoginController {
         Map<String,String> memberInform = memberService.login(memberDTO);
         // System.out.println(memberInform);
         if(memberInform.get("email").equals(memberDTO.getEmail()) && memberInform.get("password").equals(memberDTO.getPassword())){
-            session.setAttribute("memberId", memberInform.get("id"));
+            session.setAttribute("id", memberInform.get("id"));
             session.setAttribute("photo", memberInform.get("photo"));
             session.setAttribute("nickname", memberInform.get("nickname"));
             session.setAttribute("location", memberInform.get("location"));

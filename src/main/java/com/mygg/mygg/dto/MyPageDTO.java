@@ -1,5 +1,6 @@
 package com.mygg.mygg.dto;
 
+import com.mygg.mygg.domain.entity.MyPageEntity;
 import lombok.*;
 
 @Getter
@@ -13,6 +14,16 @@ public class MyPageDTO {
     private String wish;
     private String batch;
     private int mileage;
+
+    public MyPageEntity toEntity(){
+        return MyPageEntity.builder()
+                .id(id)
+                .level(level)
+                .wish(wish)
+                .batch(batch)
+                .mileage(mileage)
+                .build();
+    }
 
     @Builder
     public MyPageDTO(Long id, int level, String wish, String batch, int mileage) {
