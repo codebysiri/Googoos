@@ -1,6 +1,6 @@
 package com.mygg.mygg.service.impl;
 
-import com.mygg.mygg.dao.MemberDAO;
+import com.mygg.mygg.domain.repository.MemberRepository;
 import com.mygg.mygg.dto.MemberDTO;
 import com.mygg.mygg.dto.MyPageDTO;
 import com.mygg.mygg.service.MemberService;
@@ -12,25 +12,26 @@ import java.util.Map;
 @Service
 public class MemberServiceImpl implements MemberService {
 
-    private final MemberDAO memberDAO;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Autowired
-    public MemberServiceImpl(MemberDAO memberDAO) {
-        this.memberDAO = memberDAO;
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
     @Override
     public void register(MemberDTO memberDTO) {
-        memberDAO.register(memberDTO);
+        memberRepository.register(memberDTO);
     }
 
     @Override
     public Map<String, String> login(MemberDTO memberDTO) throws Exception {
-        return memberDAO.login(memberDTO);
+        return memberRepository.login(memberDTO);
     }
 
     @Override
     public Map<String, String> activity(MyPageDTO myPageDTO) throws Exception {
-        return memberDAO.activity(myPageDTO);
+        return memberRepository.activity(myPageDTO);
     }
 }

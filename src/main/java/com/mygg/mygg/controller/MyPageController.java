@@ -1,6 +1,5 @@
 package com.mygg.mygg.controller;
 
-import com.mygg.mygg.dto.MemberDTO;
 import com.mygg.mygg.dto.MyPageDTO;
 import com.mygg.mygg.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class MyPageController {
     public String myPage(MyPageDTO myPageDTO, HttpSession httpSession) throws Exception {
 
         Map<String, String> memberActivity = memberService.activity(myPageDTO);
-        //System.out.println(memberActivity);
+
         if(memberActivity.get("id") != null) {
             httpSession.setAttribute("level", memberActivity.get("level"));
             httpSession.setAttribute("wish", memberActivity.get("wish"));

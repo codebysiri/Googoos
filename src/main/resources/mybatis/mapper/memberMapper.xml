@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.mygg.mygg.dao.MemberDAO">
+<mapper namespace="com.mygg.mygg.domain.repository.MemberRepository">
 
     <insert id="register">
         INSERT INTO member (id, email, password, name, nickname, phone_number, gender, age, location
@@ -20,8 +20,8 @@
 
     <select id="activity" parameterType="com.mygg.mygg.dto.MyPageDTO" resultType="java.util.HashMap">
         SELECT *
-        FROM memberActivity ma JOIN member m
-        ON (ma.id = m.id)
-        WHERE ma.id = #{id}
+        FROM member m JOIN memberActivity ma
+        ON (m.id = ma.id)
+        WHERE m.id = #{id}
     </select>
 </mapper>
