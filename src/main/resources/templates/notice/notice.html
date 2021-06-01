@@ -6,37 +6,37 @@
 </head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
 <style>
-.table{
-  border:1px solid;
-  width: 1000px;
-}
-thead{
-  border-bottom: 1px solid gray;
-}
-.notice{
-  border:1px solid;
-}
-.notice:hover{
-  transition: all 0.3s;
-  background:#DED369;
-}
-#search{
-  border:1px solid lightgray;
-}
-.container{
-  display: flex;
-  justify-content: center;
-}
-.noticeCenter{
-  text-align: center;
-}
-.reply_cnt{
-  color:#E0475B;
-  margin:0;
-  padding:0;
-  font-weight: bold;
-  font-size:13px
-}
+  .table{
+    border:1px solid;
+    width: 1000px;
+  }
+  thead{
+    border-bottom: 1px solid gray;
+  }
+  .notice{
+    border:1px solid;
+  }
+  .notice:hover{
+    transition: all 0.3s;
+    background:#DED369;
+  }
+  #search{
+    border:1px solid lightgray;
+  }
+  .container{
+    display: flex;
+    justify-content: center;
+  }
+  .noticeCenter{
+    text-align: center;
+  }
+  .reply_cnt{
+    color:#E0475B;
+    margin:0;
+    padding:0;
+    font-weight: bold;
+    font-size:13px
+  }
 </style>
 <body>
 
@@ -49,30 +49,30 @@ thead{
   <table class="table" id="table">
 
     <thead>
-      <tr>
-        <th>No</th>
-        <th style="width:60%;">Title</th>
-        <th>Wrtier</th>
-        <th>Date</th>
-      </tr>
+    <tr>
+      <th>No</th>
+      <th style="width:60%;">Title</th>
+      <th>Wrtier</th>
+      <th>Date</th>
+    </tr>
     </thead>
 
     <tbody class="tbody" id="tbody">
-      <tr th:each="notice :${notices}" class="notice">
-        <td th:text="${notice.board_id}" class="noticeCenter"></td>
-        <td>
-          <a th:href="@{/notice/detail/{id}(id=${notice.board_id})}" th:text="${notice.title}"></a>
-          <span class="reply_cnt">
+    <tr th:each="notice :${notices}" class="notice">
+      <td th:text="${notice.board_id}" class="noticeCenter"></td>
+      <td>
+        <a th:href="@{/notice/detail/{id}(id=${notice.board_id})}" th:text="${notice.title}"></a>
+        <span class="reply_cnt">
             [<span th:text="${notice.reply_cnt}" class="reply_cnt"></span>]
           </span>
-        </td>
-        <td th:text="${notice.writer}" class="noticeCenter"></td>
-        <td th:text="${#strings.substring(notice.regdate,0,10)}" class="noticeCenter"></td>
-      </tr>
+      </td>
+      <td th:text="${notice.writer}" class="noticeCenter"></td>
+      <td th:text="${#strings.substring(notice.regdate,0,10)}" class="noticeCenter"></td>
+    </tr>
     </tbody>
   </table>
   <div style="text-align: right">
-    <input type="button" id="write" value="작성">
+    <input type="button" id="write" value="작성.">
   </div>
 </div>
 

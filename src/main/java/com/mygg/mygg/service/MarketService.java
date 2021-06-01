@@ -1,6 +1,7 @@
 package com.mygg.mygg.service;
 
 import java.util.List;
+
 import com.mygg.mygg.vo.MarketVO;
 
 public interface MarketService {
@@ -16,5 +17,12 @@ public interface MarketService {
 
 	// 서비스 삭제하기
 	public MarketVO serviceDelete(MarketVO marketVO) throws Exception;
+
+	// 찜 추가
+	public MarketVO serviceJm(MarketVO marketVO) throws Exception;
+
+	public int jmSave(MarketVO marketVO) throws Exception;
+
+	// 장소, 아이디
 
 }

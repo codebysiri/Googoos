@@ -3,6 +3,7 @@ package com.mygg.mygg.service.impl;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +12,10 @@ import org.springframework.stereotype.Service;
 import com.mygg.mygg.dao.MarketDAO;
 import com.mygg.mygg.service.MarketService;
 import com.mygg.mygg.vo.MarketVO;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service("marketService")
 public class MarketServiceImpl implements MarketService {
-	private static final Logger logger = LoggerFactory.getLogger(MarketDAO.class);
+//	private static final Logger logger = LoggerFactory.getLogger(MarketDAO.class);
 
 	// Dao와 연결
 	@Resource(name="marketDAO")
@@ -73,5 +73,30 @@ public class MarketServiceImpl implements MarketService {
 		marketVO.setReturnCnt(returnCnt);
 
 		return marketVO;
+	}
+
+	// 찜하기
+	@Override
+	public MarketVO serviceJm(MarketVO marketVO) throws Exception {
+
+
+		return marketDAO.serviceJm(marketVO);
+	}
+
+	@Override
+	@Transactional
+	public int jmSave(MarketVO marketVO) throws Exception {
+
+		int resultCnt = 0;
+
+		if ("I".equals(marketVO.getGubun())) {
+			resultCnt = marketDAO.insertJm(marketVO);
+		}
+		else if ("D".equals(marketVO.getGubun())) {
+			resultCnt = marketDAO.deleteJm(marketVO);
+		}
+
+		resultCnt += marketDAO.updateJmState(marketVO);
+		return resultCnt;
 	}
 }

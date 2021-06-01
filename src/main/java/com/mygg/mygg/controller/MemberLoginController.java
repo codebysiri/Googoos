@@ -43,10 +43,10 @@ public class MemberLoginController {
             session.setAttribute("location", memberInform.get("location"));
             session.setAttribute("role", memberInform.get("role"));
 
-            // System.out.println("세션 생성");
+            System.out.println("세션 생성");
             return "/member/loginSuccess";
         }else{
-            // System.out.println("비밀번호가 틀립니다.");
+            System.out.println("비밀번호가 틀립니다.");
             return "redirect:./";
         }
     }
@@ -63,4 +63,3 @@ public class MemberLoginController {
     }
 
 }
-

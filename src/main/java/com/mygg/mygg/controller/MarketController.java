@@ -1,11 +1,15 @@
 package com.mygg.mygg.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mygg.mygg.service.MarketService;
+import com.mygg.mygg.service.MemberService;
 import com.mygg.mygg.vo.MarketVO;
 
 @Controller
@@ -27,6 +32,12 @@ public class MarketController {
 	// URL market/...
 	@Resource(name="marketService")
 	private MarketService marketService;
+	private MemberService memberService;
+
+	@Autowired
+	public MarketController(MemberService memberService) {
+		this.memberService = memberService;
+	}
 
 	/**
 	 * 기능 - 서비스 목록들
@@ -42,7 +53,7 @@ public class MarketController {
 	 - SELECT 컬럼들 FROM MARKET;
 	 */
 	@RequestMapping("marketListPage")
-	public String marketListPage(Model model) throws Exception {
+	public String marketListPage(Model model, HttpServletRequest request) throws Exception {
 
 		List<MarketVO> marketList = marketService.marketList();
 
@@ -60,9 +71,20 @@ public class MarketController {
 	 * 	- N/A
 	 * return type(void, String, ServiceVO)
 	 * 쿼리(DB 작업 insert, select, update, delete)
+	 * @throws Exception
 	 */
 	@GetMapping("serviceRegistPage")
-	public String serviceRegistPage() {
+	public String serviceRegistPage(Model model, HttpServletRequest request) throws Exception {
+
+		/*
+		 * HttpSession session = request.getSession();
+		 *
+		 * Object member = session.getAttribute("memberId");
+		 *
+		 * marketService.memberId(member);
+		 *
+		 * System.out.println(member);
+		 */
 
 		return "service/serviceRegist";
 	}
@@ -85,11 +107,12 @@ public class MarketController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="serviceSave")
-	public MarketVO serviceSave(MarketVO marketVO) throws Exception {
+	public MarketVO serviceSave(MarketVO marketVO, HttpServletRequest request) throws Exception {
 
 		logger.info("##################################################");
 		logger.info("## serviceSave {} :: " + marketVO.toString());
 		logger.info("##################################################");
+
 
 		return marketService.serviceSave(marketVO);
 	}
@@ -115,6 +138,7 @@ public class MarketController {
 		logger.info("##################################################");
 		logger.info("## serviceDetail {} :: " + marketVO.toString());
 		logger.info("##################################################");
+
 		// serviceInfo는 serviceNo(글 번호)를 대표로 해당 번호의 글내용들을 다 가져와서 담겨진다.
 		MarketVO serviceInfo = marketService.serviceDetail(marketVO.getServiceNo());
 
@@ -132,13 +156,13 @@ public class MarketController {
 	 * 쿼리(DB 작업 insert, select, update, delete)
 	 */
 	@RequestMapping("serviceUpdate")
-	public String serviceUpdate(@ModelAttribute("marketVO") MarketVO marketVO, Model model) throws Exception {
+	public String serviceUpdate(@ModelAttribute("marketVO") MarketVO marketVO, Model model, HttpSession session) throws Exception {
 
 		logger.info("##################################################");
 		logger.info("## serviceUpdate {} :: " + marketVO.toString());
 		logger.info("##################################################");
 
-		// serviceNo를 가져와서 serviceInfo에 담는다.
+		// pk serviceNo로 전체값을 다 가져와서 serviceInf에 담는다.
 		MarketVO serviceInfo = marketService.serviceDetail(marketVO.getServiceNo());
 
 		model.addAttribute("serviceInfo", serviceInfo);
@@ -160,9 +184,32 @@ public class MarketController {
 
 	@RequestMapping("serviceDelete")
 	@ResponseBody
-	public MarketVO serviceDelete(MarketVO marketVO) throws Exception{
+	public MarketVO serviceDelete(MarketVO marketVO, HttpSession session) throws Exception{
 
 		return marketService.serviceDelete(marketVO);
 	}
 
+	/**
+	 * 기능 - 찜 기능 테이블 (jmstate)
+	 사용자 ID는 JM_ID 서비스 번호는 JM_SERVICE
+	 세션있는 회원들만이 찜하기 버튼이 보여진다.
+	 찜버튼을 누르면 찜 jmstate 테이블에 insert JM_ID, JM_SERVICE
+	 다시 누르면 찜취소가 된다 jmstate 테이블에 delete
+	 찜하기 버튼을 누르면 디비  jm_State에 +1씩 된다
+	 찜은 게시물 하나에서 한 사람당 1번만 할 수 있음.
+	 * URL이름 - serviceJm
+	 * Method - public String serviceJm
+	 * Parameter(매개변수 ID/PW , 없으면 N/A)
+	 - @ModelAttribute("serviceNo") MarketVO marketVO, Model model
+	 * return type(void, String, ServiceVO)
+	 * 쿼리(DB 작업 insert, select, update, delete)
+	 - INSERT INTO JMSTATE (JM_ID, JM_SERVICE) VALUES (#{jmId}, #{jmService})
+	 - DELETE FROM JMSTATE WHERE JM_ID = #{jmId}
+	 */
+
+	@RequestMapping("jmSave")
+	@ResponseBody
+	public int jmSave(MarketVO marketVO) throws Exception{
+		return marketService.jmSave(marketVO);
+	}
 }

@@ -110,22 +110,22 @@
                     msg += '결제 금액 : ' + rsp.paid_amount;
                     msg += '카드 승인번호 : ' + rsp.apply_num;
 
-                            let json = {status:[[${lists[0].status+1}]]}
-                            let jsonStr = JSON.stringify(json)
-                            console.log(jsonStr);
+                    let json = {status:[[${lists[0].status+1}]]}
+                    let jsonStr = JSON.stringify(json)
+                    console.log(jsonStr);
 
-                            $.ajax({
-                                url: `/test/request`,
-                                method: 'POST',
-                                data : jsonStr,
-                                contentType: "application/json; charset=utf-8",
-                                success : function (res) {
-                                    location.reload();
-                                },
-                                error: function (xhr) {
-                                    alert("fail");
-                                }
-                            });
+                    $.ajax({
+                        url: `/test/request`,
+                        method: 'POST',
+                        data : jsonStr,
+                        contentType: "application/json; charset=utf-8",
+                        success : function (res) {
+                            location.reload();
+                        },
+                        error: function (xhr) {
+                            alert("fail");
+                        }
+                    });
 
 
                 } else {
@@ -152,9 +152,9 @@
         let request = document.getElementById('request')
         request.addEventListener('click', () => {
 
-        let json = {status:[[${lists[0].status+1}]]}
-        let jsonStr = JSON.stringify(json)
-        console.log(jsonStr);
+            let json = {status:[[${lists[0].status+1}]]}
+            let jsonStr = JSON.stringify(json)
+            console.log(jsonStr);
 
             $.ajax({
                 url: `/test/request`,

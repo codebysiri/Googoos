@@ -1,104 +1,190 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
 <mapper namespace="market">
 
 	<insert id="insertService" parameterType="MarketVO">
 	<![CDATA[
-		INSERT 
-		  INTO MARKET
-			   (
-			    TYPE
-			  , TITLE
-			  , CONTENT
-			  , REG_DATE
-			  , UPDATE_DATE
-			  , LOCATION
-			  , JM_STATE
-			  , PRICE
-			  , ID
-			  , CATEGORY
-			  , RV_STATE
-			  , CH_STATE
-			  , SV_STATE
-			 )
+		INSERT
+		INTO MARKET
+		(
+			TYPE
+		, TITLE
+		, CONTENT
+		, REG_DATE
+		, LOCATION
+		, JM_STATE
+		, PRICE
+		, ID
+		, CATEGORY
+		, RV_STATE
+		, CH_STATE
+		, SV_STATE
+		)
 		VALUES (
-			    #{type}
-			  , #{title}
-			  , #{content}
-			  , NOW()
-			  , NOW()
-			  , #{location}
-			  , #{jmState}
-			  , #{price}
-			  , #{id}
-			  , #{category}
-			  , #{rvState}
-			  , #{chState}
-			  , #{svState}
-			 )
-	]]>
+				   #{type}
+			   , #{title}
+			   , #{content}
+			   , NOW()
+			   , #{location}
+			   , #{jmState}
+			   , #{price}
+			   , #{id}
+			   , #{category}
+			   , #{rvState}
+			   , #{chState}
+			   , #{svState}
+			   )
+		]]>
 	</insert>
 
+	<!-- 	<insert id="insertJm" parameterType="MarketVO">
+            <![CDATA[
+                INSERT
+                  INTO JMSTATE
+                       (
+                        JM_ID
+                      , JM_SERVICE
+                     )
+                VALUES (
+                        #{jmId}
+                      , #{jmService}
+                     )
+            ]]>
+        </insert>
+
+        <select id="selectJm" parameterType="MarketVO">
+            <![CDATA[
+                SELECT JM_ID
+                     , JM_SERVICE
+                  FROM JMSTATE
+                  WHERE JM_ID = #{jmId}
+            ]]>
+        ㅊㅅ
+        </select> -->
+
 	<select id="selectMarketList" parameterType="MarketVO" resultType="MarketVO">
-		<![CDATA[
-			SELECT SERVICE_NO
-				 , TYPE
-			 	 , TITLE
-			 	 , CONTENT
-				 , REG_DATE
-				 , UPDATE_DATE
-				 , LOCATION
-				 , JM_STATE
-				 , PRICE
-				 , ID
-				 , CATEGORY
-				 , RV_STATE
-				 , CH_STATE
-				 , SV_STATE
-			  FROM MARKET
+	<![CDATA[
+		SELECT M.SERVICE_NO
+			 , CASE M.TYPE
+				   WHEN 0 THEN '구매'
+				   WHEN 1 THEN '판매'
+			END AS TYPE_NM
+			 , M.TITLE
+			 , M.CONTENT
+			 , M.REG_DATE
+			 , M.UPDATE_DATE
+			 , M.LOCATION
+			 , M.JM_STATE
+			 , M.PRICE
+			 , M.ID
+			 , J.JM_ID
+			 , M.CATEGORY
+			 , M.RV_STATE
+			 , M.CH_STATE
+			 , M.SV_STATE
+		FROM MARKET M
+				 LEFT OUTER JOIN JMSTATE J
+								 ON M.ID = J.JM_ID
+									 AND M.SERVICE_NO = J.JM_SERVICE
 		]]>
 	</select>
 
 	<select id="selectServiceDetail" parameterType="MarketVO" resultType="MarketVO">
 		<![CDATA[
-			SELECT SERVICE_NO
-				 , TYPE
-				 , TITLE
-				 , CONTENT
-				 , REG_DATE
-				 , UPDATE_DATE
-				 , LOCATION
-				 , JM_STATE
-				 , PRICE
-				 , ID
-				 , CATEGORY
-				 , RV_STATE
-				 , CH_STATE
-				 , SV_STATE
-		 	  FROM MARKET
-			 WHERE SERVICE_NO = #{serviceNo}
+		SELECT SERVICE_NO
+			 , CASE TYPE
+				   WHEN 0 THEN '구매'
+				   WHEN 1 THEN '판매'
+			END AS TYPE_NM
+			 , TITLE
+			 , CONTENT
+			 , REG_DATE
+			 , UPDATE_DATE
+			 , LOCATION
+			 , JM_STATE
+			 , PRICE
+			 , ID
+			 , CATEGORY
+			 , RV_STATE
+			 , CH_STATE
+			 , SV_STATE
+		FROM MARKET
+			(
+			SELECT *
+		 	  FROM MEMBER ID
+		 	  INNER JOIN MARKET SERVICE_NO
+		 	  ON MEMBER.ID = MARKET.SERVICE_NO
+		 	  )
+		WHERE SERVICE_NO = #{serviceNo}
 		]]>
 	</select>
-	  
+
+	<!-- 	 (
+               SELECT
+               MEMBER.ID,
+               MARKET.SERVICE_NO
+               FROM MEMBER
+               INNER JOIN MARKET
+               ON MEMBER.ID = MARKET.SERVICE_NO
+               )  -->
+
 	<update id="serviceUpdate" parameterType="MarketVO">
 		UPDATE MARKET
-		   SET TYPE = #{type}
-			 , TITLE = #{title}
-			 , CONTENT = #{content}
-			 , LOCATION = #{location}
-			 , JM_STATE = #{jmState}
-			 , PRICE = #{price}
-			 , CATEGORY = #{category}
-			 , RV_STATE = #{rvState}
-			 , CH_STATE = #{chState}
-			 , SV_STATE = #{svState}
-			 , UPDATE_DATE = NOW()
-		 WHERE SERVICE_NO = #{serviceNo}
+		SET TYPE = #{type}
+		  , TITLE = #{title}
+		  , CONTENT = #{content}
+		  , LOCATION = #{location}
+		  , JM_STATE = #{jmState}
+		  , PRICE = #{price}
+		  , CATEGORY = #{category}
+		  , RV_STATE = #{rvState}
+		  , CH_STATE = #{chState}
+		  , SV_STATE = #{svState}
+		  , UPDATE_DATE = NOW()
+		WHERE SERVICE_NO = #{serviceNo}
 	</update>
-	
+
 	<delete id="serviceDelete" parameterType="MarketVO">
-		DELETE 
-		  FROM MARKET
-		 WHERE SERVICE_NO = #{serviceNo}
+		DELETE
+		FROM MARKET
+		WHERE SERVICE_NO = #{serviceNo}
 	</delete>
+
+	<insert id="insertJm" parameterType="MarketVO">
+	<![CDATA[
+		INSERT
+		INTO JMSTATE
+		(
+			JM_ID
+		, JM_SERVICE
+		)
+		VALUES (
+				   #{jmId}
+			   , #{jmService}
+			   )
+		]]>
+	</insert>
+
+	<delete id="deleteJm" parameterType="MarketVO">
+	<![CDATA[
+		DELETE
+		FROM JMSTATE
+		WHERE JM_ID = #{jmId}
+		  AND JM_SERVICE = #{jmService}
+		]]>
+	</delete>
+
+	<update id="updateJmState" parameterType="MarketVO">
+		UPDATE MARKET
+		SET JM_STATE =
+		<choose>
+			<when test='gubun == "I"'>
+				JM_STATE + 1
+			</when>
+			<when test='gubun == "D"'>
+				JM_STATE - 1
+			</when>
+		</choose>
+		WHERE SERVICE_NO = #{jmService}
+	</update>
 </mapper>

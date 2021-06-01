@@ -14,6 +14,6 @@ public interface MemberService {
     Map<String, String> login(MemberDTO memberDTO) throws Exception;
 
     // Activity
-    Map<String, String> activity(MyPageDTO myPageDTO) throws Exception;
+    Map<String, String> activity(int id) throws Exception;
 
 }

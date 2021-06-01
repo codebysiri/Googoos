@@ -1,112 +1,198 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta charset="UTF-8">
-		<title>Market List</title>
-		
-		<!-- include libraries(jQuery, bootstrap) -->
-		<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-		
-		<!-- include summernote css/js -->
-		<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-		<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-	</head>
-	<body>
-		<h2>Market List</h2>
-		<!-- 테이블 크기 조정 화면에 꽉 차게 %로 하면 창 크기를 줄여도 크기에 맞춰서 늘어나고, 줄어든다. -->
-		<table border="1">
-			<colgroup>
-				<col width="3%" />
-				<col width="3%" />
-				<col width="30%" />
-				<col width="*" />
-				<col width="10%" />
-				<col width="15%" />
-				<col width="30%" />
-			</colgroup>
-			<!-- 헤더 제목 부분 -->
-			<thead align="center">
-				<tr>
-					<td>번호</td>
-					<td><input type="checkbox" id="allChk" name="chk" /></td>
-					<td>제목</td>
-					<td>내용</td>
-					<td>타입</td>
-					<td>가격</td>
-					<td>카테고리</td>
-				</tr>
-			</thead>
-			<tbody align="center">
-			<!-- th:each 반복처리 marketList에 변수들이 담겨있음. 각 구성요소를 접근할 때 market 변수 사용 
-				 자식태그들은 market변수를 이용해서 각 요소의 속성에 접근 -->
-				<tr th:each="market : ${marketList}">
-					<!-- 번호 1씩 늘어나는거 -->
-					<td th:text="${marketStat.index + 1}"></td>
-					<td><input type="checkbox" th:id="${market.serviceNo}" name="chk" /></td>
-					<td>
-					<!-- 제목누르면 상세보기로 넘어가기 serviceNo를 넘겨주면서 -->
-					<a th:href="@{/market/serviceDetail(serviceNo=${market.serviceNo})}"
-					   th:text="${market.title}" th:field="*{market.title}">
-					</a>
-					</td>
-					<td th:utext="${market.content}"></td>
-					<td th:text="${market.type}"></td>
-					<!-- <td th:text="${market.price}" align="right"></td> -->
-					<td th:text="*{#numbers.formatDecimal(market.price, 0, 'COMMA', 0, 'POINT')}" align="right"></td>
-					<td th:text="${market.category}"></td>
-				</tr>
-			</tbody>
-		</table>
-		<input type="button" id="registBtn" value="서비스등록" />
-	</body>
-	<script>
-		$('#registBtn').on('click', function() {
-			location.href = "/market/serviceRegistPage";
-		});
-	
-		// 전체 선택, 전체 선택 해제
-		$("#allChk").on("click", function() {
-			// 클릭되었으면
-	        if ($("#allChk").prop("checked")) {
-	            $("input[name=chk]").prop("checked", true);
-	        }
-	      	// 클릭이 안되있으면
-	        else {
-	            $("input[name=chk]").prop("checked", false);
-	        }
-		});
-		
-		$('#summernote').summernote({
-			height : 300, // 에디터 높이
-			minHeight : null, // 최소 높이
-			maxHeight : null, // 최대 높이
-			focus : true, // 에디터 로딩후 포커스를 맞출지 여부
-			lang : "ko-KR", // 한글 설정
-			callbacks : {
-				onImageUpload : function(files, editor, welEditable) {
-					for (let i = files.length - 1; i >= 0; i--) {
-						uploadSummernoteImageFile(files[i], this);
-					}
+<head>
+	<meta charset="UTF-8">
+	<title>Market List</title>
+
+	<!-- include libraries(jQuery, bootstrap) -->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+	<!-- include summernote css/js -->
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+</head>
+<body>
+<h2>Market List</h2>
+<!-- 테이블 크기 조정 화면에 꽉 차게 %로 하면 창 크기를 줄여도 크기에 맞춰서 늘어나고, 줄어든다. -->
+<table border="1">
+	<colgroup>
+		<col width="3%" />
+		<col width="3%" />
+		<col width="15%" />
+		<col width="*" />
+		<col width="15%" />
+		<col width="5%" />
+		<col width="5%" />
+		<col width="5%" />
+		<col width="10%" />
+		<col width="15%" />
+	</colgroup>
+	<!-- 헤더 제목 부분 -->
+	<thead align="center">
+	<tr>
+		<td>번호</td>
+		<td><input type="checkbox" id="allChk" name="chk" /></td>
+		<td>제목</td>
+		<td>내용</td>
+		<td>날짜</td>
+		<td colspan="2">찜하기</td>
+		<td>타입</td>
+		<td>가격</td>
+		<td>카테고리</td>
+	</tr>
+	</thead>
+	<tbody align="center">
+	<!-- th:each 반복처리 marketList에 변수들이 담겨있음. 각 구성요소를 접근할 때 market 변수 사용
+         자식태그들은 market변수를 이용해서 각 요소의 속성에 접근 -->
+	<tr th:each="market : ${marketList}">
+		<!-- 번호 1씩 늘어나는거 -->
+		<td th:text="${marketStat.index + 1}"></td>
+		<td><input type="checkbox" th:id="${market.serviceNo}" name="chk" /></td>
+		<td>
+			<!-- 제목누르면 상세보기로 넘어가기 serviceNo를 넘겨주면서 -->
+			<a th:href="@{/market/serviceDetail(serviceNo=${market.serviceNo})}"
+			   th:text="${market.title}" th:field="*{market.title}">
+			</a>
+		</td>
+		<td th:utext="${market.content}"></td>
+		<td th:text="${#strings.substring(market.regDate,0,16)}"></td>
+		<td th:text="${market.jmState}"></td>
+		<td>
+			<input th:if="${market.jmId == 0}" type="button" id="jmAddBtn" value="찜하기" th:onclick="jmAdd([[ ${session.id} ]], [[ ${market.serviceNo} ]])"/>
+			<input th:if="${market.jmId != 0}" type="button" id="jmDelBtn" value="찜취소" th:onclick="jmDel([[ ${session.id} ]], [[ ${market.serviceNo} ]])"/>
+		</td>
+		<td th:text="${market.typeNm}"></td>
+		<td th:text="*{#numbers.formatDecimal(market.price, 0, 'COMMA', 0, 'POINT')}" align="right"></td>
+		<td th:text="${market.category}"></td>
+	</tr>
+	</tbody>
+</table>
+<form id="jmForm">
+	<input type="hidden" id="jmId" name="jmId" />
+	<input type="hidden" id="jmService" name="jmService" />
+	<input type="hidden" id="gubun" name="gubun" />
+</form>
+<input type="button" id="registBtn" value="서비스등록" th:if="${session.id != null}"/>
+<input type="button" id="mainBtn" value="메인"/>
+</body>
+<script>
+	$('#registBtn').on('click', function() {
+		/* if(memberId != null && memberId.equals(memberInform.getid())) {
+        } */
+		location.href = "/market/serviceRegistPage";
+	});
+	$('#mainBtn').on('click', function() {
+		location.href = "/";
+	});
+
+	// 		$('#jmBtn').on('click', function() {
+	// 			location.href = "/market/serviceJm";
+	// 			// 한번 더 누르면 찜이 취소되는 기능
+	// 		});
+
+	// 전체 선택, 전체 선택 해제
+	$("#allChk").on("click", function() {
+		// 클릭되었으면
+		if ($("#allChk").prop("checked")) {
+			$("input[name=chk]").prop("checked", true);
+		}
+		// 클릭이 안되있으면
+		else {
+			$("input[name=chk]").prop("checked", false);
+		}
+	});
+
+	$('#summernote').summernote({
+		height : 300, // 에디터 높이
+		minHeight : null, // 최소 높이
+		maxHeight : null, // 최대 높이
+		focus : true, // 에디터 로딩후 포커스를 맞출지 여부
+		lang : "ko-KR", // 한글 설정
+		callbacks : {
+			onImageUpload : function(files, editor, welEditable) {
+				for (let i = files.length - 1; i >= 0; i--) {
+					uploadSummernoteImageFile(files[i], this);
 				}
 			}
-		});
-		
-		function uploadSummernoteImageFile(file, el) {
-			data = new FormData();
-			data.append('file', file);
-			$.ajax({
-				data : data,
-				type : 'POST',
-				url : '/uploadImage',
-				contentType : false,
-				enctype : 'multipart/form-data',
-				processData : false,
-				success : function(data) {
-					$(el).summernote('editor.insertImage', data.url);
-				}
-			});
 		}
-	</script>
+	});
+
+	function uploadSummernoteImageFile(file, el) {
+		data = new FormData();
+		data.append('file', file);
+		$.ajax({
+			data : data,
+			type : 'POST',
+			url : '/uploadImage',
+			contentType : false,
+			enctype : 'multipart/form-data',
+			processData : false,
+			success : function(data) {
+				$(el).summernote('editor.insertImage', data.url);
+			}
+		});
+	}
+
+	function jmAdd(id, serviceNo) {
+		$("#jmId").val(id);
+		$("#jmService").val(serviceNo);
+		$("#gubun").val("I");
+
+		var form = $('#jmForm')[0];
+		var formData = new FormData(form);
+
+		$.ajax({
+			url : "/market/jmSave",
+			type : "post",
+			data : formData,
+			success : function(data) {
+				if (data == 2) {
+					alert("정상적으로 저장되었습니다.");
+					// 처리가 완료되면 marketList로 이동한다.
+					location.href = "/market/marketListPage";
+				} else {
+					console.log("error");
+				}
+			},
+			error : function(xhr, status) {
+				alert("오류가 발생했습니다. :: " + status);
+			},
+			cache : false,
+			contentType : false,
+			processData : false
+		});
+	}
+
+	function jmDel(id, serviceNo) {
+		$("#jmId").val(id);
+		$("#jmService").val(serviceNo);
+		$("#gubun").val("D");
+
+		var form = $('#jmForm')[0];
+		var formData = new FormData(form);
+
+		$.ajax({
+			url : "/market/jmSave",
+			type : "post",
+			data : formData,
+			success : function(data) {
+				if (data == 2) {
+					alert("정상적으로 저장되었습니다.");
+					// 처리가 완료되면 marketList로 이동한다.
+					location.href = "/market/marketListPage";
+				} else {
+					console.log("error");
+				}
+			},
+			error : function(xhr, status) {
+				alert("오류가 발생했습니다. :: " + status);
+			},
+			cache : false,
+			contentType : false,
+			processData : false
+		});
+	}
+</script>
 </html>

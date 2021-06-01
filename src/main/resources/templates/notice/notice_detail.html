@@ -6,8 +6,8 @@
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-<!--  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
-<!--  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>-->
+  <!--  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+  <!--  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>-->
   <title>Title</title>
 </head>
 <style>
@@ -66,12 +66,14 @@
     <div class="reply_items">
 
       <div class="reply_contents" id="replyContents">
-                    <!--          댓글이 들어가는 곳 입니다.          -->
+        <!--          댓글이 들어가는 곳 입니다.          -->
       </div>
 
       <div class="reply_write">
-        <input type="text" id="replyText" placeholder="댓글을 입력하세요" style="width:90%; height: 70px;">
-        <input type="button" id="replyBtn" value="작성">
+        <input type="text" id="replyText" placeholder="댓글을 입력하세요" style="width:90%; height: 70px;" th:if="${session.id != null}">
+        <input type="text" placeholder="로그인 회원만 댓글작성이 가능합니다." style="width:90%; height: 70px;" th:if="${session.id == null}" disabled>
+        <input type="button" id="replyBtn" value="작성" th:if="${session.id != null}">
+        <input type="button" id="replyBtn" value="작성안댐" th:if="${session.id == null}" disabled>
       </div>
 
     </div>
@@ -83,7 +85,7 @@
     </div>
   </div>
 </div>
-<script defer>
+<script defer >
   const content = document.getElementById('content');
   const text = content.innerText;
   content.innerHTML = text;
@@ -108,17 +110,17 @@
     let valueObj = {content: value, writer_id:'1', board_id:'[[${notice.board_id}]]'};
     let valueStr = JSON.stringify(valueObj);
     $.ajax(
-      {
-        type: 'POST'
-        , url: '/notice/insetReply'
-        , contentType: 'application/json; charset=UTF-8'
-        , data: valueStr
-        , success : ()=>{
-          replyText.value="";
-          replyText.focus();
-          getReplies();
-        }
-      });
+            {
+              type: 'POST'
+              , url: '/notice/insetReply'
+              , contentType: 'application/json; charset=UTF-8'
+              , data: valueStr
+              , success : ()=>{
+                replyText.value="";
+                replyText.focus();
+                getReplies();
+              }
+            });
   });
 
   function getReplies(){
@@ -154,6 +156,7 @@
     let reply_update = document.querySelectorAll('.reply_update');
     let reply_delete = document.querySelectorAll('.reply_delete');
     let reply_message = document.querySelectorAll('.reply_message');
+    let reply_id = document.querySelectorAll('.reply_id');
     let reply_no = document.querySelectorAll('.reply_no');
 
 
@@ -167,39 +170,45 @@
 
       reply_update[i].addEventListener('click', () => {
         reply_message[i].innerHTML = '<input type="text" id="reply_content" style="width:90%; height: 70px" value="' + reply_message[i].innerText + '">' +
-                '<input type="button" value="수정하기" onclick="reply_updateBtn('+reply_no[i].innerHTML+')">';
+                '<input type="button" value="수정하기" onclick="reply_updateBtn('+reply_no[i].innerHTML+','+reply_id[i].innerHTML+')">';
       });
       reply_delete[i].addEventListener('click', () => {
-        reply_deleteBtn(reply_no[i].innerHTML);
+        reply_deleteBtn(reply_no[i].innerHTML,reply_id[i].innerHTML);
       });
 
     }
   }
 
-  function reply_updateBtn(reply_id){
-    let reply_content = document.getElementById('reply_content').value;
-    let jsonObj = {reply_id: reply_id, reply_content: reply_content};
-    let jsonStr = JSON.stringify(jsonObj);
-    $.ajax({
-      type : 'POST'
-      ,url:'/notice/reply/update'
-      ,data: jsonStr
-      , contentType: 'application/json; charset=UTF-8'
-      ,success : () => getReplies()
-   });
+  function reply_updateBtn(reply_id,reply_nickname){
+    if('[[${session.nickname}]]' != reply_nickname){
+      alert('작성자만 수정 가능합니다.');
+    }else{
+      let reply_content = document.getElementById('reply_content').value;
+      let jsonObj = {reply_id: reply_id, reply_content: reply_content};
+      let jsonStr = JSON.stringify(jsonObj);
+      $.ajax({
+        type : 'POST'
+        ,url:'/notice/reply/update'
+        ,data: jsonStr
+        , contentType: 'application/json; charset=UTF-8'
+        ,success : () => getReplies()
+      });
+    }
   }
 
-  function reply_deleteBtn(reply_id){
-    console.log(reply_id)
+  function reply_deleteBtn(reply_id,reply_nickname){
+    if('[[${session.nickname}]]')
+      console.log(reply_id)
     $.ajax({
       type : 'POST'
       , url:'/notice/reply/delete'
       , data: reply_id
       , contentType: 'application/json; charset=UTF-8'
       ,success : () => getReplies()
-  });
+    });
   }
 
+  getReplies();
 </script>
 </body>
 </html>

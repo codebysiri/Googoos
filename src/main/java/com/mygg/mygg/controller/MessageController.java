@@ -1,12 +1,13 @@
 package com.mygg.mygg.controller;
 
-import com.mygg.mygg.model.MessageModel;
-import com.mygg.mygg.storage.UserStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.mygg.mygg.model.MessageModel;
+import com.mygg.mygg.storage.UserStorage;
 
 @RestController
 public class MessageController {
