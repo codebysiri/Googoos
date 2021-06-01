@@ -8,9 +8,10 @@
 <h1>메인 페이지</h1>
 <hr>
 <a th:href="@{/member/login}">로그인</a>
-<a th:href="@{/member/logout}">로그아웃</a>
+<a th:href="@{/member/logout}" th:if="${session.id != null}">로그아웃</a>
 <a th:href="@{/member/signup}">회원가입</a>
-<a th:href="@{/member/info}">내정보</a>
+<a th:href="@{/member/info}" th:if="${session.id != null}">내정보</a>
 <a th:href="@{/admin}">어드민</a>
 </body>
 </html>
+

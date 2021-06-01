@@ -10,49 +10,37 @@
 </h1>
 <hr>
 
-<table>
+<h3> 공개 프로필 </h3>
 
-    <thead>
-    <tr> <h3> 기본 정보</h3>
-        <th>프로필 사진</th>
-        <th>닉네임</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <tr>
-        <td th:text="${session.photo}"></td>
-        <td th:text="${session.nickname}"> </td>
-    </tr>
-    </tbody>
-
-</table>
+프로필 사진 : <span th:text="${session.photo}"></span> <br>
+닉네임 : <span th:text="${session.nickname}"></span> <br>
+성별 : <span th:text="${session.gender}"></span> <br>
+연령 : <span th:text="${session.age}"></span> <br>
+별점 평균 : 아직 미연동 <br>
+서비스 리뷰 : 아직 미연동 <br>
+서비스 이력 : 아직 미연동 <br>
+<input type="text" name="information" placeholder="자기소개를 입력해주세요">
 
 <hr>
 
+<h3> 활동 내역 </h3>
 
-<table>
+활동 지역 : <span th:text="${session.location}"></span> <br>
+레벨 : <span th:text="${session.level}"></span> <br>
+마일리지 : <span th:text="${session.mileage}"></span> <br>
+배지 : <span th:text="${session.batch}"></span> <br>
 
-    <thead>
-    <h3> 활동 내역</h3>
-    <tr>
-        <th>활동 지역</th>
-        <th>레벨</th>
-        <th>활동 카테고리</th>
-        <th>마일리지</th>
-    </tr>
-    </thead>
+<hr>
 
-    <tbody>
-    <tr>
-        <td th:text="${session.location}"></td>
-        <td th:text="${session.level}"></td>
-        <td > 아직 연동 안함 </td>
-        <td th:text="${session.mileage}"></td>
-    </tr>
-    </tbody>
+<h3> 나의 작성글 </h3>
 
-</table>
+<hr>
+
+<h3> 진행중인 서비스 </h3>
+
+<hr>
+
+<h3> 나의 찜 </h3>
 
 </body>
 </html>

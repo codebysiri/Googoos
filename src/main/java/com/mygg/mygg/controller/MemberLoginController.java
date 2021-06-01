@@ -40,13 +40,15 @@ public class MemberLoginController {
             session.setAttribute("id", memberInform.get("id"));
             session.setAttribute("photo", memberInform.get("photo"));
             session.setAttribute("nickname", memberInform.get("nickname"));
+            session.setAttribute("gender", memberInform.get("gender"));
+            session.setAttribute("age", memberInform.get("age"));
             session.setAttribute("location", memberInform.get("location"));
             session.setAttribute("role", memberInform.get("role"));
 
-            System.out.println("세션 생성");
+            // System.out.println("세션 생성");
             return "/member/loginSuccess";
         }else{
-            System.out.println("비밀번호가 틀립니다.");
+            // System.out.println("로그인 실패");
             return "redirect:./";
         }
     }
