@@ -51,6 +51,7 @@
 		</div>
 		<!-- value="I" 신규등록 구분하기 위해서 -->
 		<input type="hidden" name="gubun" value="I" />
+		<input type="hidden" name="id" th:value="${session.id}" />
 		<input type="submit" value="저장">
 		<input type="button" id="listBtn" value="마켓리스트" />
 	</form>
