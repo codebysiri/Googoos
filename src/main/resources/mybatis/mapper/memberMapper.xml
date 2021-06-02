@@ -24,4 +24,22 @@
         ON (m.id = ma.id)
         WHERE m.id = #{id}
     </select>
+
+<!--    <insert id="introduction">-->
+<!--        UPDATE INTO memberActivity (level, wish, batch, mileage, introduction)-->
+<!--        VALUES (#{level}, #{wish}, #{batch}, #{mileage}, #{introduction})-->
+<!--        WHERE id = #{id}-->
+<!--    </insert>-->
+
+<!--    <update id="introduction">-->
+<!--        UPDATE memberActivity-->
+<!--        SET introduction = #{introduction}-->
+<!--        WHERE id = #{id}-->
+<!--    </update>-->
+
+    <insert id="introduction">
+        INSERT INTO memberActivity (level, wish, batch, mileage, introduction)
+        VALUES (#{level}, #{wish}, #{batch}, #{mileage}, #{introduction})
+    </insert>
+
 </mapper>

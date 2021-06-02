@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>내정보</title>
+    <script>
+
+        function introduction(url, name) {
+            var options = 'width = 500, height = 500, top = 100, location = no';
+            window.open(url, name, options);
+        }
+
+    </script>
+
 </head>
 <body>
 <h1>
@@ -19,11 +28,11 @@
 별점 평균 : 아직 미연동 <br>
 서비스 리뷰 : 아직 미연동 <br>
 서비스 이력 : 아직 미연동 <br>
-<input type="text" name="information" placeholder="자기소개를 입력해주세요">
+자기 소개 : <a href="javascript:introduction('/member/introduction', 'introduction')"> 입력하기 </a>
 
 <hr>
 
-<h3> 활동 내역 </h3>
+<h3>활동 내역 </h3>
 
 활동 지역 : <span th:text="${session.location}"></span> <br>
 레벨 : <span th:text="${session.level}"></span> <br>

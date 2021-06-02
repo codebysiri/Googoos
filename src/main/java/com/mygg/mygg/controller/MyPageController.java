@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -38,6 +39,19 @@ public class MyPageController {
         } else {
             return "redirect:/member/login";
         }
+    }
+
+    // introduction page
+    @GetMapping("/introduction")
+    public String introductionGET() {
+        return "/member/introduction";
+    }
+
+    // introduction 입력 처리
+    @PostMapping("/introduction")
+    public String introductionPOST(MyPageDTO myPageDTO) {
+        memberService.introduction(myPageDTO);
+        return "/member/introduction";
     }
 
 }
