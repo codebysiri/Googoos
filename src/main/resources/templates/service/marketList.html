@@ -2,111 +2,156 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>ServiceDetail</title>
+	<title>Market List</title>
 
-	<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+	<!-- include libraries(jQuery, bootstrap) -->
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+	<!-- include summernote css/js -->
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 </head>
 <body>
-<!-- serviceUpdate에서 입력한 값들이 여기서 보이는것. -->
-<h2>ServiceDetail</h2>
-<form id="serviceUpdateForm" th:action="@{/market/serviceUpdate}" th:object="${serviceInfo}">
-	<table border="1">
-		<colgroup>
-			<col width="10%" />
-			<col width="5%" />
-			<col width="*" />
-			<col width="10%" />
-			<col width="5%" />
-			<col width="5%" />
-			<col width="5%" />
-			<col width="10%" />
-			<col width="20%" />
-		</colgroup>
-		<thead align="center">
-		<tr>
-			<td>제목</td>
-			<td>작성자</td>
-			<td>내용</td>
-			<td>장소</td>
-			<td>
-				<input type="button" id="jmBtn" value="찜하기" />
-			</td>
-			<td>가격</td>
-			<td>타입</td>
-			<td>날짜</td>
-			<td>카테고리</td>
-		</tr>
-		</thead>
-		<!-- 객체를 지정해주면 앞에 market.으로 접근하지 않아도 된다. -->
-		<tbody align="center">
-		<tr>
-			<td th:text="*{title}"></td>
-			<td>
-				<a th:href="@{/member/info}" th:text="*{nickname}"></a>
-			</td>
-			<td th:utext="*{content}"></td>
-			<td th:text="*{location}"></td>
-			<td th:text="*{jmState}"></td>
-			<td th:text="*{#numbers.formatDecimal(price, 0, 'COMMA', 0, 'POINT')}" align="right"></td>
-			<td th:text="*{typeNm}"></td>
-			<td th:text="*{#strings.substring(regDate,0,16)}"></td>
-			<td th:text="*{category}" th:filed="*{category}"></td>
-		</tr>
-		</tbody>
-	</table>
-	<input type="hidden" th:value="*{serviceNo}" th:field="*{serviceNo}">
+<h2>Market List</h2>
+<!-- 테이블 크기 조정 화면에 꽉 차게 %로 하면 창 크기를 줄여도 크기에 맞춰서 늘어나고, 줄어든다. -->
+<table border="1">
+	<colgroup>
+		<col width="3%" />
+		<col width="3%" />
+		<col width="15%" />
+		<col width="*" />
+		<col width="15%" />
+		<col width="5%" />
+		<col width="5%" />
+		<col width="5%" />
+		<col width="8%" />
+		<col width="10%" />
+	</colgroup>
+	<!-- 헤더 제목 부분 -->
+	<thead align="center">
+	<tr>
+		<td>번호</td>
+		<td><input type="checkbox" id="allChk" name="chk" /></td>
+		<td>제목</td>
+		<td>내용</td>
+		<td>날짜</td>
+		<td colspan="2">찜하기</td>
+		<td>타입</td>
+		<td>가격</td>
+		<td>카테고리</td>
+	</tr>
+	</thead>
+	<tbody align="center">
+	<!-- th:each 반복처리 marketList에 변수들이 담겨있음. 각 구성요소를 접근할 때 market 변수 사용
+         자식태그들은 market변수를 이용해서 각 요소의 속성에 접근 -->
+	<tr th:each="market : ${marketList}">
+		<!-- 번호 1씩 늘어나는거 -->
+		<td th:text="${marketStat.index + 1}"></td>
+		<td><input type="checkbox" th:id="${market.serviceNo}" name="chk" /></td>
+		<td>
+			<!-- 제목누르면 상세보기로 넘어가기 serviceNo를 넘겨주면서 -->
+			<a th:href="@{/market/serviceDetail(serviceNo=${market.serviceNo}, id=${session.id})}"
+			   th:text="${market.title}" th:field="*{market.title}">
+			</a>
+		</td>
+		<td th:utext="${market.content}"></td>
+		<td th:text="${#strings.substring(market.regDate,0,16)}"></td>
+		<td th:text="${market.jmState}"></td>
+		<td>
+			<input th:if="${market.jmId == 0}" type="button" id="jmAddBtn" value="찜하기" th:onclick="jmAdd([[ ${session.id} ]], [[ ${market.serviceNo} ]])"/>
+			<input th:if="${market.jmId != 0}" type="button" id="jmDelBtn" value="찜취소" th:onclick="jmDel([[ ${session.id} ]], [[ ${market.serviceNo} ]])"/>
+		</td>
+		<td th:text="${market.typeNm}"></td>
+		<td th:text="*{#numbers.formatDecimal(market.price, 0, 'COMMA', 0, 'POINT')}" align="right"></td>
+		<td th:text="${market.category}"></td>
+	</tr>
+	</tbody>
+</table>
+<!-- 찜하기 폼 작성자, 글번호, 구분은 I나 D로 -->
+<form id="jmForm">
+	<input type="hidden" id="jmId" name="jmId" />
+	<input type="hidden" id="jmService" name="jmService" />
+	<input type="hidden" id="gubun" name="gubun" />
 </form>
-
-<input type="button" id="updateBtn" value="수정" th:if="${session.id != null}"/>
-<input type="button" id="deleteBtn" value="삭제" th:if="${session.id != null}"/>
-<input type="button" id="mainBtn" value="메인" />
-<input type="button" id="listBtn" value="마켓 리스트" />
-
-<script th:inline="javascript">
-
-	$('#updateBtn').on('click', function() {
-		// memberId가 존재하고, 그 작성자 아이디가 작성한 글의 번호랑 동일할때
-		/* 	if(memberId != null && memberId.equals(serviceInfo.getserviceNo())){ */
-		var form = $('#serviceUpdateForm')[0];
-		form.submit();
-		alert(/*[[${session.id}]]*/);
+<input type="button" id="registBtn" value="서비스등록" th:if="${session.id != null}"/>
+<input type="button" id="mainBtn" value="메인"/>
+</body>
+<script>
+	$('#registBtn').on('click', function() {
+		location.href = "/market/serviceRegistPage";
 	});
-
 	$('#mainBtn').on('click', function() {
 		location.href = "/";
 	});
 
-	$('#listBtn').on('click', function() {
-		location.href = "/market/marketListPage";
+	// 전체 선택, 전체 선택 해제
+	$("#allChk").on("click", function() {
+		// 클릭되었으면
+		if ($("#allChk").prop("checked")) {
+			$("input[name=chk]").prop("checked", true);
+		}
+		// 클릭이 안되있으면
+		else {
+			$("input[name=chk]").prop("checked", false);
+		}
 	});
 
-	// 버튼을 딱 누르면 실행을 할거에오
-	$('#deleteBtn').on('click', function() {
-		// 상세보기 해당 번호를 serviceDelete URL로 보낸다.
-		var form = $('#serviceUpdateForm')[0];
+	$('#summernote').summernote({
+		height : 300, // 에디터 높이
+		minHeight : null, // 최소 높이
+		maxHeight : null, // 최대 높이
+		focus : true, // 에디터 로딩후 포커스를 맞출지 여부
+		lang : "ko-KR", // 한글 설정
+		callbacks : {
+			onImageUpload : function(files, editor, welEditable) {
+				for (let i = files.length - 1; i >= 0; i--) {
+					uploadSummernoteImageFile(files[i], this);
+				}
+			}
+		}
+	});
+
+	function uploadSummernoteImageFile(file, el) {
+		data = new FormData();
+		data.append('file', file);
+		$.ajax({
+			data : data,
+			type : 'POST',
+			url : '/uploadImage',
+			contentType : false,
+			enctype : 'multipart/form-data',
+			processData : false,
+			success : function(data) {
+				$(el).summernote('editor.insertImage', data.url);
+			}
+		});
+	}
+	// 찜하기
+	function jmAdd(id, serviceNo) {
+		// session id를 jmId에 담고
+		$("#jmId").val(id);
+
+		// serviceNo를 jmService에 담고
+		$("#jmService").val(serviceNo);
+		$("#gubun").val("I");
+
+		var form = $('#jmForm')[0];
 		var formData = new FormData(form);
 
-		/**
-		 * url : 전송할 서버 주소
-		 * type : 전송방식 (get/post)
-		 * data : 전송할 데이터 ※ form.serialize() ? >> form 안에 데이터를 json 형태로 변환
-		 * success : 전송 후, 응답이 성공일 경우 수행할 기능 작성
-		 * error : 전송 후, 응답이 실패일 경우 수행할 기능 작성
-		 */
 		$.ajax({
-			url  : "/market/serviceDelete"
-			, type : "POST"
-			, data : formData
-			, success : function(data) {
-				if(data.returnCnt > 0) {
-					alert("정상적으로 삭제되었습니다.");
-
+			url : "/market/jmSave",
+			type : "POST",
+			data : formData,
+			success : function(data) {
+				// 두개의 데이터가 정삭적으로 온다면
+				if (data == 2) {
+					alert("찜하기 완료");
 					// 처리가 완료되면 marketList로 이동한다.
 					location.href = "/market/marketListPage";
 				} else {
-					alert("오류가 발생했습니다. 다시 시도해주시기 바랍니다.");
+					console.log("error");
 				}
 			},
 			error : function(xhr, status) {
@@ -116,7 +161,41 @@
 			contentType : false,
 			processData : false
 		});
-	});
+	}
+
+	// 찜 취소
+	function jmDel(id, serviceNo) {
+		// session id를 jmId에 담고
+		$("#jmId").val(id);
+
+		// serviceNo를 jmService에 담고
+		$("#jmService").val(serviceNo);
+		$("#gubun").val("D");
+
+		var form = $('#jmForm')[0];
+		var formData = new FormData(form);
+
+		$.ajax({
+			url : "/market/jmSave",
+			type : "POST",
+			data : formData,
+			success : function(data) {
+				// 2개 데이터가 정상적으로 삭제되어지면
+				if (data == 2) {
+					alert("찜하기 취소");
+					// 처리가 완료되면 marketList로 이동한다.
+					location.href = "/market/marketListPage";
+				} else {
+					console.log("error");
+				}
+			},
+			error : function(xhr, status) {
+				alert("오류가 발생했습니다. :: " + status);
+			},
+			cache : false,
+			contentType : false,
+			processData : false
+		});
+	}
 </script>
-</body>
 </html>
