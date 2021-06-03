@@ -1,7 +1,5 @@
 package com.mygg.mygg.vo;
 
-
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,8 +12,8 @@ import java.sql.Timestamp;
 public class MarketVO {
 
 	private int serviceNo;			// 서비스번호(찜에 쓰임)
-	private int type;				// 서비스타입(구매 0, 판매 1)
-	private String typeNm;			// 서비스타입(구매, 판매)
+	private int type;				// 서비스타입(숫자)
+	private String typeNm;			// 서비스타입(글자)
 	private String title;			// 제목
 	private String content;			// 내용
 	private String image;			// 사진
@@ -28,6 +26,7 @@ public class MarketVO {
 	private int jmService;			// 서비스 번호 찜
 	private int price;				// 가격
 	private int id;					// 작성자 아이디(찜에도 쓰임)
+	private String nickname;		// 작성자 닉네임(상세보기에서 마이페이지로이동)
 	private String category;		// 카테고리
 	private String[] categorys;		// 카테고리들 담는곳
 	private String rvState;			// 예약상태

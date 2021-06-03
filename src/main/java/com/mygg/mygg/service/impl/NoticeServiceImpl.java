@@ -69,4 +69,6 @@ public class NoticeServiceImpl implements NoticeService {
     public int deleteReply(int reply_id) {
         return noticeRepository.deleteReply(reply_id);
     }
+
+
 }

@@ -11,7 +11,6 @@
 		, TITLE
 		, CONTENT
 		, REG_DATE
-		, LOCATION
 		, JM_STATE
 		, PRICE
 		, ID
@@ -25,7 +24,6 @@
 			   , #{title}
 			   , #{content}
 			   , NOW()
-			   , #{location}
 			   , #{jmState}
 			   , #{price}
 			   , #{id}
@@ -37,103 +35,64 @@
 		]]>
 	</insert>
 
-	<!-- 	<insert id="insertJm" parameterType="MarketVO">
-            <![CDATA[
-                INSERT
-                  INTO JMSTATE
-                       (
-                        JM_ID
-                      , JM_SERVICE
-                     )
-                VALUES (
-                        #{jmId}
-                      , #{jmService}
-                     )
-            ]]>
-        </insert>
-
-        <select id="selectJm" parameterType="MarketVO">
-            <![CDATA[
-                SELECT JM_ID
-                     , JM_SERVICE
-                  FROM JMSTATE
-                  WHERE JM_ID = #{jmId}
-            ]]>
-        ㅊㅅ
-        </select> -->
-
 	<select id="selectMarketList" parameterType="MarketVO" resultType="MarketVO">
 	<![CDATA[
-		SELECT M.SERVICE_NO
-			 , CASE M.TYPE
+		SELECT S.SERVICE_NO
+			 , CASE S.TYPE
 				   WHEN 0 THEN '구매'
 				   WHEN 1 THEN '판매'
 			END AS TYPE_NM
-			 , M.TITLE
-			 , M.CONTENT
-			 , M.REG_DATE
-			 , M.UPDATE_DATE
-			 , M.LOCATION
-			 , M.JM_STATE
-			 , M.PRICE
-			 , M.ID
+			 , S.TITLE
+			 , S.CONTENT
+			 , S.REG_DATE
+			 , S.UPDATE_DATE
+			 , S.JM_STATE
+			 , S.PRICE
+			 , S.ID
 			 , J.JM_ID
-			 , M.CATEGORY
-			 , M.RV_STATE
-			 , M.CH_STATE
-			 , M.SV_STATE
-		FROM MARKET M
+			 , S.CATEGORY
+			 , S.RV_STATE
+			 , S.CH_STATE
+			 , S.SV_STATE
+		FROM MARKET S
 				 LEFT OUTER JOIN JMSTATE J
-								 ON M.ID = J.JM_ID
-									 AND M.SERVICE_NO = J.JM_SERVICE
+								 ON S.ID = J.JM_ID
+									 AND S.SERVICE_NO = J.JM_SERVICE
 		]]>
 	</select>
 
 	<select id="selectServiceDetail" parameterType="MarketVO" resultType="MarketVO">
 		<![CDATA[
-		SELECT SERVICE_NO
-			 , CASE TYPE
+		SELECT S.SERVICE_NO
+			 , CASE S.TYPE
 				   WHEN 0 THEN '구매'
 				   WHEN 1 THEN '판매'
 			END AS TYPE_NM
-			 , TITLE
-			 , CONTENT
-			 , REG_DATE
-			 , UPDATE_DATE
-			 , LOCATION
-			 , JM_STATE
-			 , PRICE
-			 , ID
-			 , CATEGORY
-			 , RV_STATE
-			 , CH_STATE
-			 , SV_STATE
-		FROM MARKET
-			(
-			SELECT *
-		 	  FROM MEMBER ID
-		 	  INNER JOIN MARKET SERVICE_NO
-		 	  ON MEMBER.ID = MARKET.SERVICE_NO
-		 	  )
+			 , S.TITLE
+			 , S.CONTENT
+			 , S.REG_DATE
+			 , S.UPDATE_DATE
+			 , M.LOCATION
+			 , S.JM_STATE
+			 , S.PRICE
+			 , S.ID
+			 , M.NICKNAME
+			 , S.CATEGORY
+			 , S.RV_STATE
+			 , S.CH_STATE
+			 , S.SV_STATE
+		FROM MARKET S
+				 INNER JOIN MEMBER M
+							ON S.ID = M.ID
 		WHERE SERVICE_NO = #{serviceNo}
 		]]>
 	</select>
-
-	<!-- 	 (
-               SELECT
-               MEMBER.ID,
-               MARKET.SERVICE_NO
-               FROM MEMBER
-               INNER JOIN MARKET
-               ON MEMBER.ID = MARKET.SERVICE_NO
-               )  -->
 
 	<update id="serviceUpdate" parameterType="MarketVO">
 		UPDATE MARKET
 		SET TYPE = #{type}
 		  , TITLE = #{title}
 		  , CONTENT = #{content}
-		  , LOCATION = #{location}
 		  , JM_STATE = #{jmState}
 		  , PRICE = #{price}
 		  , CATEGORY = #{category}

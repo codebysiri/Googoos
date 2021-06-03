@@ -19,8 +19,6 @@ public interface MarketService {
 	public MarketVO serviceDelete(MarketVO marketVO) throws Exception;
 
 	// 찜 추가
-	public MarketVO serviceJm(MarketVO marketVO) throws Exception;
-
 	public int jmSave(MarketVO marketVO) throws Exception;
 
 	// 장소, 아이디

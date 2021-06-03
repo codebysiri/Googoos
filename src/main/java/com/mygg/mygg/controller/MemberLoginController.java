@@ -43,7 +43,7 @@ public class MemberLoginController {
             session.setAttribute("gender", memberInform.get("gender"));
             session.setAttribute("age", memberInform.get("age"));
             session.setAttribute("location", memberInform.get("location"));
-            session.setAttribute("role", memberInform.get("role"));
+            session.setAttribute("authority", memberInform.get("authority"));
 
             // System.out.println("세션 생성");
             return "/member/loginSuccess";

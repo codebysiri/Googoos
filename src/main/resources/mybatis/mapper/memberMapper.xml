@@ -8,8 +8,8 @@
     <insert id="register">
         INSERT INTO member (id, email, password, name, nickname, phone_number, gender, age, location
                            , photo, authority, role)
-                    VALUES (#{id}, #{email}, #{password}, #{name}, #{nickname}, #{phone_number}
-                           , #{gender}, #{age}, #{location}, #{photo}, #{authority}, #{role})
+        VALUES (#{id}, #{email}, #{password}, #{name}, #{nickname}, #{phone_number}
+               , #{gender}, #{age}, #{location}, #{photo}, #{authority}, #{role})
     </insert>
 
     <select id="login" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="java.util.HashMap">
@@ -21,21 +21,21 @@
     <select id="activity" parameterType="Integer" resultType="java.util.HashMap">
         SELECT *
         FROM member m JOIN memberActivity ma
-        ON (m.id = ma.id)
+                           ON (m.id = ma.id)
         WHERE m.id = #{id}
     </select>
 
-<!--    <insert id="introduction">-->
-<!--        UPDATE INTO memberActivity (level, wish, batch, mileage, introduction)-->
-<!--        VALUES (#{level}, #{wish}, #{batch}, #{mileage}, #{introduction})-->
-<!--        WHERE id = #{id}-->
-<!--    </insert>-->
+    <!--    <insert id="introduction">-->
+    <!--        UPDATE INTO memberActivity (level, wish, batch, mileage, introduction)-->
+    <!--        VALUES (#{level}, #{wish}, #{batch}, #{mileage}, #{introduction})-->
+    <!--        WHERE id = #{id}-->
+    <!--    </insert>-->
 
-<!--    <update id="introduction">-->
-<!--        UPDATE memberActivity-->
-<!--        SET introduction = #{introduction}-->
-<!--        WHERE id = #{id}-->
-<!--    </update>-->
+    <!--    <update id="introduction">-->
+    <!--        UPDATE memberActivity-->
+    <!--        SET introduction = #{introduction}-->
+    <!--        WHERE id = #{id}-->
+    <!--    </update>-->
 
     <insert id="introduction">
         INSERT INTO memberActivity (level, wish, batch, mileage, introduction)

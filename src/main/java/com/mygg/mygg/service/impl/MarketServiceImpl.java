@@ -77,26 +77,23 @@ public class MarketServiceImpl implements MarketService {
 
 	// 찜하기
 	@Override
-	public MarketVO serviceJm(MarketVO marketVO) throws Exception {
-
-
-		return marketDAO.serviceJm(marketVO);
-	}
-
-	@Override
 	@Transactional
 	public int jmSave(MarketVO marketVO) throws Exception {
 
 		int resultCnt = 0;
 
+		// 찜하기
 		if ("I".equals(marketVO.getGubun())) {
 			resultCnt = marketDAO.insertJm(marketVO);
 		}
+		// 찜취소
 		else if ("D".equals(marketVO.getGubun())) {
 			resultCnt = marketDAO.deleteJm(marketVO);
 		}
-
+		// 찜 카운트
 		resultCnt += marketDAO.updateJmState(marketVO);
+
+		// 결과건수가 몇인지
 		return resultCnt;
 	}
 }

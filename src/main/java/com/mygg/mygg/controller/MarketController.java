@@ -197,19 +197,21 @@ public class MarketController {
 	 다시 누르면 찜취소가 된다 jmstate 테이블에 delete
 	 찜하기 버튼을 누르면 디비  jm_State에 +1씩 된다
 	 찜은 게시물 하나에서 한 사람당 1번만 할 수 있음.
-	 * URL이름 - serviceJm
-	 * Method - public String serviceJm
+	 * URL이름 - jmSave
+	 * Method - public int jmSave
 	 * Parameter(매개변수 ID/PW , 없으면 N/A)
-	 - @ModelAttribute("serviceNo") MarketVO marketVO, Model model
+	 - MarketVO marketVO
 	 * return type(void, String, ServiceVO)
 	 * 쿼리(DB 작업 insert, select, update, delete)
 	 - INSERT INTO JMSTATE (JM_ID, JM_SERVICE) VALUES (#{jmId}, #{jmService})
-	 - DELETE FROM JMSTATE WHERE JM_ID = #{jmId}
+	 - DELETE FROM JMSTATE WHERE JM_ID = #{jmId} AND JM_SERVICE = #{jmService}
+	 - UPDATE MARKET SET JM_STATE = <choose> <when test='gubun == "I"'> JM_STATE + 1 </when>
+	 <when test='gubun == "D"'> JM_STATE - 1 </when></choose> WHERE SERVICE_NO = #{jmService}
 	 */
-
 	@RequestMapping("jmSave")
 	@ResponseBody
 	public int jmSave(MarketVO marketVO) throws Exception{
+		// marketVO안에 session id랑 serviceNo 담겨있음
 		return marketService.jmSave(marketVO);
 	}
 }

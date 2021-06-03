@@ -42,17 +42,17 @@ public class MarketDAO extends AbstractDAO {
 		return (int) delete("market.serviceDelete", serviceNo);
 	}
 
-	public MarketVO serviceJm(MarketVO marketVO) throws Exception {
-		return (MarketVO) insert("market.serviceJm", marketVO);
-	}
-
+	// 찜하기
 	public int insertJm(MarketVO marketVO) throws Exception {
 		return (int) insert("market.insertJm", marketVO);
 	}
 
+	// 찜취소
 	public int deleteJm(MarketVO marketVO) throws Exception {
 		return (int) delete("market.deleteJm", marketVO);
 	}
+
+	// 찜카운트
 	public int updateJmState(MarketVO marketVO) {
 		return (int) update("market.updateJmState", marketVO);
 	}
