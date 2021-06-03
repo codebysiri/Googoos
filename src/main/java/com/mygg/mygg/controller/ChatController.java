@@ -1,6 +1,6 @@
 package com.mygg.mygg.controller;
 
-import com.mygg.mygg.dto.RoomDto;
+import com.mygg.mygg.dto.RoomDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Controller
 public class ChatController {
 
-    List<RoomDto> roomList = new ArrayList<RoomDto>();
+    List<RoomDTO> roomList = new ArrayList<RoomDTO>();
     static int roomNumber = 0;
 
     @RequestMapping("/chat")
@@ -43,10 +43,10 @@ public class ChatController {
      * @return
      */
     @RequestMapping("/createRoom")
-    public @ResponseBody List<RoomDto> createRoom(@RequestParam HashMap<Object, Object> params){
+    public @ResponseBody List<RoomDTO> createRoom(@RequestParam HashMap<Object, Object> params){
         String roomName = (String) params.get("roomName");
         if(roomName != null && !roomName.trim().equals("")) {
-            RoomDto room = new RoomDto();
+            RoomDTO room = new RoomDTO();
             room.setRoomNumber(++roomNumber);
             room.setRoomname(roomName);
             roomList.add(room);
@@ -60,7 +60,7 @@ public class ChatController {
      * @return
      */
     @RequestMapping("/getRoom")
-    public @ResponseBody List<RoomDto> getRoom(@RequestParam HashMap<Object, Object> params){
+    public @ResponseBody List<RoomDTO> getRoom(@RequestParam HashMap<Object, Object> params){
         return roomList;
     }
 
@@ -73,7 +73,7 @@ public class ChatController {
         ModelAndView mv = new ModelAndView();
         int roomNumber = Integer.parseInt((String) params.get("roomNumber"));
 
-        List<RoomDto> new_list = roomList.stream().filter(o->o.getRoomNumber()==roomNumber).collect(Collectors.toList());
+        List<RoomDTO> new_list = roomList.stream().filter(o->o.getRoomNumber()==roomNumber).collect(Collectors.toList());
         if(new_list != null && new_list.size() > 0) {
             System.out.println(params.get("roomName")+"룸네임ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ");
             mv.addObject("roomName", params.get("roomName"));
