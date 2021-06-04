@@ -16,8 +16,8 @@ public interface MemberRepository {
     Map<String, String> login(MemberDTO memberDTO) ;
 
     // MyPage
-    Map<String, String> activity(int id);
     void introduction(MemberDTO memberDTO);
+    Map<String, String> marketList(int id);
 
 
 }

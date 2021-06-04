@@ -31,12 +31,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Map<String, String> activity(int id) throws Exception {
-        return memberRepository.activity(id);
+    public void introduction(MemberDTO memberDTO) {
+        memberRepository.introduction(memberDTO);
     }
 
     @Override
-    public void introduction(MemberDTO memberDTO) {
-        memberRepository.introduction(memberDTO);
+    public Map<String, String> marketList(int id) throws  Exception {
+        return memberRepository.marketList(id);
     }
 }

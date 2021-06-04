@@ -12,10 +12,9 @@ public interface MemberService {
     // login
     Map<String, String> login(MemberDTO memberDTO) throws Exception;
 
-    // Activity
-    Map<String, String> activity(int id) throws Exception;
-
-    // Introduction
+    // myPage
     void introduction(MemberDTO memberDTO);
+    Map<String, String> marketList(int id) throws Exception;
+
 
 }
