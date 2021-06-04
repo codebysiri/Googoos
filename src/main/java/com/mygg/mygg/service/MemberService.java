@@ -15,6 +15,7 @@ public interface MemberService {
     // myPage
     void introduction(MemberDTO memberDTO);
     Map<String, String> marketList(int id) throws Exception;
+    Map<String, String> wish(int id);
 
 
 }

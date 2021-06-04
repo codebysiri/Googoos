@@ -31,4 +31,11 @@
         WHERE m.id = #{id}
     </select>
 
+    <select id="wish" parameterType="Integer" resultType="java.util.HashMap">
+        SELECT *
+        FROM member m JOIN jmstate j
+        ON (m.id = j.jm_id)
+        WHERE m.id = #{id}
+    </select>
+
 </mapper>

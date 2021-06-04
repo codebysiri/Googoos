@@ -28,12 +28,14 @@ public class MyPageController {
 
         Integer id = (int) httpSession.getAttribute("id");
         Map<String, String> marketList = memberService.marketList(id);
+        Map<String, String> wish = memberService.wish(id);
 
         if (marketList.get("id") != null) {
             httpSession.setAttribute("type", marketList.get("TYPE"));
             httpSession.setAttribute("title", marketList.get("TITLE"));
             httpSession.setAttribute("price", marketList.get("PRICE"));
             httpSession.setAttribute("rvState", marketList.get("RV_STATE"));
+            httpSession.setAttribute("wish", wish.get("JM_SERVICE"));
             return "/member/myinfo";
         } else {
             return "redirect:/member/login";

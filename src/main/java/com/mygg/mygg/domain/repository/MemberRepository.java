@@ -18,6 +18,7 @@ public interface MemberRepository {
     // MyPage
     void introduction(MemberDTO memberDTO);
     Map<String, String> marketList(int id);
+    Map<String, String> wish(int id);
 
 
 }

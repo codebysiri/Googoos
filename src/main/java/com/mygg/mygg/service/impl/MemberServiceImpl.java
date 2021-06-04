@@ -36,7 +36,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Map<String, String> marketList(int id) throws  Exception {
+    public Map<String, String> marketList(int id) throws Exception {
         return memberRepository.marketList(id);
+    }
+
+    @Override
+    public Map<String, String> wish(int id) {
+        return memberRepository.wish(id);
     }
 }
