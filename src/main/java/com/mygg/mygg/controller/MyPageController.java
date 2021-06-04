@@ -1,6 +1,6 @@
 package com.mygg.mygg.controller;
 
-import com.mygg.mygg.dto.MyPageDTO;
+import com.mygg.mygg.dto.MemberDTO;
 import com.mygg.mygg.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,8 +49,8 @@ public class MyPageController {
 
     // introduction 입력 처리
     @PostMapping("/introduction")
-    public String introductionPOST(MyPageDTO myPageDTO) {
-        memberService.introduction(myPageDTO);
+    public String introductionPOST(MemberDTO memberDTO) {
+        memberService.introduction(memberDTO);
         return "/member/introduction";
     }
 

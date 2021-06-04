@@ -2,7 +2,6 @@ package com.mygg.mygg.service.impl;
 
 import com.mygg.mygg.domain.repository.MemberRepository;
 import com.mygg.mygg.dto.MemberDTO;
-import com.mygg.mygg.dto.MyPageDTO;
 import com.mygg.mygg.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,7 @@ public class MemberServiceImpl implements MemberService {
         this.memberRepository = memberRepository;
     }
 
+    // JOIN
     @Override
     public void register(MemberDTO memberDTO) {
         memberRepository.register(memberDTO);
@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void introduction(MyPageDTO myPageDTO) {
-        memberRepository.introduction(myPageDTO);
+    public void introduction(MemberDTO memberDTO) {
+        memberRepository.introduction(memberDTO);
     }
 }

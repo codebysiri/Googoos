@@ -6,10 +6,10 @@
 <mapper namespace="com.mygg.mygg.domain.repository.MemberRepository">
 
     <insert id="register">
-        INSERT INTO member (id, email, password, name, nickname, phone_number, gender, age, location
-                           , photo, authority, role)
-        VALUES (#{id}, #{email}, #{password}, #{name}, #{nickname}, #{phone_number}
-               , #{gender}, #{age}, #{location}, #{photo}, #{authority}, #{role})
+        INSERT INTO member (id, email, password, name, nickname, phone_number, gender, age, location, photo, authority,
+                            level, wish, batch, mileage, introduction)
+        VALUES (#{id}, #{email}, #{password}, #{name}, #{nickname}, #{phone_number}, #{gender}, #{age}, #{location}, #{photo}, #{authority},
+                #{level}, #{wish}, #{batch}, #{mileage}, #{introduction})
     </insert>
 
     <select id="login" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="java.util.HashMap">
@@ -20,26 +20,14 @@
 
     <select id="activity" parameterType="Integer" resultType="java.util.HashMap">
         SELECT *
-        FROM member m JOIN memberActivity ma
-                           ON (m.id = ma.id)
-        WHERE m.id = #{id}
+        FROM member
+        WHERE id = #{id}
     </select>
 
-    <!--    <insert id="introduction">-->
-    <!--        UPDATE INTO memberActivity (level, wish, batch, mileage, introduction)-->
-    <!--        VALUES (#{level}, #{wish}, #{batch}, #{mileage}, #{introduction})-->
-    <!--        WHERE id = #{id}-->
-    <!--    </insert>-->
-
-    <!--    <update id="introduction">-->
-    <!--        UPDATE memberActivity-->
-    <!--        SET introduction = #{introduction}-->
-    <!--        WHERE id = #{id}-->
-    <!--    </update>-->
-
-    <insert id="introduction">
-        INSERT INTO memberActivity (level, wish, batch, mileage, introduction)
-        VALUES (#{level}, #{wish}, #{batch}, #{mileage}, #{introduction})
-    </insert>
+    <update id="introduction">
+        UPDATE member
+        SET introduction = #{introduction}
+        WHERE id = #{id}
+    </update>
 
 </mapper>

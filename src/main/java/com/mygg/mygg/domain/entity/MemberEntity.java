@@ -25,10 +25,17 @@ public class MemberEntity {
     private String photo;
     private int authority = 1;
     private LocalDateTime join_date;
-    private String role;
+
+    //Activity
+    private int level = 1;
+    private String wish;
+    private String batch;
+    private int mileage = 0;
+    private String introduction;
 
     @Builder
-    public MemberEntity(Long id, String email, String password, String name, String nickname, String phone_number, String gender, int age, String location, String photo, String authority, String join_date, String role) {
+    public MemberEntity(Long id, String email, String password, String name, String nickname, String phone_number, String gender, int age, String location, String photo,
+                        int authority, int level, String wish, String batch, int mileage, String introduction) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -40,7 +47,11 @@ public class MemberEntity {
         this.location = location;
         this.photo = photo;
         this.authority = 1;
-        this.role =role;
+        this.level = 1;
+        this.wish = wish;
+        this.batch = batch;
+        this.mileage = 0;
+        this.introduction = introduction;
     }
 
     @PrePersist
