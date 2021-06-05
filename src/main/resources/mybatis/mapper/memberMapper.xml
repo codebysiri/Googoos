@@ -5,6 +5,7 @@
 
 <mapper namespace="com.mygg.mygg.domain.repository.MemberRepository">
 
+<!--    Join-->
     <insert id="register">
         INSERT INTO member (id, email, password, name, nickname, phone_number, gender, age, location, photo, authority,
                             level, wish, batch, mileage, introduction)
@@ -12,25 +13,25 @@
                 #{level}, #{wish}, #{batch}, #{mileage}, #{introduction})
     </insert>
 
+<!--    Login-->
     <select id="login" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="java.util.HashMap">
         SELECT *
         FROM member
         WHERE email = #{email}
     </select>
 
+<!--    MyPage-->
     <update id="introduction">
         UPDATE member
         SET introduction = #{introduction}
         WHERE id = #{id}
     </update>
-
     <select id="marketList" parameterType="Integer" resultType="java.util.HashMap">
         SELECT *
         FROM member m JOIN market mk
         ON (m.id = mk.id)
         WHERE m.id = #{id}
     </select>
-
     <select id="wish" parameterType="Integer" resultType="java.util.HashMap">
         SELECT *
         FROM member m JOIN jmstate j
