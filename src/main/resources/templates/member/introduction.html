@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>자기소개 페이지</title>
@@ -16,17 +16,18 @@
 <body>
 <h1>자기 소개</h1>
 <hr>
+<div class="container">
+    <form action="/member/introduction" method="post">
+        <div class="textarea">
+            <textarea name="introduction" id="summernote" cols="30" rows="10"></textarea>
+        </div>
+        <div>
+            <input type="submit" class="submit" id="submit" value="저장">
+        </div>
+    </form>
+</div>
 
-<form action="/member/introduction" method="post">
-
-    <div class="textarea">
-        <textarea name="introduction" id="summernote" cols="30" rows="10"></textarea>
-        <input type="submit" class="submit" id="submit" value="저장">
-    </div>
-
-</form>
 <script>
-
     $('#summernote').summernote({
         height: 300,                 // set editor height
         minHeight: null,             // set minimum height of editor
@@ -57,6 +58,5 @@
         });
     }
 </script>
-
 </body>
 </html>
