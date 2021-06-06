@@ -24,6 +24,7 @@
   <update id="introduction">
         UPDATE member
         SET introduction = #{introduction}
+        WHERE id = #{id}
     </update>
     <select id="marketList" parameterType="Integer" resultType="java.util.HashMap">
         SELECT *
