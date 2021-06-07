@@ -57,18 +57,16 @@
 		</tbody>
 	</table>
 	<input type="hidden" th:value="*{serviceNo}" th:field="*{serviceNo}">
+	<input type="hidden" th:value="*{id}" th:field="*{id}">
 </form>
 
-<input type="button" id="updateBtn" value="수정" th:if="${session.id != null}"/>
-<input type="button" id="deleteBtn" value="삭제" th:if="${session.id != null}"/>
+<input type="button" id="updateBtn" value="수정" th:if="${session.id != null} and ${session.id == serviceInfo.id}"/>
+<input type="button" id="deleteBtn" value="삭제" th:if="${session.id != null} and ${session.id == serviceInfo.id}"/>
 <input type="button" id="mainBtn" value="메인" />
 <input type="button" id="listBtn" value="마켓 리스트" />
 
 <script th:inline="javascript">
-
 	$('#updateBtn').on('click', function() {
-		// memberId가 존재하고, 그 작성자 아이디가 작성한 글의 번호랑 동일할때
-		/* 	if(memberId != null && memberId.equals(serviceInfo.getserviceNo())){ */
 		var form = $('#serviceUpdateForm')[0];
 		form.submit();
 		alert(/*[[${session.id}]]*/);
@@ -117,6 +115,7 @@
 			processData : false
 		});
 	});
+
 </script>
 </body>
 </html>

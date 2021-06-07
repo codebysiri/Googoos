@@ -2,6 +2,7 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="/css/header.css">
   <link rel="stylesheet" th:href="@{/css/content-styles.css}" type="text/css">
   <title>Title</title>
 </head>
@@ -28,7 +29,7 @@
   }
 </style>
 <body>
-
+<div th:replace="/fixed/header :: header"></div>
 <div class="container">
   <form action="/notice/update" method="POST">
     <div class="form_items">

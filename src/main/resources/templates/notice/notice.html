@@ -2,6 +2,7 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="/css/header.css">
   <title>Title</title>
 </head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
@@ -39,7 +40,7 @@
   }
 </style>
 <body>
-
+<div th:replace="/fixed/header :: header"></div>
 <div class="serchArea">
   <input type="text" placeholder="검색어를 입력해주세요"  id="search">
   <input type="button" value="검색" id="searchBtn">

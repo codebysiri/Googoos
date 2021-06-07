@@ -2,6 +2,8 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
+
     <title>자기소개 페이지</title>
     <!-- include libraries(jQuery, bootstrap) -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
@@ -14,6 +16,7 @@
 
 </head>
 <body>
+<div th:replace="/fixed/header :: header"></div>
 <h1>자기 소개</h1>
 <hr>
 <div class="container">

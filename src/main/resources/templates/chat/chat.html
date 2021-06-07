@@ -44,13 +44,54 @@
         }
     </style>
 </head>
+<body>
+<div id="container" class="container">
+    <span th:text="${roomName}"></span>
+    <input type="hidden" id="sessionId" value="">
+    <input type="hidden" id="roomNumber" th:value="${roomNumber}">
 
-<script type="text/javascript">
+    <div id="chating" class="chating">
+        <block th:each="list : ${lists}">
+            <p class='me' th:if="${list.chat_writer == session.nickname}" th:text="'나 :'+${list.chat_content}"></p>
+            <p class='others' th:if="${list.chat_writer != session.nickname}" th:text="${list.chat_writer}+' : '+${list.chat_content}"></p>
+        </block>
+    </div>
+
+    <div id="yourName">
+        <table class="inputTable">
+            <tr>
+                <th>사용자명</th>
+                <th><input type="text" name="userName" id="userName" th:value="${session.nickname}"></th>
+            </tr>
+        </table>
+    </div>
+
+    <div id="yourMsg">
+        <table class="inputTable">
+            <tr>
+                <th>메시지</th>
+                <th><input id="chatting" placeholder="보내실 메시지를 입력하세요."></th>
+                <th><button onclick="send()" id="sendBtn">보내기</button></th>
+            </tr>
+        </table>
+    </div>
+</div>
+<script th:inline="javascript" defer>
     let ws;
+
+    function chatName(){
+        wsOpen();
+        $("#yourName").hide();
+        $("#yourMsg").show();
+    }
+
+    chatName();
 
     function wsOpen(){
         //웹소켓 전송시 현재 방의 번호를 넘겨서 보낸다.
-        ws = new WebSocket("ws://" + location.host + "/chating/"+$("#roomNumber").val());
+        let roomNumber = document.getElementById('roomNumber')
+
+        ws = new WebSocket("ws://" + location.host + "/chating/"+[[${roomNumber}]]);
         wsEvt();
     }
 
@@ -64,6 +105,7 @@
             let msg = data.data;
             if(msg != null && msg.trim() != ''){
                 let d = JSON.parse(msg);
+                console.log(msg);
                 if(d.type == "getId"){
                     let si = d.sessionId != null ? d.sessionId : "";
                     if(si != ''){
@@ -89,17 +131,6 @@
         });
     }
 
-    function chatName(){
-        let userName = $("#userName").val();
-        if(userName == null || userName.trim() == ""){
-            alert("사용자 이름을 입력해주세요.");
-            $("#userName").focus();
-        }else{
-            wsOpen();
-            $("#yourName").hide();
-            $("#yourMsg").show();
-        }
-    }
 
     function send() {
         let option ={
@@ -110,36 +141,27 @@
             msg : $("#chatting").val()
         }
         ws.send(JSON.stringify(option))
+
+        let json = {
+            room_id: [[${roomNumber}]],
+            chat_writer: $("#userName").val(),
+            chat_content: $("#chatting").val()
+        };
+
+        $.ajax({
+            url:'/insertChat',
+            type: 'POST',
+            data: JSON.stringify(json),
+            contentType: "application/json; charset=UTF-8",
+            success:(result)=>{
+                console.log(result);
+            }
+        });
+
+
         $('#chatting').val("");
+
     }
 </script>
-<body>
-<div id="container" class="container">
-    <span th:text="${roomName}"></span>
-    <input type="hidden" id="sessionId" value="">
-    <input type="hidden" id="roomNumber" th:value="${roomNumber}">
-
-    <div id="chating" class="chating">
-    </div>
-
-    <div id="yourName">
-        <table class="inputTable">
-            <tr>
-                <th>사용자명</th>
-                <th><input type="text" name="userName" id="userName"></th>
-                <th><button onclick="chatName()" id="startBtn">이름 등록</button></th>
-            </tr>
-        </table>
-    </div>
-    <div id="yourMsg">
-        <table class="inputTable">
-            <tr>
-                <th>메시지</th>
-                <th><input id="chatting" placeholder="보내실 메시지를 입력하세요."></th>
-                <th><button onclick="send()" id="sendBtn">보내기</button></th>
-            </tr>
-        </table>
-    </div>
-</div>
 </body>
 </html>

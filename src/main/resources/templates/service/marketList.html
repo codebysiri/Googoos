@@ -45,7 +45,7 @@
 	</thead>
 	<tbody align="center">
 	<!-- th:each 반복처리 marketList에 변수들이 담겨있음. 각 구성요소를 접근할 때 market 변수 사용
-         자식태그들은 market변수를 이용해서 각 요소의 속성에 접근 -->
+     자식태그들은 market변수를 이용해서 각 요소의 속성에 접근 -->
 	<tr th:each="market : ${marketList}">
 		<!-- 번호 1씩 늘어나는거 -->
 		<td th:text="${marketStat.index + 1}"></td>
@@ -60,8 +60,12 @@
 		<td th:text="${#strings.substring(market.regDate,0,16)}"></td>
 		<td th:text="${market.jmState}"></td>
 		<td>
-			<input th:if="${market.jmId == 0}" type="button" id="jmAddBtn" value="찜하기" th:onclick="jmAdd([[ ${session.id} ]], [[ ${market.serviceNo} ]])"/>
-			<input th:if="${market.jmId != 0}" type="button" id="jmDelBtn" value="찜취소" th:onclick="jmDel([[ ${session.id} ]], [[ ${market.serviceNo} ]])"/>
+			<!-- 만약 찜회원아이디가 0일때 찜하기 버튼을 누를때 세션id와 글번호-->
+			<input th:if="${market.jmId == 0}" type="button" id="jmAddBtn" value="찜하기"
+				   th:onclick="jmAdd([[ ${session.id} ]], [[ ${market.serviceNo} ]])"/>
+
+			<input th:if="${market.jmId != 0}" type="button" id="jmDelBtn" value="찜취소"
+				   th:onclick="jmDel([[ ${session.id} ]], [[ ${market.serviceNo} ]])"/>
 		</td>
 		<td th:text="${market.typeNm}"></td>
 		<td th:text="*{#numbers.formatDecimal(market.price, 0, 'COMMA', 0, 'POINT')}" align="right"></td>
@@ -80,10 +84,24 @@
 </body>
 <script>
 	$('#registBtn').on('click', function() {
+
 		location.href = "/market/serviceRegistPage";
 	});
+
 	$('#mainBtn').on('click', function() {
 		location.href = "/";
+	});
+
+	$('#jmAddBtn').on('click', function() {
+		// 만약 세션이 없거나 이 글을 등록한 작성자라면 버튼이 비활성화
+		// disabled value='비활성화1'
+		/* if() {
+
+        } */
+	});
+
+	$('#jmDelBtn').on('click', function() {
+
 	});
 
 	// 전체 선택, 전체 선택 해제
@@ -148,6 +166,7 @@
 				// 두개의 데이터가 정삭적으로 온다면
 				if (data == 2) {
 					alert("찜하기 완료");
+
 					// 처리가 완료되면 marketList로 이동한다.
 					location.href = "/market/marketListPage";
 				} else {
@@ -180,9 +199,10 @@
 			type : "POST",
 			data : formData,
 			success : function(data) {
-				// 2개 데이터가 정상적으로 삭제되어지면
+				// 2개 데이터가 정상적으로 오면
 				if (data == 2) {
 					alert("찜하기 취소");
+
 					// 처리가 완료되면 marketList로 이동한다.
 					location.href = "/market/marketListPage";
 				} else {

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>내정보</title>
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
     <script>
 
         function introduction(url, name) {
@@ -14,6 +15,7 @@
 
 </head>
 <body>
+<div th:replace="/fixed/header :: header"></div>
 <h1>
     <span th:text="${session.nickname}"></span> 님의 마이페이지
 </h1>

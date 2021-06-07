@@ -2,201 +2,120 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>serviceRegist</title>
+	<title>ServiceDetail</title>
 
-	<!-- include libraries(jQuery, bootstrap) -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-	<!-- include summernote css/js -->
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 </head>
 <body>
-<h2>글 등록</h2>
-<div>
-	<!-- 다 입력을 한 후에 /market/serviceSave URL로 값들을 다 보낸다. -->
-	<form id="serviceRegistForm" th:action="@{/market/serviceSave}" th:method="post">
-		<div>제목 : </div>
-		<input type="text" th:name="title"> <br/>
+<!-- serviceUpdate에서 입력한 값들이 여기서 보이는것. -->
+<h2>ServiceDetail</h2>
+<form id="serviceUpdateForm" th:action="@{/market/serviceUpdate}" th:object="${serviceInfo}">
+	<table border="1">
+		<colgroup>
+			<col width="10%" />
+			<col width="5%" />
+			<col width="*" />
+			<col width="10%" />
+			<col width="5%" />
+			<col width="5%" />
+			<col width="5%" />
+			<col width="10%" />
+			<col width="20%" />
+		</colgroup>
+		<thead align="center">
+		<tr>
+			<td>제목</td>
+			<td>작성자</td>
+			<td>내용</td>
+			<td>장소</td>
+			<td>
+				<input type="button" id="jmBtn" value="찜하기" />
+			</td>
+			<td>가격</td>
+			<td>타입</td>
+			<td>날짜</td>
+			<td>카테고리</td>
+		</tr>
+		</thead>
+		<!-- 객체를 지정해주면 앞에 market.으로 접근하지 않아도 된다. -->
+		<tbody align="center">
+		<tr>
+			<td th:text="*{title}"></td>
+			<td>
+				<a th:href="@{/member/info}" th:text="*{nickname}"></a>
+			</td>
+			<td th:utext="*{content}"></td>
+			<td th:text="*{location}"></td>
+			<td th:text="*{jmState}"></td>
+			<td th:text="*{#numbers.formatDecimal(price, 0, 'COMMA', 0, 'POINT')}" align="right"></td>
+			<td th:text="*{typeNm}"></td>
+			<td th:text="*{#strings.substring(regDate,0,16)}"></td>
+			<td th:text="*{category}" th:filed="*{category}"></td>
+		</tr>
+		</tbody>
+	</table>
+	<input type="hidden" th:value="*{serviceNo}" th:field="*{serviceNo}">
+	<input type="hidden" th:value="*{id}" th:field="*{id}">
+</form>
 
-		<div class="type">유형 : </div>
-		<input type="radio" th:name="type" th:value="0">구매
-		<input type="radio" th:name="type" th:value="1">판매<br/>
+<input type="button" id="updateBtn" value="수정" th:if="${session.id != null} and ${session.id == serviceInfo.id}"/>
+<input type="button" id="deleteBtn" value="삭제" th:if="${session.id != null} and ${session.id == serviceInfo.id}"/>
+<input type="button" id="mainBtn" value="메인" />
+<input type="button" id="listBtn" value="마켓 리스트" />
 
-		<div class="textarea">내용 : </div>
-		<textarea th:name="content" id="summernote" cols="30" rows="10"></textarea><br/>
+<script th:inline="javascript">
+	$('#updateBtn').on('click', function() {
+		var form = $('#serviceUpdateForm')[0];
+		form.submit();
+		alert(/*[[${session.id}]]*/);
+	});
 
-		<div>가격 : </div>
-		<div class="price">
-			<input type="checkbox" id="chkPrice" name="chkPrice">무료
-			<input type="text" id="price" name="price"><br/>
-		</div>
+	$('#mainBtn').on('click', function() {
+		location.href = "/";
+	});
 
-		<div>카테고리 : 1개 이상 선택하세요.</div>
-		<div class="category">
-			<input type="checkbox" id="취미" name="category" value="취미">취미
-			<input type="checkbox" id="디지털" name="category" value="디지털">디지털
-			<input type="checkbox" id="가전제품" name="category" value="가전제품">가전제품
-			<input type="checkbox" id="반려동물" name="category" value="반려동물">반려동물
-			<input type="checkbox" id="유아" name="category" value="유아">유아
-			<input type="checkbox" id="여행" name="category" value="여행">여행
-			<input type="checkbox" id="음식" name="category" value="음식">음식
-			<input type="checkbox" id="생활용품" name="category" value="생활용품">생활용품
-			<input type="checkbox" id="뷰티" name="category" value="뷰티">뷰티
-			<input type="checkbox" id="패션잡화" name="category" value="패션잡화">패션잡화
-			<input type="checkbox" id="스포츠" name="category" value="스포츠">스포츠
-			<input type="checkbox" id="공부" name="category" value="공부">공부
-		</div>
-		<!-- value="I" 신규등록 구분하기 위해서 -->
-		<input type="hidden" name="gubun" value="I" />
-		<input type="hidden" name="id" th:value="${session.id}" />
-		<input type="submit" value="저장">
-		<input type="button" id="listBtn" value="마켓리스트" />
-	</form>
-</div>
-<script>
 	$('#listBtn').on('click', function() {
 		location.href = "/market/marketListPage";
-		alert("작성이 완료 되지 않았습니다.");
 	});
 
-	$('#summernote').summernote({
-		height : 300, 		// 에디터 높이
-		minHeight : null, 	// 최소 높이
-		maxHeight : null,	// 최대 높이
-		focus : true, 		// 에디터 로딩후 포커스를 맞출지 여부
-		lang : "ko-KR", 	// 한글 설정
-		callbacks : {
-			onImageUpload : function(files, editor, welEditable) {
-				for (let i = files.length - 1; i >= 0; i--) {
-					uploadSummernoteImageFile(files[i], this);
-				}
-			}
-		}
-	});
+	// 버튼을 딱 누르면 실행을 할거에오
+	$('#deleteBtn').on('click', function() {
+		// 상세보기 해당 번호를 serviceDelete URL로 보낸다.
+		var form = $('#serviceUpdateForm')[0];
+		var formData = new FormData(form);
 
-	// 서머노트 이미지 파일 업로드
-	function uploadSummernoteImageFile(file, el) {
-		data = new FormData();
-		data.append('file', file);
+		/**
+		 * url : 전송할 서버 주소
+		 * type : 전송방식 (get/post)
+		 * data : 전송할 데이터 ※ form.serialize() ? >> form 안에 데이터를 json 형태로 변환
+		 * success : 전송 후, 응답이 성공일 경우 수행할 기능 작성
+		 * error : 전송 후, 응답이 실패일 경우 수행할 기능 작성
+		 */
 		$.ajax({
-			data : data,
-			type : 'POST',
-			url : '/uploadImage',
-			contentType : false,
-			enctype : 'multipart/form-data',
-			processData : false,
-			success : function(data) {
-				$(el).summernote('editor.insertImage', data.url);
-				console.log('data.url이 이미지 파일 주소' + data.url);
-			}
-		});
-	}
-	// 폼에서 등록한 내용 저장으로 보내기
-	$(function() {
-		// 가격 이벤트 처리
-		// ES6 이전
-		$("#chkPrice").on("click", function(){
-			if ($("#chkPrice")[0].checked) {
-				$("#price").val(0);
-				$("#price").attr('readonly', true);
-			} else {
-				$("#price").attr('readonly', false);
-			}
-		});
-		// ES6 이후
-		/* 			 	const chkPrice = document.getElementById('chkPrice');
-                         const price = document.getElementById('price');
-                         chkPrice.addEventListener('click',()=> {
-                             if (chkPrice.checked) {
-                                 price.value = 0;
-                                 price.readOnly = true;
-                             } else {
-                                 price.readOnly = false;
-                             }
-                         }); */
+			url  : "/market/serviceDelete"
+			, type : "POST"
+			, data : formData
+			, success : function(data) {
+				if(data.returnCnt > 0) {
+					alert("정상적으로 삭제되었습니다.");
 
-		$("#serviceRegistForm").submit(function() {
-			// 유효성 검사 다 완료되서 끝날때까지 넘어가지 않게 멈추는거
-			event.preventDefault();
-
-			// id가 serviceRegistForm인 form을 불러온다.
-			var form = $('#serviceRegistForm')[0];
-
-			// form 안에 title 유효성 체크
-			if (form.title.value == "") {
-				alert("제목은 필수 입력 항목입니다!");
-				$(form.title).focus();
-				return;
-			}
-			// form 안에 type 유효성 체크
-			if (form.type.value == "") {
-				alert("타입은 필수 입력 항목입니다!");
-				$(form.type).focus();
-				return;
-			}
-			//form 안에 content 유효성 체크
-			if (form.content.value == "") {
-				alert("내용은 필수 입력 항목입니다!");
-				$(form.content).focus();
-				return;
-			}
-			//form 안에 price 유효성 체크
-			if (form.price.value == "") {
-				alert("가격은 필수 입력 항목입니다!");
-				$(form.price).focus();
-				return;
-			}
-
-			// 카테고리 유효성 검사
-			const cg = document.getElementsByName('category');
-			let count = 0;
-
-			// for문으로 카테고리 길이만큼 다 검사
-			for (let i = 0; i < cg.length; i++) {
-				if (cg[i].checked) {
-					console.log(cg[i].value);
-					count++;
-				}
-			}
-			// 다 검사했을때 0이면 한개 이상 체크 하라고 알림창 띄움
-			if (count === 0) {
-				alert('카테고리를 한 개 이상 체크해주세요');
-				return;
-			} else {
-				count = 0;
-			}
-
-			/**
-			 * url : 전송할 서버 주소
-			 * type : 전송방식 (get/post)
-			 * data : 전송할 데이터 ※ form.serialize() ? >> form 안에 데이터를 json 형태로 변환
-			 * success : 전송 후, 응답이 성공일 경우 수행할 기능 작성
-			 * error : 전송 후, 응답이 실패일 경우 수행할 기능 작성
-			 */
-			var formData = new FormData(form);
-
-			$.ajax({
-				url : "/market/serviceSave",
-				type : "post",
-				data : formData,
-				success : function(data) {
-					alert("정상적으로 저장되었습니다.");
 					// 처리가 완료되면 marketList로 이동한다.
 					location.href = "/market/marketListPage";
-
-				},
-				error : function(xhr, status) {
-					alert("오류가 발생했습니다. :: " + status);
-				},
-				cache : false,
-				contentType : false,
-				processData : false
-			});
+				} else {
+					alert("오류가 발생했습니다. 다시 시도해주시기 바랍니다.");
+				}
+			},
+			error : function(xhr, status) {
+				alert("오류가 발생했습니다. :: " + status);
+			},
+			cache : false,
+			contentType : false,
+			processData : false
 		});
 	});
+
 </script>
 </body>
 </html>

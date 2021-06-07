@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>메인</title>
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
 </head>
 <body>
+<div th:replace="/fixed/header :: header"></div>
 <h1>메인 페이지</h1>
 <hr>
 <a th:href="@{/member/login}">로그인</a>
@@ -12,9 +14,8 @@
 <a th:href="@{/member/signup}">회원가입</a>
 <a th:href="@{/member/info}" th:if="${session.id != null}">내정보</a>
 <a th:href="@{/admin}">어드민</a>
-<a th:href="@{/market/marketListPage}">마켓리스트</a>
 <a th:href="@{/notice}">공지사항</a>
-<a th:href="@{/room}">채팅방</a>
-
+<a th:href="@{/marketListPage}">어드민</a>
+<a th:href="@{/room}">새로 타임주기가</a>
 </body>
 </html>

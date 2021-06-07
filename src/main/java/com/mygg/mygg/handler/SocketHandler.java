@@ -96,6 +96,8 @@ public class SocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         //소켓 종료
+        System.out.println("소켓닫힙니다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(rls);
         if(rls.size() > 0) { //소켓이 종료되면 해당 세션값들을 찾아서 지운다.
             for(int i=0; i<rls.size(); i++) {
                 rls.get(i).remove(session.getId());

@@ -1,5 +1,7 @@
 package com.mygg.mygg.vo;
 
+
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -1,0 +1,40 @@
+*{
+    padding:0;
+    margin:0;
+    text-decoration: none;
+}
+*:link, *:visited{
+    color:black;
+}
+
+header{
+    background: rgb(237, 229, 153);
+    height: 70px;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0px 4px 10px 0px #cccccc;
+}
+.title_zone, .login_zone{
+    display: flex;
+    align-items: center;
+}
+.icon{
+    width: 50px;
+    margin-right: 10px;
+}
+.project_title{
+    color:rgb(90, 129, 0);
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 40px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.menus{
+    font-size: 20px;
+    font-weight: 550;
+}
+.login_control{
+    margin-right: 30px;
+}
