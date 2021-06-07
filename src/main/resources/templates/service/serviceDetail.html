@@ -5,10 +5,12 @@
 	<title>ServiceDetail</title>
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 </head>
 <body>
+<div th:replace="/fixed/header :: header"></div>
 <!-- serviceUpdate에서 입력한 값들이 여기서 보이는것. -->
 <h2>ServiceDetail</h2>
 <form id="serviceUpdateForm" th:action="@{/market/serviceUpdate}" th:object="${serviceInfo}">
@@ -30,9 +32,6 @@
 			<td>작성자</td>
 			<td>내용</td>
 			<td>장소</td>
-			<td>
-				<input type="button" id="jmBtn" value="찜하기" />
-			</td>
 			<td>가격</td>
 			<td>타입</td>
 			<td>날짜</td>
@@ -48,7 +47,6 @@
 			</td>
 			<td th:utext="*{content}"></td>
 			<td th:text="*{location}"></td>
-			<td th:text="*{jmState}"></td>
 			<td th:text="*{#numbers.formatDecimal(price, 0, 'COMMA', 0, 'POINT')}" align="right"></td>
 			<td th:text="*{typeNm}"></td>
 			<td th:text="*{#strings.substring(regDate,0,16)}"></td>
@@ -58,12 +56,20 @@
 	</table>
 	<input type="hidden" th:value="*{serviceNo}" th:field="*{serviceNo}">
 	<input type="hidden" th:value="*{id}" th:field="*{id}">
+	<!-- 찜하기 폼 작성자, 글번호, 구분은 I나 D로 -->
+	<input type="hidden" id="jmId" name="jmId" th:value="${session.id}" />
+	<input type="hidden" id="jmService" name="jmService" th:value="*{serviceNo}" />
+	<input type="hidden" id="gubun" name="gubun" />
 </form>
 
 <input type="button" id="updateBtn" value="수정" th:if="${session.id != null} and ${session.id == serviceInfo.id}"/>
 <input type="button" id="deleteBtn" value="삭제" th:if="${session.id != null} and ${session.id == serviceInfo.id}"/>
 <input type="button" id="mainBtn" value="메인" />
 <input type="button" id="listBtn" value="마켓 리스트" />
+
+<!-- 만약 찜회원아이디가 0일때 찜하기 버튼을 누를때 세션id와 글번호-->
+<input th:if="${serviceInfo.jmGubun == null} and ${session.id != serviceInfo.id}" type="button" id="jmAddBtn" value="찜하기" />
+<input th:if="${serviceInfo.jmGubun != null} and ${session.id != serviceInfo.id}" type="button" id="jmDelBtn" value="찜취소" />
 
 <script th:inline="javascript">
 	$('#updateBtn').on('click', function() {
@@ -80,7 +86,6 @@
 		location.href = "/market/marketListPage";
 	});
 
-	// 버튼을 딱 누르면 실행을 할거에오
 	$('#deleteBtn').on('click', function() {
 		// 상세보기 해당 번호를 serviceDelete URL로 보낸다.
 		var form = $('#serviceUpdateForm')[0];
@@ -116,6 +121,68 @@
 		});
 	});
 
+	// 찜 버튼
+	$('#jmAddBtn').on('click', function() {
+		$("#gubun").val("I");
+
+		var form = $('#serviceUpdateForm')[0];
+		var formData = new FormData(form);
+
+		$.ajax({
+			url : "/market/jmSave",
+			type : "POST",
+			data : formData,
+			success : function(data) {
+				// 두개의 데이터가 정삭적으로 온다면
+				if (data == 2) {
+					alert("찜하기 완료");
+
+// 							$("#jmAddBtn").hide();
+// 							$("#jmDelBtn").show();
+					location.reload();
+				} else {
+					console.log("error");
+				}
+			},
+			error : function(xhr, status) {
+				alert("오류가 발생했습니다. :: " + status);
+			},
+			cache : false,
+			contentType : false,
+			processData : false
+		});
+	});
+	// 찜 취소
+	$('#jmDelBtn').on('click', function() {
+		$("#gubun").val("D");
+
+		var form = $('#serviceUpdateForm')[0];
+		var formData = new FormData(form);
+
+		$.ajax({
+			url : "/market/jmSave",
+			type : "POST",
+			data : formData,
+			success : function(data) {
+				// 2개 데이터가 정상적으로 오면
+				if (data == 2) {
+					alert("찜하기 취소");
+
+// 							$("#jmAddBtn").show();
+// 							$("#jmDelBtn").hide();
+					location.reload();
+				} else {
+					console.log("error");
+				}
+			},
+			error : function(xhr, status) {
+				alert("오류가 발생했습니다. :: " + status);
+			},
+			cache : false,
+			contentType : false,
+			processData : false
+		});
+	});
 </script>
 </body>
 </html>

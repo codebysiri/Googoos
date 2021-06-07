@@ -6,14 +6,18 @@
 
 	<!-- include libraries(jQuery, bootstrap) -->
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 	<!-- include summernote css/js -->
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 </head>
+
 <body>
+<div th:replace="/fixed/header :: header"></div>
 <h2>Market List</h2>
 <!-- 테이블 크기 조정 화면에 꽉 차게 %로 하면 창 크기를 줄여도 크기에 맞춰서 늘어나고, 줄어든다. -->
 <table border="1">
@@ -23,7 +27,6 @@
 		<col width="15%" />
 		<col width="*" />
 		<col width="15%" />
-		<col width="5%" />
 		<col width="5%" />
 		<col width="5%" />
 		<col width="8%" />
@@ -37,7 +40,7 @@
 		<td>제목</td>
 		<td>내용</td>
 		<td>날짜</td>
-		<td colspan="2">찜하기</td>
+		<td>+찜</td>
 		<td>타입</td>
 		<td>가격</td>
 		<td>카테고리</td>
@@ -51,57 +54,32 @@
 		<td th:text="${marketStat.index + 1}"></td>
 		<td><input type="checkbox" th:id="${market.serviceNo}" name="chk" /></td>
 		<td>
-			<!-- 제목누르면 상세보기로 넘어가기 serviceNo를 넘겨주면서 -->
-			<a th:href="@{/market/serviceDetail(serviceNo=${market.serviceNo}, id=${session.id})}"
+			<!-- 제목누르면 상세보기로 넘어가기 service_no를 넘겨주면서 -->
+			<a th:if="${session.id != null}" th:href="@{/market/serviceDetail(serviceNo=${market.serviceNo}, id=${session.id})}"
 			   th:text="${market.title}" th:field="*{market.title}">
 			</a>
+			<a th:if="${session.id == null}" href="javascript:void(0)" th:text="${market.title}" th:field="*{market.title}"
+			   onclick="alert('로그인 후 확인 가능합니다.'); return false;"></a>
 		</td>
 		<td th:utext="${market.content}"></td>
 		<td th:text="${#strings.substring(market.regDate,0,16)}"></td>
 		<td th:text="${market.jmState}"></td>
-		<td>
-			<!-- 만약 찜회원아이디가 0일때 찜하기 버튼을 누를때 세션id와 글번호-->
-			<input th:if="${market.jmId == 0}" type="button" id="jmAddBtn" value="찜하기"
-				   th:onclick="jmAdd([[ ${session.id} ]], [[ ${market.serviceNo} ]])"/>
-
-			<input th:if="${market.jmId != 0}" type="button" id="jmDelBtn" value="찜취소"
-				   th:onclick="jmDel([[ ${session.id} ]], [[ ${market.serviceNo} ]])"/>
-		</td>
 		<td th:text="${market.typeNm}"></td>
 		<td th:text="*{#numbers.formatDecimal(market.price, 0, 'COMMA', 0, 'POINT')}" align="right"></td>
 		<td th:text="${market.category}"></td>
 	</tr>
 	</tbody>
 </table>
-<!-- 찜하기 폼 작성자, 글번호, 구분은 I나 D로 -->
-<form id="jmForm">
-	<input type="hidden" id="jmId" name="jmId" />
-	<input type="hidden" id="jmService" name="jmService" />
-	<input type="hidden" id="gubun" name="gubun" />
-</form>
 <input type="button" id="registBtn" value="서비스등록" th:if="${session.id != null}"/>
 <input type="button" id="mainBtn" value="메인"/>
 </body>
 <script>
 	$('#registBtn').on('click', function() {
-
 		location.href = "/market/serviceRegistPage";
 	});
 
 	$('#mainBtn').on('click', function() {
 		location.href = "/";
-	});
-
-	$('#jmAddBtn').on('click', function() {
-		// 만약 세션이 없거나 이 글을 등록한 작성자라면 버튼이 비활성화
-		// disabled value='비활성화1'
-		/* if() {
-
-        } */
-	});
-
-	$('#jmDelBtn').on('click', function() {
-
 	});
 
 	// 전체 선택, 전체 선택 해제
@@ -146,76 +124,6 @@
 			}
 		});
 	}
-	// 찜하기
-	function jmAdd(id, serviceNo) {
-		// session id를 jmId에 담고
-		$("#jmId").val(id);
 
-		// serviceNo를 jmService에 담고
-		$("#jmService").val(serviceNo);
-		$("#gubun").val("I");
-
-		var form = $('#jmForm')[0];
-		var formData = new FormData(form);
-
-		$.ajax({
-			url : "/market/jmSave",
-			type : "POST",
-			data : formData,
-			success : function(data) {
-				// 두개의 데이터가 정삭적으로 온다면
-				if (data == 2) {
-					alert("찜하기 완료");
-
-					// 처리가 완료되면 marketList로 이동한다.
-					location.href = "/market/marketListPage";
-				} else {
-					console.log("error");
-				}
-			},
-			error : function(xhr, status) {
-				alert("오류가 발생했습니다. :: " + status);
-			},
-			cache : false,
-			contentType : false,
-			processData : false
-		});
-	}
-
-	// 찜 취소
-	function jmDel(id, serviceNo) {
-		// session id를 jmId에 담고
-		$("#jmId").val(id);
-
-		// serviceNo를 jmService에 담고
-		$("#jmService").val(serviceNo);
-		$("#gubun").val("D");
-
-		var form = $('#jmForm')[0];
-		var formData = new FormData(form);
-
-		$.ajax({
-			url : "/market/jmSave",
-			type : "POST",
-			data : formData,
-			success : function(data) {
-				// 2개 데이터가 정상적으로 오면
-				if (data == 2) {
-					alert("찜하기 취소");
-
-					// 처리가 완료되면 marketList로 이동한다.
-					location.href = "/market/marketListPage";
-				} else {
-					console.log("error");
-				}
-			},
-			error : function(xhr, status) {
-				alert("오류가 발생했습니다. :: " + status);
-			},
-			cache : false,
-			contentType : false,
-			processData : false
-		});
-	}
 </script>
 </html>

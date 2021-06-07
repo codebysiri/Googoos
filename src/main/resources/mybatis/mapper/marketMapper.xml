@@ -5,26 +5,24 @@
 	<insert id="insertService" parameterType="MarketVO">
 	<![CDATA[
 		INSERT
-		INTO MARKET
+		INTO market
 		(
-			TYPE
-		, TITLE
-		, CONTENT
-		, REG_DATE
-		, JM_STATE
-		, PRICE
-		, ID
-		, CATEGORY
-		, RV_STATE
-		, CH_STATE
-		, SV_STATE
+			type
+		, title
+		, content
+		, reg_date
+		, price
+		, id
+		, category
+		, rv_state
+		, ch_state
+		, sv_state
 		)
 		VALUES (
 				   #{type}
 			   , #{title}
 			   , #{content}
 			   , NOW()
-			   , #{jmState}
 			   , #{price}
 			   , #{id}
 			   , #{category}
@@ -37,85 +35,93 @@
 
 	<select id="selectMarketList" parameterType="MarketVO" resultType="MarketVO">
 	<![CDATA[
-		SELECT S.SERVICE_NO
-			 , CASE S.TYPE
+		SELECT S.service_no
+			 , CASE S.type
 				   WHEN 0 THEN '구매'
 				   WHEN 1 THEN '판매'
-			END AS TYPE_NM
-			 , S.TITLE
-			 , S.CONTENT
-			 , S.REG_DATE
-			 , S.UPDATE_DATE
-			 , S.JM_STATE
-			 , S.PRICE
-			 , S.ID
-			 , J.JM_ID
-			 , S.CATEGORY
-			 , S.RV_STATE
-			 , S.CH_STATE
-			 , S.SV_STATE
-		FROM MARKET S
-				 LEFT OUTER JOIN JMSTATE J
-								 ON S.ID = J.JM_ID
-									 AND S.SERVICE_NO = J.JM_SERVICE
+			END AS type_nm
+			 , S.title
+			 , S.content
+			 , S.reg_date
+			 , S.update_date
+			 , S.jm_state
+			 , S.price
+			 , S.id
+			 , J.jm_id
+			 , S.category
+			 , S.rv_state
+			 , S.ch_state
+			 , S.sv_state
+		FROM market S
+				 LEFT OUTER JOIN jmstate J
+								 ON S.id = J.jm_id
+									 AND S.service_no = J.jm_service
 		]]>
 	</select>
+	<!-- WHERE 공개번호 = 1;-->
 
+	<!-- member의 장소와 닉네임, market의 글 내용, jmState의 찜하기 찜취소 -->
 	<select id="selectServiceDetail" parameterType="MarketVO" resultType="MarketVO">
 		<![CDATA[
-		SELECT S.SERVICE_NO
-			 , CASE S.TYPE
-				   WHEN 0 THEN '구매'
-				   WHEN 1 THEN '판매'
-			END AS TYPE_NM
-			 , S.TITLE
-			 , S.CONTENT
-			 , S.REG_DATE
-			 , S.UPDATE_DATE
-			 , M.LOCATION
-			 , S.JM_STATE
-			 , S.PRICE
-			 , S.ID
-			 , M.NICKNAME
-			 , S.CATEGORY
-			 , S.RV_STATE
-			 , S.CH_STATE
-			 , S.SV_STATE
-		FROM MARKET S
-				 INNER JOIN MEMBER M
-							ON S.ID = M.ID
-		WHERE SERVICE_NO = #{serviceNo}
+			SELECT S.service_no
+				 , CASE S.type
+			  	   WHEN 0 THEN '구매'
+			  	   WHEN 1 THEN '판매'
+			  	   END AS type_nm
+				 , S.title
+				 , S.content
+				 , S.reg_date
+				 , S.update_date
+				 , M.location
+				 , S.jm_state
+				 , S.price
+				 , S.id
+				 , M.nickname
+				 , S.category
+				 , S.rv_state
+				 , S.ch_state
+				 , S.sv_state
+				 , ( SELECT jm_id
+                       FROM jmstate
+					  WHERE jm_service = S.service_no
+                        AND jm_id = #{id}) AS jm_gubun
+		 	  FROM market S
+		INNER JOIN member M
+				ON S.id = M.id
+			 WHERE S.service_no = #{serviceNo}
 		]]>
+		<!-- 		INNER JOIN jmstate J
+                        = J.ID  -->
 	</select>
 
 	<update id="serviceUpdate" parameterType="MarketVO">
 		UPDATE MARKET
-		SET TYPE = #{type}
-		  , TITLE = #{title}
-		  , CONTENT = #{content}
-		  , JM_STATE = #{jmState}
-		  , PRICE = #{price}
-		  , CATEGORY = #{category}
-		  , RV_STATE = #{rvState}
-		  , CH_STATE = #{chState}
-		  , SV_STATE = #{svState}
-		  , UPDATE_DATE = NOW()
-		WHERE SERVICE_NO = #{serviceNo}
+		SET type = #{type}
+		  , title = #{title}
+		  , content = #{content}
+		  , jm_state = #{jmState}
+		  , price = #{price}
+		  , category = #{category}
+		  , rv_state = #{rvState}
+		  , ch_state = #{chState}
+		  , sv_state = #{svState}
+		  , update_date = NOW()
+		WHERE service_no = #{serviceNo}
 	</update>
 
 	<delete id="serviceDelete" parameterType="MarketVO">
 		DELETE
-		FROM MARKET
-		WHERE SERVICE_NO = #{serviceNo}
+		FROM market
+		WHERE service_no = #{serviceNo}
 	</delete>
 
 	<insert id="insertJm" parameterType="MarketVO">
 	<![CDATA[
 		INSERT
-		INTO JMSTATE
+		INTO jmstate
 		(
-			JM_ID
-		, JM_SERVICE
+			jm_id
+		, jm_service
 		)
 		VALUES (
 				   #{jmId}
@@ -127,23 +133,23 @@
 	<delete id="deleteJm" parameterType="MarketVO">
 	<![CDATA[
 		DELETE
-		FROM JMSTATE
-		WHERE JM_ID = #{jmId}
-		  AND JM_SERVICE = #{jmService}
+		FROM jmstate
+		WHERE jm_id = #{jmId}
+		  AND jm_service = #{jmService}
 		]]>
 	</delete>
 
 	<update id="updateJmState" parameterType="MarketVO">
-		UPDATE MARKET
-		SET JM_STATE =
+		UPDATE market
+		SET jm_state =
 		<choose>
 			<when test='gubun == "I"'>
-				JM_STATE + 1
+				jm_state + 1
 			</when>
 			<when test='gubun == "D"'>
-				JM_STATE - 1
+				jm_state - 1
 			</when>
 		</choose>
-		WHERE SERVICE_NO = #{jmService}
+		WHERE service_no = #{jmService}
 	</update>
 </mapper>

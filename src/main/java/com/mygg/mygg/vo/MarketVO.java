@@ -1,7 +1,5 @@
 package com.mygg.mygg.vo;
 
-
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,7 +25,7 @@ public class MarketVO {
 	private int jmId;				// 사용자 ID 찜
 	private int jmService;			// 서비스 번호 찜
 	private int price;				// 가격
-	private int id;					// 작성자 아이디(찜에도 쓰임)
+	private int id;					// 작성자 pk값(찜에도 쓰임)
 	private String nickname;		// 작성자 닉네임(상세보기에서 마이페이지로이동)
 	private String category;		// 카테고리
 	private String[] categorys;		// 카테고리들 담는곳
@@ -36,6 +34,8 @@ public class MarketVO {
 	private int svState;			// 등록자의 매물상태
 
 	private String gubun;			// 저장&수정 작업을 구분하기 위한 변수
+	private String jmGubun;			// 찜구분
+	// private String jm_gubun;		// 찜구분
 	private int returnCnt;			// 작업처리 결과건수(1건이면 1받고, 2건이면 2받고)
 
 }

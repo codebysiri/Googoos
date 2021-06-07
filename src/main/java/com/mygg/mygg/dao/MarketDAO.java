@@ -23,8 +23,8 @@ public class MarketDAO extends AbstractDAO {
 	}
 
 	// 상세보기
-	public MarketVO serviceDetail(int serviceNo) throws Exception {
-		return (MarketVO) select("market.selectServiceDetail", serviceNo);
+	public MarketVO serviceDetail(MarketVO marketVO) throws Exception {
+		return (MarketVO) select("market.selectServiceDetail", marketVO);
 	}
 
 	// 등록

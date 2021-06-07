@@ -15,7 +15,8 @@ import com.mygg.mygg.vo.MarketVO;
 
 @Service("marketService")
 public class MarketServiceImpl implements MarketService {
-//	private static final Logger logger = LoggerFactory.getLogger(MarketDAO.class);
+
+	private static final Logger logger = LoggerFactory.getLogger(MarketDAO.class);
 
 	// Dao와 연결
 	@Resource(name="marketDAO")
@@ -58,9 +59,16 @@ public class MarketServiceImpl implements MarketService {
 
 	// 서비스 상세보기
 	@Override
-	public MarketVO serviceDetail(int serviceNo) throws Exception {
+	public MarketVO serviceDetail(MarketVO marketVO) throws Exception {
 
-		return marketDAO.serviceDetail(serviceNo);
+		MarketVO serviceDetail = marketDAO.serviceDetail(marketVO);
+
+		if (serviceDetail != null) {
+			logger.info(serviceDetail.toString());
+		}
+
+		// 찜 관련
+		return serviceDetail;
 	}
 
 	// 서비스 삭제하기

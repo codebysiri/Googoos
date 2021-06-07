@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>로그인 성공</title>
-    <link rel="stylesheet" type="text/css" href="/css/header.css">
 </head>
 <body>
-<div th:replace="/fixed/header :: header"></div>
 <h1>로그인 성공!!</h1>
 <hr>
 <p>
@@ -14,5 +12,6 @@
 </p>
 <a th:href="@{'/'}">메인으로 이동</a>
 <a th:href="@{'/member/info'}"> 마이페이지 </a>
+<a th:href="@{/market/marketListPage}">마켓리스트</a>
 </body>
 </html>

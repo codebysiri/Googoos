@@ -13,7 +13,7 @@ public interface MarketService {
 	public MarketVO serviceSave(MarketVO marketVO) throws Exception;
 
 	// 서비스 상세보기
-	public MarketVO serviceDetail(int serviceNo) throws Exception;
+	public MarketVO serviceDetail(MarketVO marketVO) throws Exception;
 
 	// 서비스 삭제하기
 	public MarketVO serviceDelete(MarketVO marketVO) throws Exception;

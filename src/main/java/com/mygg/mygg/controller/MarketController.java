@@ -1,10 +1,12 @@
 package com.mygg.mygg.controller;
 
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -18,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mygg.mygg.dto.MemberDTO;
 import com.mygg.mygg.service.MarketService;
 import com.mygg.mygg.service.MemberService;
 import com.mygg.mygg.vo.MarketVO;
@@ -74,19 +78,19 @@ public class MarketController {
 	 * @throws Exception
 	 */
 	@GetMapping("serviceRegistPage")
-	public String serviceRegistPage(Model model, HttpServletRequest request) throws Exception {
+	public String serviceRegistPage(HttpServletResponse response, MemberDTO memberDTO, Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
 
-		/*
-		 * HttpSession session = request.getSession();
-		 *
-		 * Object member = session.getAttribute("memberId");
-		 *
-		 * marketService.memberId(member);
-		 *
-		 * System.out.println(member);
-		 */
+		// 세션이 없는채로 url찍고들어오면 로그인하라고 페이지 이동
+		HttpSession session = request.getSession();
 
-		return "service/serviceRegist";
+		Object member = session.getAttribute("id");
+
+		if(member == null) {
+
+			return "redirect:/member/login";
+		} else {
+			return "service/serviceRegist";
+		}
 	}
 
 	/**
@@ -113,7 +117,6 @@ public class MarketController {
 		logger.info("## serviceSave {} :: " + marketVO.toString());
 		logger.info("##################################################");
 
-
 		return marketService.serviceSave(marketVO);
 	}
 
@@ -133,17 +136,28 @@ public class MarketController {
 	 - serviceNo로 찾아와서 상세보기 해야함.
 	 */
 	@RequestMapping("serviceDetail")
-	public String serviceDetail(@ModelAttribute("marketVO") MarketVO marketVO, Model model) throws Exception {
+	public String serviceDetail(@ModelAttribute("marketVO") MarketVO marketVO, Model model, HttpServletResponse response, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
 
 		logger.info("##################################################");
 		logger.info("## serviceDetail {} :: " + marketVO.toString());
 		logger.info("##################################################");
 
-		// serviceInfo는 serviceNo(글 번호)를 대표로 해당 번호의 글내용들을 다 가져와서 담겨진다.
-		MarketVO serviceInfo = marketService.serviceDetail(marketVO.getServiceNo());
+		HttpSession session = request.getSession();
 
-		model.addAttribute("serviceInfo", serviceInfo);
-		return "service/serviceDetail";
+		Object member = session.getAttribute("id");
+
+		if (member == null) {
+
+			return "redirect:/member/login";
+
+		} else {
+			// serviceInfo는 serviceNo(글 번호)를 대표로 해당 번호의 글내용들을 다 가져와서 담겨진다.
+			MarketVO serviceInfo = marketService.serviceDetail(marketVO);
+
+			model.addAttribute("serviceInfo", serviceInfo);
+
+			return "service/serviceDetail";
+		}
 	}
 	/**
 	 * 기능 - 서비스 수정하는 폼 입력 기능
@@ -156,17 +170,26 @@ public class MarketController {
 	 * 쿼리(DB 작업 insert, select, update, delete)
 	 */
 	@RequestMapping("serviceUpdate")
-	public String serviceUpdate(@ModelAttribute("marketVO") MarketVO marketVO, Model model, HttpSession session) throws Exception {
+	public String serviceUpdate(@ModelAttribute("marketVO") MarketVO marketVO, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		logger.info("##################################################");
-		logger.info("## serviceUpdate {} :: " + marketVO.toString());
-		logger.info("##################################################");
+		HttpSession session = request.getSession();
 
-		// pk serviceNo로 전체값을 다 가져와서 serviceInf에 담는다.
-		MarketVO serviceInfo = marketService.serviceDetail(marketVO.getServiceNo());
+		Object member = session.getAttribute("id");
 
-		model.addAttribute("serviceInfo", serviceInfo);
-		return "service/serviceUpdate";
+		if (member == null) {
+			return "redirect:/member/login";
+		} else {
+
+			logger.info("##################################################");
+			logger.info("## serviceUpdate {} :: " + marketVO.toString());
+			logger.info("##################################################");
+
+			// pk serviceNo로 전체값을 다 가져와서 serviceInf에 담는다.
+			MarketVO serviceInfo = marketService.serviceDetail(marketVO);
+
+			model.addAttribute("serviceInfo", serviceInfo);
+			return "service/serviceUpdate";
+		}
 	}
 	/**
 	 * 기능 - 서비스를 삭제 하는 곳
