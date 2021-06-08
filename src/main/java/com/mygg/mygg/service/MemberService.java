@@ -2,6 +2,7 @@ package com.mygg.mygg.service;
 
 import com.mygg.mygg.dto.MemberDTO;
 
+import java.util.List;
 import java.util.Map;
 
 public interface MemberService {
@@ -17,5 +18,8 @@ public interface MemberService {
     Map<String, String> marketList(int id) throws Exception;
     Map<String, String> wish(int id);
 
+    // Admin
+    List<Map<String, Object>> memberList(Integer member_page);
+    Double getTotal();
 
 }

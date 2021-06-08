@@ -6,6 +6,7 @@ import com.mygg.mygg.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -19,17 +20,19 @@ public class MemberServiceImpl implements MemberService {
         this.memberRepository = memberRepository;
     }
 
+    // Login
+    @Override
+    public Map<String, String> login(MemberDTO memberDTO) throws Exception {
+        return memberRepository.login(memberDTO);
+    }
+
     // JOIN
     @Override
     public void register(MemberDTO memberDTO) {
         memberRepository.register(memberDTO);
     }
 
-    @Override
-    public Map<String, String> login(MemberDTO memberDTO) throws Exception {
-        return memberRepository.login(memberDTO);
-    }
-
+    // MyPage
     @Override
     public void introduction(MemberDTO memberDTO) {
         memberRepository.introduction(memberDTO);
@@ -44,4 +47,17 @@ public class MemberServiceImpl implements MemberService {
     public Map<String, String> wish(int id) {
         return memberRepository.wish(id);
     }
+
+    // Admin
+    @Override
+    public List<Map<String, Object>> memberList(Integer member_page) {
+        return memberRepository.memberList(member_page);
+    }
+
+    @Override
+    public Double getTotal() {
+        return memberRepository.getTotal();
+    }
+
+
 }

@@ -5,10 +5,77 @@
     <title>어드민</title>
     <link rel="stylesheet" type="text/css" href="/css/header.css">
 </head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<style>
+    .table{
+        border:1px solid;
+        width: 1100px;
+    }
+    thead{
+        border-bottom: 1px solid gray;
+    }
+    .member{
+        border:1px solid;
+    }
+    .member:hover{
+        transition: all 0.3s;
+        background:#DED369;
+    }
+    #search{
+        border:1px solid lightgray;
+    }
+    .container{
+        display: flex;
+        justify-content: center;
+    }
+    .memberCenter{
+        text-align: center;
+    }
+
+</style>
 <body>
 <div th:replace="/fixed/header :: header"></div>
 <h1>회원 목록 페이지</h1>
 <hr>
+<div class="searchArea">
+    <input type="text" placeholder="검색어를 입력해주세요"  id="search">
+    <input type="button" value="검색" id="searchBtn">
+    <br><br>
+</div>
+<div class="container">
+    <table class="table" id="table">
+
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>email</th>
+            <th>name</th>
+            <th>nickname</th>
+            <th>phone_number</th>
+            <th>gender</th>
+            <th>age</th>
+            <th>location</th>
+            <th>authority</th>
+            <th>정지 회원 처리</th>
+        </tr>
+        </thead>
+
+        <tbody class="tbody" id="tbody">
+        <tr th:each="member :${members}" class="member">
+            <td th:text="${member.id}" class="memberCenter"></td>
+            <td th:text="${member.email}" class="memberCenter"></td>
+            <td th:text="${member.name}" class="memberCenter"></td>
+            <td th:text="${member.nickname}" class="memberCenter"></td>
+            <td th:text="${member.phone_number}" class="memberCenter"></td>
+            <td th:text="${member.gender}" class="memberCenter"></td>
+            <td th:text="${member.age}" class="memberCenter"></td>
+            <td th:text="${member.location}" class="memberCenter"></td>
+            <td th:text="${member.authority}" class="memberCenter"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
 
 
 

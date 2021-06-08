@@ -39,4 +39,17 @@
         WHERE m.id = #{id}
     </select>
 
+<!--    Admin-->
+    <select id="memberList" resultType="java.util.HashMap" parameterType="Integer">
+        SELECT *
+        FROM member
+        ORDER BY id DESC
+        LIMIT 20 OFFSET #{member_page}
+    </select>
+
+    <select id="getTotal" resultType="Double">
+        SELECT count(*) AS total
+        FROM member
+    </select>
+
 </mapper>
