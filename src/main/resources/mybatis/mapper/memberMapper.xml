@@ -5,7 +5,7 @@
 
 <mapper namespace="com.mygg.mygg.domain.repository.MemberRepository">
 
-<!--    Join-->
+    <!--    Join-->
     <insert id="register">
         INSERT INTO member (id, email, password, name, nickname, phone_number, gender, age, location, photo, authority,
                             level, wish, batch, mileage, introduction)
@@ -13,15 +13,15 @@
                 #{level}, #{wish}, #{batch}, #{mileage}, #{introduction})
     </insert>
 
-<!--    Login-->
+    <!--    Login-->
     <select id="login" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="java.util.HashMap">
         SELECT *
         FROM member
         WHERE email = #{email}
     </select>
 
-<!--    MyPage-->
-  <update id="introduction">
+    <!--    MyPage-->
+    <update id="introduction">
         UPDATE member
         SET introduction = #{introduction}
         WHERE id = #{id}
@@ -29,22 +29,22 @@
     <select id="marketList" parameterType="Integer" resultType="java.util.HashMap">
         SELECT *
         FROM member m JOIN market mk
-        ON (m.id = mk.id)
+                           ON (m.id = mk.id)
         WHERE m.id = #{id}
     </select>
     <select id="wish" parameterType="Integer" resultType="java.util.HashMap">
         SELECT *
         FROM member m JOIN jmstate j
-        ON (m.id = j.jm_id)
+                           ON (m.id = j.jm_id)
         WHERE m.id = #{id}
     </select>
 
-<!--    Admin-->
+    <!--    Admin-->
     <select id="memberList" resultType="java.util.HashMap" parameterType="Integer">
         SELECT *
         FROM member
         ORDER BY id DESC
-        LIMIT 20 OFFSET #{member_page}
+            LIMIT 20 OFFSET #{member_page}
     </select>
 
     <select id="getTotal" resultType="Double">
