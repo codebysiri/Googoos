@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class MemberAdminController {
 
@@ -19,12 +22,19 @@ public class MemberAdminController {
 
     // Member List
     @GetMapping(value ={"/member/admin/{member_page}", "/member/admin"})
-    public String memberList(@PathVariable(required = false) Integer member_page, Model model) {
+    public String memberList(@PathVariable(required = false) Integer member_page, Model model, HttpServletRequest request) {
 
+        HttpSession httpSession = request.getSession();
         Double total = memberService.getTotal();
         int totalPage = (int) Math.ceil(total / 20);
 
-        if(member_page != null) {
+        // "authority" 1 - 일반회원 2 - 운영자
+        if ((int)httpSession.getAttribute("authority") != 2) {
+            String referer = request.getHeader("Referer");
+            return "redirect:" + referer;
+        }
+
+        if (member_page != null) {
             model.addAttribute("members", memberService.memberList((member_page - 1) * 10 * 2));
             model.addAttribute("totalPage", totalPage);
         } else {
