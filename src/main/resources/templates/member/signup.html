@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>회원가입 페이지</title>
     <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
 <div th:replace="/fixed/header :: header"></div>
@@ -12,50 +13,117 @@
 
 <form action="/member/signup" method="post">
 
-    <input type="email" name="email" placeholder="이메일 입력해주세요"><br>
-    <input type="password" name="password" placeholder="비밀번호"><br>
-    <input type="text" name="name" placeholder="이름"><br>
-    <input type="text" name="nickname" placeholder="닉네임"><br>
-    <input type="text" name="phone_number" placeholder="휴대폰 번호"><br>
-    성별
-    <select type="text" name="gender" placeholder="성별">
-        <option>-- 선택 --</option>
-        <option>남성</option>
-        <option>여성</option>
-    </select> <br>
-    <input type="text" name="age" placeholder="나이"><br>
-    주소
-    <select type="text" name="location" placeholder="주소">
-        <option>-- 선택 --</option>
-        <option>종로구</option>
-        <option>중구</option>
-        <option>용산구</option>
-        <option>성동구</option>
-        <option>광진구</option>
-        <option>동대문구</option>
-        <option>중랑구</option>
-        <option>성북구</option>
-        <option>강북구</option>
-        <option>도봉구</option>
-        <option>노원구</option>
-        <option>은평구</option>
-        <option>서대문구</option>
-        <option>마포구</option>
-        <option>양천구</option>
-        <option>강서구</option>
-        <option>구로구</option>
-        <option>금천구</option>
-        <option>영등포구</option>
-        <option>동작구</option>
-        <option>관악구</option>
-        <option>서초구</option>
-        <option>강남구</option>
-        <option>송파구</option>
-        <option>강동구</option>
-    </select> <br>
-    프로필 사진
-    <input type="file" name="photo" multiple="사진"/><br>
-    <button type="submit">가입하기</button>
+    <table>
+        <tr>
+            <th>
+                <label> 이메일 </label>
+            </th>
+            <td>
+                <input type="email" id="email" name="email">
+                <button type="button"> 중복확인 </button>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label> 비밀번호 </label>
+            </th>
+            <td>
+                <input type="password" name="password">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label> 이름 </label>
+            </th>
+            <td>
+                <input type="text" name="name" >
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label> 닉네임 </label>
+            </th>
+            <td>
+                <input type="text" name="nickname" >
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label> 휴대폰 번호 </label>
+            </th>
+            <td>
+                <input type="text" name="phone_number" >
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label> 성별 </label>
+            </th>
+            <td>
+                <select type="text" name="gender" placeholder="성별">
+                    <option>-- 선택 --</option>
+                    <option>남성</option>
+                    <option>여성</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label> 나이 </label>
+            </th>
+            <td>
+                <input type="text" name="age" >
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label> 주소 </label>
+            </th>
+            <td>
+                <select type="text" name="location" placeholder="주소">
+                    <option>-- 선택 --</option>
+                    <option>종로구</option>
+                    <option>중구</option>
+                    <option>용산구</option>
+                    <option>성동구</option>
+                    <option>광진구</option>
+                    <option>동대문구</option>
+                    <option>중랑구</option>
+                    <option>성북구</option>
+                    <option>강북구</option>
+                    <option>도봉구</option>
+                    <option>노원구</option>
+                    <option>은평구</option>
+                    <option>서대문구</option>
+                    <option>마포구</option>
+                    <option>양천구</option>
+                    <option>강서구</option>
+                    <option>구로구</option>
+                    <option>금천구</option>
+                    <option>영등포구</option>
+                    <option>동작구</option>
+                    <option>관악구</option>
+                    <option>서초구</option>
+                    <option>강남구</option>
+                    <option>송파구</option>
+                    <option>강동구</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label> 프로필 사진 </label>
+            </th>
+            <td>
+                <input type="file" name="photo" multiple="사진">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit">가입하기</button>
+            </td>
+        </tr>
+    </table>
 </form>
 </body>
 </html>
