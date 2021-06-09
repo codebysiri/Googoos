@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -48,12 +49,10 @@ public class MyPageController {
         return "/member/introduction";
     }
 
-    // introduction 입력 처리
-    @PostMapping("/introduction")
-    public String introductionPOST(MemberDTO memberDTO) {
-        memberService.introduction(memberDTO);
+    // introduction update
+    @PostMapping("introduction")
+    public String introductionPOST(@RequestParam Map<String, String> introduction) {
+        memberService.introduction(introduction);
         return "/member/introduction";
     }
-
-
 }

@@ -14,7 +14,8 @@ public interface MemberService {
     Map<String, String> login(MemberDTO memberDTO) throws Exception;
 
     // myPage
-    void introduction(MemberDTO memberDTO);
+//    void introduction(MemberDTO memberDTO);
+    int introduction(Map<String, String> introduction);
     Map<String, String> marketList(int id) throws Exception;
     Map<String, String> wish(int id);
 

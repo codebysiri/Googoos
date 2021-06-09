@@ -33,9 +33,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // MyPage
+//    @Override
+//    public void introduction(MemberDTO memberDTO) {
+//        memberRepository.introduction(memberDTO);
+//    }
+
     @Override
-    public void introduction(MemberDTO memberDTO) {
-        memberRepository.introduction(memberDTO);
+    public int introduction(Map<String, String> introduction) {
+        return memberRepository.introduction(introduction);
     }
 
     @Override

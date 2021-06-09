@@ -21,7 +21,7 @@
     </select>
 
     <!--    MyPage-->
-    <update id="introduction">
+    <update id="introduction" parameterType="java.util.HashMap">
         UPDATE member
         SET introduction = #{introduction}
         WHERE id = #{id}
