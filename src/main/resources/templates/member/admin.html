@@ -39,38 +39,40 @@
 <hr>
 
 <div class="container">
-    <table class="table" id="table">
+    <form action="/admin/update" method="POST">
+        <table class="table" id="table">
 
-        <thead>
-        <tr>
-            <th>id</th>
-            <th>email</th>
-            <th>name</th>
-            <th>nickname</th>
-            <th>phone_number</th>
-            <th>gender</th>
-            <th>age</th>
-            <th>location</th>
-            <th>authority</th>
-            <th>정지 회원 처리</th>
-        </tr>
-        </thead>
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>email</th>
+                <th>name</th>
+                <th>nickname</th>
+                <th>phone_number</th>
+                <th>gender</th>
+                <th>age</th>
+                <th>location</th>
+                <th>authority</th>
+                <th>정지 회원 처리</th>
+            </tr>
+            </thead>
 
-        <tbody class="tbody" id="tbody">
-        <tr th:each="member :${members}" class="member">
-            <td th:text="${member.id}" class="memberCenter"></td>
-            <td th:text="${member.email}" class="memberCenter"></td>
-            <td th:text="${member.name}" class="memberCenter"></td>
-            <td th:text="${member.nickname}" class="memberCenter"></td>
-            <td th:text="${member.phone_number}" class="memberCenter"></td>
-            <td th:text="${member.gender}" class="memberCenter"></td>
-            <td th:text="${member.age}" class="memberCenter"></td>
-            <td th:text="${member.location}" class="memberCenter"></td>
-            <td th:text="${member.authority}" class="memberCenter"></td>
-        </tr>
-        </tbody>
-    </table>
-
+            <tbody class="tbody" id="tbody">
+            <tr th:each="member :${members}" class="member">
+                <td th:text="${member.id}" class="memberCenter"></td>
+                <td th:text="${member.email}" class="memberCenter"></td>
+                <td th:text="${member.name}" class="memberCenter"></td>
+                <td th:text="${member.nickname}" class="memberCenter"></td>
+                <td th:text="${member.phone_number}" class="memberCenter"></td>
+                <td th:text="${member.gender}" class="memberCenter"></td>
+                <td th:text="${member.age}" class="memberCenter"></td>
+                <td th:text="${member.location}" class="memberCenter"></td>
+                <td th:text="${member.authority}" class="memberCenter"></td>
+                <td><input type="submit" class="submit" id="submit" value="정지"></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
 </div>
 
 

@@ -52,4 +52,10 @@
         FROM member
     </select>
 
+    <update id="disableMember" parameterType="java.util.HashMap">
+        UPDATE member
+        SET authority = 3
+        WHERE authority = 1
+    </update>
+
 </mapper>

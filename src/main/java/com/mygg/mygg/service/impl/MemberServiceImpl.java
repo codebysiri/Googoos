@@ -59,5 +59,10 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.getTotal();
     }
 
+    @Override
+    public int disableMember(Map<String, String> disable) {
+        return memberRepository.disableMember(disable);
+    }
+
 
 }

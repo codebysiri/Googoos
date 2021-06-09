@@ -6,9 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Controller
 public class MemberAdminController {
@@ -43,6 +46,12 @@ public class MemberAdminController {
             model.addAttribute("totalPage", totalPage);
         }
         return "/member/admin";
+    }
+
+    @PostMapping("/admin/update")
+    public String disableMember(@RequestParam Map<String, String> disable) {
+        memberService.disableMember(disable);
+        return "redirect:/member/admin";
     }
 
 }

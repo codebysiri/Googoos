@@ -24,5 +24,6 @@ public interface MemberRepository {
     // Admin
     List<Map<String, Object>> memberList(Integer member_page);
     Double getTotal();
+    int disableMember(Map<String, String> disable);
 
 }
