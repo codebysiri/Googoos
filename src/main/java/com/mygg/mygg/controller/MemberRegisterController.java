@@ -26,13 +26,30 @@ public class MemberRegisterController {
         return result;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/nickCheck", method = RequestMethod.POST)
+    public int nickCheck(String nickname) throws Exception {
+        int result = memberService.nickCheck(nickname);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/phoneCheck", method = RequestMethod.POST)
+    public int phoneCheck(String phone_number) throws Exception {
+        int result = memberService.phoneCheck(phone_number);
+        return result;
+    }
+
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String registerPOST(MemberDTO memberDTO, String email) throws Exception {
-        int result = memberService.emailCheck(email);
+    public String registerPOST(MemberDTO memberDTO, String email, String nickname, String phone_number) throws Exception {
+        int emailResult = memberService.emailCheck(email);
+        int nickResult = memberService.nickCheck(nickname);
+        int phoneResult = memberService.phoneCheck(phone_number);
+
         try {
-            if (result == 1) {
+            if (emailResult == 1 || nickResult == 1 || phoneResult == 1) {
                 return "/member/signup";
-            } else if (result == 0) {
+            } else if (emailResult == 0 && nickResult == 0 && phoneResult == 0) {
                 memberService.register(memberDTO);
                 return "redirect:/member/login";
             }

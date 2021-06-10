@@ -10,6 +10,8 @@ public interface MemberService {
     // join
     void register(MemberDTO memberDTO) throws Exception;
     int emailCheck(String email) throws Exception;
+    int nickCheck(String nickname) throws Exception;
+    int phoneCheck(String phone_number) throws Exception;
 
     // login
     Map<String, String> login(MemberDTO memberDTO) throws Exception;
@@ -23,4 +25,5 @@ public interface MemberService {
     List<Map<String, Object>> memberList(Integer member_page);
     Double getTotal();
     int disableMember(Map<String, String> disable);
+
 }

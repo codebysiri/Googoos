@@ -38,6 +38,18 @@ public class MemberServiceImpl implements MemberService {
         return result;
     }
 
+    @Override
+    public int nickCheck(String nickname) throws Exception {
+        int result = memberRepository.nickCheck(nickname);
+        return result;
+    }
+
+    @Override
+    public int phoneCheck(String phone_number) throws Exception {
+        int result = memberRepository.phoneCheck(phone_number);
+        return result;
+    }
+
     // MyPage
     @Override
     public int introduction(Map<String, String> introduction) {

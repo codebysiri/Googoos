@@ -13,9 +13,11 @@ public interface MemberRepository {
     // JOIN
     void register(MemberDTO memberDTO) throws Exception;
     int emailCheck(String email) throws Exception;
+    int nickCheck(String nickname) throws Exception;
+    int phoneCheck(String phone_number) throws Exception;
 
     // Login
-    Map<String, String> login(MemberDTO memberDTO) ;
+    Map<String, String> login(MemberDTO memberDTO);
 
     // MyPage
     int introduction(Map<String, String> introduction);

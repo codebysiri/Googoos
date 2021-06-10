@@ -12,12 +12,21 @@
         VALUES (#{id}, #{email}, #{password}, #{name}, #{nickname}, #{phone_number}, #{gender}, #{age}, #{location}, #{photo}, #{authority},
                 #{level}, #{wish}, #{batch}, #{mileage}, #{introduction})
     </insert>
-    <select id="emailCheck" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="int" >
+    <select id="emailCheck" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="int">
         SELECT COUNT(*)
         FROM member
         WHERE email = #{email}
     </select>
-    <select id="nickCheck"
+    <select id="nickCheck" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM member
+        WHERE nickname = #{nickname}
+    </select>
+    <select id="phoneCheck" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM member
+        WHERE phone_number = #{phone_number}
+    </select>
 
     <!--    Login-->
     <select id="login" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="java.util.HashMap">
