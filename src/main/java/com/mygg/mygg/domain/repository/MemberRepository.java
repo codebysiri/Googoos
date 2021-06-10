@@ -11,7 +11,8 @@ import java.util.Map;
 public interface MemberRepository {
 
     // JOIN
-    void register(MemberDTO memberDTO) ;
+    void register(MemberDTO memberDTO) throws Exception;
+    int emailCheck(String email) throws Exception;
 
     // Login
     Map<String, String> login(MemberDTO memberDTO) ;

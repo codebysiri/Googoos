@@ -12,15 +12,14 @@
 <hr>
 
 <form action="/member/signup" method="post">
-
     <table>
         <tr>
             <th>
-                <label> 이메일 </label>
+                <label for="email"> 이메일 </label>
             </th>
             <td>
-                <input type="email" id="email" name="email">
-                <button type="button"> 중복확인 </button>
+                <input type="text" id="email" name="email">
+                <button class="emailCheck" type="button" id="emailCheck" onclick="fn_emailCheck();" value="N"> 중복확인 </button>
             </td>
         </tr>
         <tr>
@@ -125,5 +124,24 @@
         </tr>
     </table>
 </form>
+<script>
+    function fn_emailCheck() {
+        $.ajax({
+            url : "/member/emailCheck",
+            type : "POST",
+            dataType :"JSON",
+            data : {"email" : $("#email").val()},
+            success : function (data) {
+                if(data == 1) {
+                    alert("중복된 이메일입니다.");
+                } else if (data == 0) {
+                    $("#emailCheck").attr("value", "Y");
+                    alert("사용 가능한 이메일입니다.")
+                }
+            }
+
+        })
+    }
+</script>
 </body>
 </html>

@@ -8,7 +8,8 @@ import java.util.Map;
 public interface MemberService {
 
     // join
-    void register(MemberDTO memberDTO);
+    void register(MemberDTO memberDTO) throws Exception;
+    int emailCheck(String email) throws Exception;
 
     // login
     Map<String, String> login(MemberDTO memberDTO) throws Exception;

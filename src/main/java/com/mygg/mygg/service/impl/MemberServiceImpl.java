@@ -28,8 +28,14 @@ public class MemberServiceImpl implements MemberService {
 
     // JOIN
     @Override
-    public void register(MemberDTO memberDTO) {
+    public void register(MemberDTO memberDTO) throws Exception {
         memberRepository.register(memberDTO);
+    }
+
+    @Override
+    public int emailCheck(String email) throws Exception {
+        int result = memberRepository.emailCheck(email);
+        return result;
     }
 
     // MyPage

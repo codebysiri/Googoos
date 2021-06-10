@@ -12,6 +12,12 @@
         VALUES (#{id}, #{email}, #{password}, #{name}, #{nickname}, #{phone_number}, #{gender}, #{age}, #{location}, #{photo}, #{authority},
                 #{level}, #{wish}, #{batch}, #{mileage}, #{introduction})
     </insert>
+    <select id="emailCheck" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="int" >
+        SELECT COUNT(*)
+        FROM member
+        WHERE email = #{email}
+    </select>
+    <select id="nickCheck"
 
     <!--    Login-->
     <select id="login" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="java.util.HashMap">
@@ -40,7 +46,7 @@
     </select>
 
     <!--    Admin-->
-    <select id="memberList" resultType="java.util.HashMap" parameterType="Integer">
+    <select id="memberList" parameterType="Integer" resultType="java.util.HashMap" >
         SELECT *
         FROM member
         ORDER BY id DESC
