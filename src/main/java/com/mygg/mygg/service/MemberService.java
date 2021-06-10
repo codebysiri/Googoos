@@ -18,8 +18,8 @@ public interface MemberService {
 
     // myPage
     int introduction(Map<String, String> introduction);
-    Map<String, String> marketList(int id) throws Exception;
-    Map<String, String> wish(int id);
+    List<Map<String, Object>> marketList(int id);
+    List<Map<String, Object>> wish(int id);
 
     // Admin
     List<Map<String, Object>> memberList(Integer member_page);

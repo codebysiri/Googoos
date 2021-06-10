@@ -1,16 +1,17 @@
 package com.mygg.mygg.controller;
 
-import com.mygg.mygg.dto.MemberDTO;
 import com.mygg.mygg.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -25,18 +26,16 @@ public class MyPageController {
     }
 
     @GetMapping("/info")
-    public String myPage(HttpSession httpSession) throws Exception {
+    public String myPage(HttpSession httpSession, Model model) throws Exception {
 
-        Integer id = (int) httpSession.getAttribute("id");
-        Map<String, String> marketList = memberService.marketList(id);
-        Map<String, String> wish = memberService.wish(id);
+        if(httpSession.getAttribute("id") != null) {
+            Integer id = (int) httpSession.getAttribute("id");
+            List<Map<String, Object>> marketList = memberService.marketList(id);
+            List<Map<String, Object>> wish = memberService.wish(id);
 
-        if (marketList.get("id") != null) {
-            httpSession.setAttribute("type", marketList.get("TYPE"));
-            httpSession.setAttribute("title", marketList.get("TITLE"));
-            httpSession.setAttribute("price", marketList.get("PRICE"));
-            httpSession.setAttribute("rvState", marketList.get("RV_STATE"));
-            httpSession.setAttribute("wish", wish.get("JM_SERVICE"));
+            model.addAttribute(marketList);
+            model.addAttribute(wish);
+
             return "/member/myinfo";
         } else {
             return "redirect:/member/login";
