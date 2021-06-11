@@ -31,4 +31,30 @@ public class ChatServiceImpl implements ChatService {
         return chatRepository.insertChat(form_value);
     }
 
+    @Override
+    public int insertChatRoom(HashMap<String, Object> value) {
+        return chatRepository.insertChatRoom(value);
+    }
+
+    @Override
+    public Map<String,Object> getRoomStatus(int room_id) {
+        return chatRepository.getRoomStatus(room_id);
+    }
+
+    @Override
+    public int accept(HashMap<String, Object> acceptValue) {
+        return chatRepository.accept(acceptValue);
+    }
+
+    @Override
+    public Map<String, Object> getMarket(int room_id) {
+        return chatRepository.getMarket(room_id);
+    }
+
+    @Override
+    public int upDateReview(HashMap<String, Object> formData) {
+        return chatRepository.upDateReview(formData);
+    }
+
+
 }

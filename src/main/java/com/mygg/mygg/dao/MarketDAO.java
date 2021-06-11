@@ -1,6 +1,7 @@
 package com.mygg.mygg.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,8 @@ public class MarketDAO extends AbstractDAO {
 	private static final Logger logger = LoggerFactory.getLogger(MarketDAO.class);
 
 	// 쿼리 "namespace.id", 값
-	// 리스트
+
+	// 서비스 리스트
 	public List<MarketVO> marketList() throws Exception {
 
 		@SuppressWarnings("unchecked")
@@ -21,6 +23,15 @@ public class MarketDAO extends AbstractDAO {
 
 		return marketList;
 	}
+
+	// 카테고리 리스트
+//	public List<MarketVO> categoryList() throws Exception {
+//
+//		@SuppressWarnings("unchecked")
+//		List<MarketVO> categoryList = (List<MarketVO>) selectList("market.selectcategoryList");
+//
+//		return categoryList;
+//	}
 
 	// 상세보기
 	public MarketVO serviceDetail(MarketVO marketVO) throws Exception {
@@ -56,4 +67,7 @@ public class MarketDAO extends AbstractDAO {
 	public int updateJmState(MarketVO marketVO) {
 		return (int) update("market.updateJmState", marketVO);
 	}
+
+
+
 }

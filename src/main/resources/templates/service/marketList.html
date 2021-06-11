@@ -6,70 +6,124 @@
 
 	<!-- include libraries(jQuery, bootstrap) -->
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 	<!-- include summernote css/js -->
-	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="/css/header.css">
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 </head>
+<style>
+	.categoryTable {
+		width:80%;
+		height:50%;
+	}
+
+	.marketServiceTable {
+		width:100%;
+		height:50%;
+	}
+	#search{
+		border:1px solid lightgray;
+	}
+</style>
 
 <body>
 <div th:replace="/fixed/header :: header"></div>
+<div class="serchArea">
+	<input type="text" placeholder="검색어를 입력해주세요"  id="search">
+	<input type="button" value="검색" id="searchBtn">
+</div>
 <h2>Market List</h2>
 <!-- 테이블 크기 조정 화면에 꽉 차게 %로 하면 창 크기를 줄여도 크기에 맞춰서 늘어나고, 줄어든다. -->
-<table border="1">
-	<colgroup>
-		<col width="3%" />
-		<col width="3%" />
-		<col width="15%" />
-		<col width="*" />
-		<col width="15%" />
-		<col width="5%" />
-		<col width="5%" />
-		<col width="8%" />
-		<col width="10%" />
-	</colgroup>
-	<!-- 헤더 제목 부분 -->
-	<thead align="center">
-	<tr>
-		<td>번호</td>
-		<td><input type="checkbox" id="allChk" name="chk" /></td>
-		<td>제목</td>
-		<td>내용</td>
-		<td>날짜</td>
-		<td>+찜</td>
-		<td>타입</td>
-		<td>가격</td>
-		<td>카테고리</td>
-	</tr>
-	</thead>
-	<tbody align="center">
-	<!-- th:each 반복처리 marketList에 변수들이 담겨있음. 각 구성요소를 접근할 때 market 변수 사용
-     자식태그들은 market변수를 이용해서 각 요소의 속성에 접근 -->
-	<tr th:each="market : ${marketList}">
-		<!-- 번호 1씩 늘어나는거 -->
-		<td th:text="${marketStat.index + 1}"></td>
-		<td><input type="checkbox" th:id="${market.serviceNo}" name="chk" /></td>
-		<td>
-			<!-- 제목누르면 상세보기로 넘어가기 service_no를 넘겨주면서 -->
-			<a th:if="${session.id != null}" th:href="@{/market/serviceDetail(serviceNo=${market.serviceNo}, id=${session.id})}"
-			   th:text="${market.title}" th:field="*{market.title}">
-			</a>
-			<a th:if="${session.id == null}" href="javascript:void(0)" th:text="${market.title}" th:field="*{market.title}"
-			   onclick="alert('로그인 후 확인 가능합니다.'); return false;"></a>
-		</td>
-		<td th:utext="${market.content}"></td>
-		<td th:text="${#strings.substring(market.regDate,0,16)}"></td>
-		<td th:text="${market.jmState}"></td>
-		<td th:text="${market.typeNm}"></td>
-		<td th:text="*{#numbers.formatDecimal(market.price, 0, 'COMMA', 0, 'POINT')}" align="right"></td>
-		<td th:text="${market.category}"></td>
-	</tr>
-	</tbody>
-</table>
+<div class="categoryTable" style="display:flex">
+	<div>
+		<table border="1">
+			<colgroup>
+				<col width="10%" />
+			</colgroup>
+			<thead align="center">
+			<tr>
+				<th class="category" colspan="2">카테고리</th>
+			</tr>
+			</thead>
+			<tbody align="center">
+			<!-- 	 th:each="category : ${categoryList}" -->
+			<tr>
+				<td>
+					돌봄
+				</td>
+				<td>
+					디지털
+				</td>
+				<td>
+					뷰티
+				</td>
+				<td>
+					교육
+				</td>
+				<td>
+					취미
+				</td>
+				<td>
+					기타
+				</td>
+			</tr>
+			</tbody>
+
+		</table>
+	</div>
+	<div class="marketServiceTable">
+		<table border="1">
+			<colgroup>
+				<col width="3%" />
+				<col width="15%" />
+				<col width="*" />
+				<col width="15%" />
+				<col width="8%" />
+				<col width="5%" />
+				<col width="8%" />
+				<col width="10%" />
+			</colgroup>
+			<!-- 헤더 제목 부분 -->
+			<thead align="center">
+			<tr>
+				<td>번호</td>
+				<td>제목</td>
+				<td>내용</td>
+				<td>날짜</td>
+				<td>+찜</td>
+				<td>타입</td>
+				<td>가격</td>
+				<td>카테고리</td>
+			</tr>
+			</thead>
+			<tbody align="center">
+			<!-- th:each 반복처리 marketList에 변수들이 담겨있음. 각 구성요소를 접근할 때 market 변수 사용
+             자식태그들은 market변수를 이용해서 각 요소의 속성에 접근 -->
+			<tr th:each="market : ${marketList}">
+				<!-- 번호 1씩 늘어나는거 -->
+				<td th:text="${marketStat.index + 1}"></td>
+				<td>
+					<!-- 제목누르면 상세보기로 넘어가기 service_no를 넘겨주면서 -->
+					<a th:if="${session.id != null}" th:href="@{/market/serviceDetail(serviceNo=${market.serviceNo}, id=${session.id})}"
+					   th:text="${market.title}" th:field="*{market.title}">
+					</a>
+					<a th:if="${session.id == null}" href="javascript:void(0)" th:text="${market.title}" th:field="*{market.title}"
+					   onclick="alert('로그인 후 확인 가능합니다.'); return false;"></a>
+				</td>
+				<td th:utext="${market.content}"></td>
+				<td th:text="${#strings.substring(market.regDate,0,16)}"></td>
+				<td th:text="${market.jmState}"></td>
+				<td th:text="${market.typeNm}"></td>
+				<td th:text="*{#numbers.formatDecimal(market.price, 0, 'COMMA', 0, 'POINT')}" align="right"></td>
+				<td th:text="${market.category}"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
 <input type="button" id="registBtn" value="서비스등록" th:if="${session.id != null}"/>
 <input type="button" id="mainBtn" value="메인"/>
 </body>
@@ -80,18 +134,6 @@
 
 	$('#mainBtn').on('click', function() {
 		location.href = "/";
-	});
-
-	// 전체 선택, 전체 선택 해제
-	$("#allChk").on("click", function() {
-		// 클릭되었으면
-		if ($("#allChk").prop("checked")) {
-			$("input[name=chk]").prop("checked", true);
-		}
-		// 클릭이 안되있으면
-		else {
-			$("input[name=chk]").prop("checked", false);
-		}
 	});
 
 	$('#summernote').summernote({

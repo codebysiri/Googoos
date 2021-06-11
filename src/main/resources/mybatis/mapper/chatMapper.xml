@@ -5,15 +5,52 @@
 <mapper namespace="com.mygg.mygg.domain.repository.ChatRepository">
 
     <select id="getChats" resultType="java.util.HashMap" parameterType="String">
-        SELECT * FROM chatroom WHERE room_host = #{nickName} or room_user = #{nickName};
+        SELECT *
+             , (select C.chat_content
+                FROM chat C JOIN chatRoom CR ON C.room_id= CR.room_id
+                WHERE Room.room_id = C.room_id ORDER BY C.chat_date DESC limit 1)
+               content
+               , (select C.chat_date
+               FROM chat C JOIN chatRoom CR ON C.room_id= CR.room_id
+               WHERE Room.room_id = C.room_id ORDER BY C.chat_date DESC limit 1)
+               regdate
+        FROM chatRoom Room WHERE room_host = #{nickName} OR room_user = #{nickName}
     </select>
 
     <select id="getChat" resultType="java.util.HashMap" parameterType="int">
         SELECT * FROM chat WHERE room_id = #{room_id}
     </select>
 
+    <select id="getRoomStatus" resultType="java.util.HashMap" parameterType="int">
+        SELECT room_status, room_host FROM chatRoom where room_id = #{room_id}
+    </select>
+
     <insert id="insertChat" parameterType="java.util.HashMap">
         INSERT INTO chat(room_id,chat_writer,chat_content) VALUE(#{room_id},#{chat_writer},#{chat_content});
     </insert>
+
+    <insert id="insertChatRoom" parameterType="java.util.HashMap">
+        INSERT INTO chatRoom(service_no,room_title,room_host,room_user) VALUE(#{service_no},#{title},#{nickname},#{mynick});
+    </insert>
+
+    <update id="accept" parameterType="java.util.HashMap">
+        UPDATE chatRoom SET room_status=#{room_status} where room_id=${room_id}
+    </update>
+
+    <select id="getMarket" parameterType="int" resultType="java.util.HashMap">
+        SELECT * FROM (SELECT
+                           m.type
+                            , m.title
+                            , m.content
+                            , m.price
+                            ,m.reg_date
+                            ,m.RV_STATE
+                            , m.IMAGE
+                            , c.room_id
+                       FROM market m, chatroom c
+                       WHERE m.SERVICE_NO = c.service_no) v
+        WHERE room_id=#{room_id}
+    </select>
+
 
 </mapper>

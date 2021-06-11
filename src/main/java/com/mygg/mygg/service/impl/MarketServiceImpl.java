@@ -1,6 +1,7 @@
 package com.mygg.mygg.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
@@ -31,7 +32,17 @@ public class MarketServiceImpl implements MarketService {
 		return marketList;
 	}
 
+	// 카테고리 리스트
+//	@Override
+//	public List<MarketVO> categoryList() throws Exception {
+//
+//		List<MarketVO> categoryList = marketDAO.categoryList();
+//
+//		return categoryList;
+//	}
+
 	// 서비스 글 올리기
+	@Transactional
 	@Override
 	public MarketVO serviceSave(MarketVO marketVO) throws Exception {
 
@@ -104,4 +115,8 @@ public class MarketServiceImpl implements MarketService {
 		// 결과건수가 몇인지
 		return resultCnt;
 	}
+
+
+
+
 }

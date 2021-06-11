@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>serviceRegist</title>
+	<title>serviceUpdate</title>
 
 	<!-- include libraries(jQuery, bootstrap) -->
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
@@ -16,61 +16,55 @@
 </head>
 <body>
 <div th:replace="/fixed/header :: header"></div>
-<h2>글 등록</h2>
+<h2>serviceUpdate</h2>
 <div>
-	<!-- 다 입력을 한 후에 /market/serviceSave URL로 값들을 다 보낸다. -->
-	<form id="serviceRegistForm" th:action="@{/market/serviceSave}" th:method="post">
-		<div>제목 : </div>
-		<input type="text" th:name="title"> <br/>
+	<form id="serviceUpdateForm" th:action="@{/market/serviceSave}" th:method="post" th:object="${serviceInfo}">
 
-		<div class="type">유형 : </div>
-		<input type="radio" th:name="type" th:value="0">구매
-		<input type="radio" th:name="type" th:value="1">판매<br/>
+		<div>제목 : </div>
+		<input type="text" th:value="*{title}" th:field="*{title}"><br/>
+
+		<div>유형 : </div>
+		<input type="radio" th:value="0" th:field="*{type}">구매
+		<input type="radio" th:value="1" th:field="*{type}">판매<br/>
 
 		<div class="textarea">내용 : </div>
-		<textarea th:name="content" id="summernote" cols="30" rows="10"></textarea><br/>
+		<textarea th:name="content" id="summernote" th:value="*{content}" th:field="*{content}" cols="30" rows="10"></textarea><br/>
 
 		<div>가격 : </div>
-		<div class="price">
-			<input type="checkbox" id="chkPrice" name="chkPrice">무료
-			<input type="text" id="price" name="price"><br/>
-		</div>
+		<input type="checkbox" id="chkPrice" name="chkPrice">무료
+		<input type="text" id="price" name="price" th:value="*{price}" th:field="*{price}"><br/>
 
-		<div>카테고리 : 1개 이상 선택하세요.</div>
+		<div>카테고리</div>
 		<div class="category">
-			<!-- 카테고리 12개 -->
-			<input type="checkbox" id="취미" name="category" value="취미">취미
-			<input type="checkbox" id="디지털" name="category" value="디지털">디지털
-			<input type="checkbox" id="가전제품" name="category" value="가전제품">가전제품
-			<input type="checkbox" id="반려동물" name="category" value="반려동물">반려동물
-			<input type="checkbox" id="유아" name="category" value="유아">유아
-			<input type="checkbox" id="여행" name="category" value="여행">여행
-			<input type="checkbox" id="음식" name="category" value="음식">음식
-			<input type="checkbox" id="생활용품" name="category" value="생활용품">생활용품
-			<input type="checkbox" id="뷰티" name="category" value="뷰티">뷰티
-			<input type="checkbox" id="패션잡화" name="category" value="패션잡화">패션잡화
-			<input type="checkbox" id="스포츠" name="category" value="스포츠">스포츠
-			<input type="checkbox" id="공부" name="category" value="공부">공부
+			<select id=category name="category" th:field="*{category}" th:value="*{category}">
+				<option value="없음">===선택===</option>
+				<option value="돌봄">돌봄</option>
+				<option value="디지털">디지털</option>
+				<option value="뷰티">뷰티</option>
+				<option value="교육">교육</option>
+				<option value="취미">취미</option>
+				<option value="기타">기타</option>
+			</select>
 		</div>
-		<!-- value="I" 신규등록 구분하기 위해서 -->
-		<input type="hidden" name="gubun" value="I" />
-		<input type="hidden" name="id" th:value="${session.id}" />
-		<input type="submit" value="저장">
+		<!-- value="U" 수정 -->
+		<input type="hidden" name="gubun" value="U" />
+		<input type="hidden" th:value="*{serviceNo}" th:field="*{serviceNo}">
+		<input type="submit" value="수정완료">
 		<input type="button" id="listBtn" value="마켓리스트" />
 	</form>
 </div>
 <script>
 	$('#listBtn').on('click', function() {
 		location.href = "/market/marketListPage";
-		alert("작성이 완료 되지 않았습니다.");
+		alert("수정이 완료 되지 않았습니다.");
 	});
 
 	$('#summernote').summernote({
-		height : 300, 		// 에디터 높이
-		minHeight : null, 	// 최소 높이
-		maxHeight : null,	// 최대 높이
-		focus : true, 		// 에디터 로딩후 포커스를 맞출지 여부
-		lang : "ko-KR", 	// 한글 설정
+		height : 300, // 에디터 높이
+		minHeight : null, // 최소 높이
+		maxHeight : null, // 최대 높이
+		focus : true, // 에디터 로딩후 포커스를 맞출지 여부
+		lang : "ko-KR", // 한글 설정
 		callbacks : {
 			onImageUpload : function(files, editor, welEditable) {
 				for (let i = files.length - 1; i >= 0; i--) {
@@ -79,8 +73,6 @@
 			}
 		}
 	});
-
-	// 서머노트 이미지 파일 업로드
 	function uploadSummernoteImageFile(file, el) {
 		data = new FormData();
 		data.append('file', file);
@@ -93,15 +85,18 @@
 			processData : false,
 			success : function(data) {
 				$(el).summernote('editor.insertImage', data.url);
-				console.log('data.url이 이미지 파일 주소' + data.url);
+				console.log("data.url이 이미지 파일 주소" + data.url);
 			}
 		});
 	}
-	// 폼에서 등록한 내용 저장으로 보내기
+</script>
+<script th:inline="javascript">
 	$(function() {
-		// 가격 이벤트 처리
-		// ES6 이전
-		$("#chkPrice").on("click", function(){
+		// 화면 초기구성
+		check_freeForm();
+
+		// 가격 이벤트 처리 ES6 이전
+		$("#chkPrice").on("change", function(){
 			if ($("#chkPrice")[0].checked) {
 				$("#price").val(0);
 				$("#price").attr('readonly', true);
@@ -109,52 +104,42 @@
 				$("#price").attr('readonly', false);
 			}
 		});
-		// ES6 이후
-		/* 			 	const chkPrice = document.getElementById('chkPrice');
-                         const price = document.getElementById('price');
-                         chkPrice.addEventListener('click',()=> {
-                             if (chkPrice.checked) {
-                                 price.value = 0;
-                                 price.readOnly = true;
-                             } else {
-                                 price.readOnly = false;
-                             }
-                         }); */
 
-		$("#serviceRegistForm").submit(function() {
-			// 유효성 검사 다 완료되서 끝날때까지 넘어가지 않게 멈추는거
+		// 수정 폼 Submit 이벤트
+		$("#serviceUpdateForm").submit(function(){
 			event.preventDefault();
 
-			// id가 serviceRegistForm인 form을 불러온다.
-			var form = $('#serviceRegistForm')[0];
+			// id가 serviceUpdateFormm인 form을 불러온다.
+			var form = $('#serviceUpdateForm')[0];
 
-			// form 안에 title 유효성 체크
 			if (form.title.value == "") {
 				alert("제목은 필수 입력 항목입니다!");
 				$(form.title).focus();
 				return;
 			}
-			// form 안에 type 유효성 체크
 			if (form.type.value == "") {
 				alert("타입은 필수 입력 항목입니다!");
 				$(form.type).focus();
 				return;
 			}
-			//form 안에 content 유효성 체크
 			if (form.content.value == "") {
 				alert("내용은 필수 입력 항목입니다!");
 				$(form.content).focus();
 				return;
 			}
-			//form 안에 price 유효성 체크
 			if (form.price.value == "") {
 				alert("가격은 필수 입력 항목입니다!");
 				$(form.price).focus();
 				return;
 			}
+			if (form.category.value == "없음") {
+				alert("카테고리는 필수 입력 항목입니다!");
+				$(form.category).focus();
+				return;
+			}
 
-			// 카테고리 유효성 검사
-			const cg = document.getElementsByName('category');
+			// 가격 유효성 검사
+			const cg = document.getElementsByName('chkPrice');
 			let count = 0;
 
 			// for문으로 카테고리 길이만큼 다 검사
@@ -164,9 +149,8 @@
 					count++;
 				}
 			}
-			// 다 검사했을때 0이면 한개 이상 체크 하라고 알림창 띄움
-			if (count === 0) {
-				alert('카테고리를 한 개 이상 체크해주세요');
+			if (count === "") {
+				alert('가격을 체크해주세요.');
 				return;
 			} else {
 				count = 0;
@@ -182,24 +166,43 @@
 			var formData = new FormData(form);
 
 			$.ajax({
-				url : "/market/serviceSave",
-				type : "post",
-				data : formData,
-				success : function(data) {
-					alert("정상적으로 저장되었습니다.");
-					// 처리가 완료되면 marketList로 이동한다.
-					location.href = "/market/marketListPage";
-
-				},
-				error : function(xhr, status) {
+				url : "/market/serviceSave"
+				, type : "post"
+				, data : formData
+				, success : function(data) {
+					// 결과처리 건수가 0이상이면 정상
+					if (data.returnCnt > 0) {
+						alert("정상적으로 수정되었습니다.");
+						// 처리가 완료되면 serviceDetail로 이동한다. serviceNo도 같이 보내면서
+						location.href = "/market/serviceDetail?serviceNo=" + data.serviceNo;
+					} else {
+						// 0 일때 오류
+						alert("오류가 발생했습니다. 다시 시도해주시기 바랍니다.");
+					}
+				}
+				, error : function(xhr, status) {
 					alert("오류가 발생했습니다. :: " + status);
-				},
-				cache : false,
-				contentType : false,
-				processData : false
+				}
+				, cache: false
+				, contentType: false
+				, processData: false
 			});
 		});
 	});
+	function check_freeForm() {
+		// 무료 체크박스 설정
+		/*<![CDATA[*/
+		var price = /*[[ ${serviceInfo.price} ]]*/
+				/*]]*/
+				console.log("price {} :: ", price);
+		if(price == 0) {
+			$("input:checkbox[id='chkPrice']").prop("checked", true);
+			$("#price").attr('readonly', true);
+		} else {
+			$("#price").attr('readonly', false);
+		}
+	}
+
 </script>
 </body>
 </html>

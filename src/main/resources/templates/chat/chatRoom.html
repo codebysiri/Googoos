@@ -1,27 +1,167 @@
-<header>
-    <div class="title_zone">
-        <img src="/icon/title.png" alt="" class="icon">
-        <span>
-            <a href="/" class="project_title">MyGuGu</a>
-        </span>
-        <span class="menus">
-            <a href="/">Service</a> |
-            <a href="/market/marketListPage">Market</a>  |
-            <a href="/notice">Notice</a>
-        </span>
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Chating</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        .container{
+            width: 500px;
+            margin: 0 auto;
+            padding: 25px
+        }
+        .container h1{
+            text-align: left;
+            padding: 5px 5px 5px 15px;
+            color: #FFBB00;
+            border-left: 3px solid #FFBB00;
+            margin-bottom: 20px;
+        }
+        .chating{
+            background-color: #000;
+            width: 500px;
+            height: 500px;
+            overflow: auto;
+        }
+        .chating .me{
+            color: #F6F6F6;
+            text-align: right;
+        }
+        .chating .others{
+            color: #FFE400;
+            text-align: left;
+        }
+        input{
+            width: 330px;
+            height: 25px;
+        }
+        #yourMsg{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="container" class="container">
+    <span th:text="${roomName}"></span>
+    <input type="hidden" id="sessionId" value="">
+    <input type="hidden" id="roomNumber" th:value="${roomNumber}">
+
+    <div id="chating" class="chating">
+        <block th:each="list : ${lists}">
+            <p class='me' th:if="${list.chat_writer == session.nickname}" th:text="'나 :'+${list.chat_content}"></p>
+            <p class='others' th:if="${list.chat_writer != session.nickname}" th:text="${list.chat_writer}+' : '+${list.chat_content}"></p>
+        </block>
     </div>
-    <div class="login_zone">
-        <span class="login_control">
-            <span class="menus">
-                <block th:if="${session.nickname == null}">
-                    <a href="/member/login" >로그인</a> |
-                    <a href="/member/signup"> 회원가입</a>
-                </block>
-                <block th:unless="${session.nickname == null}">
-                    <a th:href="@{/member/info}" >내정보</a> |
-                    <a th:href="@{/member/logout}" >로그아웃</a>
-                </block>
-            </span>
-        </span>
+
+    <div id="yourName">
+        <table class="inputTable">
+            <tr>
+                <th>사용자명</th>
+                <th><input type="text" name="userName" id="userName" th:value="${session.nickname}"></th>
+            </tr>
+        </table>
     </div>
-</header>
+
+    <div id="yourMsg">
+        <table class="inputTable">
+            <tr>
+                <th>메시지</th>
+                <th><input id="chatting" placeholder="보내실 메시지를 입력하세요."></th>
+                <th><button onclick="send()" id="sendBtn">보내기</button></th>
+            </tr>
+        </table>
+    </div>
+</div>
+<script th:inline="javascript" defer>
+    let ws;
+
+    function chatName(){
+        wsOpen();
+        $("#yourName").hide();
+        $("#yourMsg").show();
+    }
+
+    chatName();
+
+    function wsOpen(){
+        //웹소켓 전송시 현재 방의 번호를 넘겨서 보낸다.
+        let roomNumber = document.getElementById('roomNumber')
+
+        ws = new WebSocket("ws://" + location.host + "/chating/"+[[${roomNumber}]]);
+        wsEvt();
+    }
+
+    function wsEvt() {
+        ws.onopen = function(data){
+            //소켓이 열리면 동작
+        }
+
+        ws.onmessage = function(data) {
+            //메시지를 받으면 동작
+            let msg = data.data;
+            if(msg != null && msg.trim() != ''){
+                let d = JSON.parse(msg);
+                console.log(msg);
+                if(d.type == "getId"){
+                    let si = d.sessionId != null ? d.sessionId : "";
+                    if(si != ''){
+                        $("#sessionId").val(si);
+                    }
+                }else if(d.type == "message"){
+                    if(d.sessionId == $("#sessionId").val()){
+                        $("#chating").append("<p class='me'>나 :" + d.msg + "</p>");
+                    }else{
+                        $("#chating").append("<p class='others'>" + d.userName + " :" + d.msg + "</p>");
+                    }
+
+                }else{
+                    console.warn("unknown type!")
+                }
+            }
+        }
+
+        document.addEventListener("keypress", function(e){
+            if(e.keyCode == 13){ //enter press
+                send();
+            }
+        });
+    }
+
+
+    function send() {
+        let option ={
+            type: "message",
+            roomNumber: $("#roomNumber").val(),
+            sessionId : $("#sessionId").val(),
+            userName : $("#userName").val(),
+            msg : $("#chatting").val()
+        }
+        ws.send(JSON.stringify(option))
+
+        let json = {
+            room_id: [[${roomNumber}]],
+            chat_writer: $("#userName").val(),
+            chat_content: $("#chatting").val()
+        };
+
+        $.ajax({
+            url:'/insertChat',
+            type: 'POST',
+            data: JSON.stringify(json),
+            contentType: "application/json; charset=UTF-8",
+            success:(result)=>{
+                console.log(result);
+            }
+        });
+
+
+        $('#chatting').val("");
+
+    }
+</script>
+</body>
+</html>
