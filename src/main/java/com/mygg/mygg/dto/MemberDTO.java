@@ -24,8 +24,6 @@ public class MemberDTO {
     // Activity
     private int level = 1;
     private String wish;
-    private String batch;
-    private int mileage = 0;
     private String introduction;
 
 
@@ -44,8 +42,6 @@ public class MemberDTO {
                 .authority(1)
                 .level(1)
                 .wish(wish)
-                .batch(batch)
-                .mileage(0)
                 .introduction(introduction)
                 .build();
     }
@@ -66,8 +62,6 @@ public class MemberDTO {
         this.authority = 1;
         this.level = 1;
         this.wish = wish;
-        this.batch = batch;
-        this.mileage = 0;
         this.introduction = introduction;
     }
 }

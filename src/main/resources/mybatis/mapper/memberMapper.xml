@@ -8,9 +8,9 @@
     <!--    Join-->
     <insert id="register">
         INSERT INTO member (id, email, password, name, nickname, phone_number, gender, age, location, photo, authority,
-                            level, wish, batch, mileage, introduction)
+                            level, wish, introduction)
         VALUES (#{id}, #{email}, #{password}, #{name}, #{nickname}, #{phone_number}, #{gender}, #{age}, #{location}, #{photo}, #{authority},
-                #{level}, #{wish}, #{batch}, #{mileage}, #{introduction})
+                #{level}, #{wish}, #{introduction})
     </insert>
     <select id="emailCheck" parameterType="com.mygg.mygg.dto.MemberDTO" resultType="int">
         SELECT COUNT(*)
