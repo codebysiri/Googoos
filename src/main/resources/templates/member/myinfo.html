@@ -12,7 +12,6 @@
         }
 
     </script>
-
 </head>
 <body>
 <div th:replace="/fixed/header :: header"></div>
@@ -52,7 +51,6 @@
 <hr>
 
 <h3> 나의 찜 </h3>
-찜 글제목 : <span th:text="${session.wish}"></span>
-
+찜 글제목 : <span th:text="${marketList[index].title}"></span>
 </body>
 </html>
