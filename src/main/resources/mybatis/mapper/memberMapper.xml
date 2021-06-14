@@ -41,7 +41,7 @@
         SET introduction = #{introduction}
         WHERE id = #{id}
     </update>
-    <select id="marketList" parameterType="Integer" resultType="java.util.HashMap">
+    <select id="marketList" parameterType="int" resultType="java.util.HashMap">
         SELECT *
         FROM member m JOIN market mk
                            ON (m.id = mk.id)

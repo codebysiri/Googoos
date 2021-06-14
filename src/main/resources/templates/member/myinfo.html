@@ -26,7 +26,6 @@
 닉네임 : <span th:text="${session.nickname}"></span> <br>
 성별 : <span th:text="${session.gender}"></span> <br>
 연령 : <span th:text="${session.age}"></span> <br>
-별점 평균 : 아직 미연동 <br>
 서비스 리뷰 : 아직 미연동 <br>
 서비스 이력 : 아직 미연동 <br>
 자기 소개 : <a href="javascript:introduction('/member/introduction', 'introduction')"> 입력하기 </a>
@@ -40,9 +39,20 @@
 
 <hr>
 
-<h3> 나의 작성글 </h3>
-제목 : <span th:text="${session.title}"></span> <br>
-
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>나의 작성글</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="market :${marketList}">
+            <td th:text="${market.title}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 <hr>
 
@@ -51,6 +61,6 @@
 <hr>
 
 <h3> 나의 찜 </h3>
-찜 글제목 : <span th:text="${marketList[index].title}"></span>
+
 </body>
 </html>
