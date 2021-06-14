@@ -49,8 +49,9 @@
     </select>
     <select id="wish" parameterType="Integer" resultType="java.util.HashMap">
         SELECT *
-        FROM member m JOIN jmstate j
-                           ON (m.id = j.jm_id)
+        FROM jmstate js JOIN member m
+        ON js.jm_id = m.id JOIN market mk
+        ON js.jm_service = mk.service_no
         WHERE m.id = #{id}
     </select>
 

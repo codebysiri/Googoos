@@ -60,7 +60,20 @@
 
 <hr>
 
-<h3> 나의 찜 </h3>
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>찜 목록</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="market :${wish}">
+            <td th:text="${market.title}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
