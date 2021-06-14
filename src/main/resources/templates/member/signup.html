@@ -15,6 +15,15 @@
     <table>
         <tr>
             <th>
+                <img id="show_profile" height="240px">
+                <label for="profile"> 프로필 사진 </label>
+            </th>
+            <td>
+                <input id="profile" type="file" name="profile" accept=".jpg,.jpeg,.png,.gif">
+            </td>
+        </tr>
+        <tr>
+            <th>
                 <label for="email"> 이메일 </label>
             </th>
             <td>
@@ -112,14 +121,6 @@
             </td>
         </tr>
         <tr>
-            <th>
-                <label> 프로필 사진 </label>
-            </th>
-            <td>
-                <input type="file" name="photo" multiple="사진">
-            </td>
-        </tr>
-        <tr>
             <td>
                 <button type="submit">가입하기</button>
             </td>
@@ -180,6 +181,19 @@
 
         })
     }
+
+    function loadProfile() {
+        var $file = $("#profile")[0].files[0];
+        var reader = new FileReader();
+
+        reader.onload = function () {
+            $("#show_profile").attr("src", reader.result);
+        }
+        reader.readAsDataURL($file);
+    }
+    $(document).ready(function () {
+        $("#profile").on("change", loadProfile);
+    })
 </script>
 </body>
 </html>
