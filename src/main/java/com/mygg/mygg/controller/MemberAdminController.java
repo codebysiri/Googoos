@@ -24,7 +24,7 @@ public class MemberAdminController {
     }
 
     // Member List
-    @GetMapping(value ={"/member/admin/{member_page}", "/member/admin"})
+    @GetMapping(value ={"/admin/memberList/{member_page}", "/admin/memberList"})
     public String memberList(@PathVariable(required = false) Integer member_page, Model model, HttpServletRequest request) {
 
         HttpSession httpSession = request.getSession();
@@ -45,13 +45,13 @@ public class MemberAdminController {
             model.addAttribute("members", memberService.memberList((member_page - 1) * 10 * 2));
             model.addAttribute("totalPage", totalPage);
         }
-        return "/member/admin";
+        return "/admin/memberList";
     }
 
-    @PostMapping("/admin/update")
+    @PostMapping("/memberList/update")
     public String disableMember(@RequestParam Map<String, String> disable) {
         memberService.disableMember(disable);
-        return "redirect:/member/admin";
+        return "redirect:/admin/memberList";
     }
 
 }

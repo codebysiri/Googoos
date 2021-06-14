@@ -54,23 +54,4 @@
         WHERE m.id = #{id}
     </select>
 
-    <!--    Admin-->
-    <select id="memberList" parameterType="Integer" resultType="java.util.HashMap" >
-        SELECT *
-        FROM member
-        ORDER BY id DESC
-            LIMIT 20 OFFSET #{member_page}
-    </select>
-
-    <select id="getTotal" resultType="Double">
-        SELECT count(*) AS total
-        FROM member
-    </select>
-
-    <update id="disableMember" parameterType="java.util.HashMap">
-        UPDATE member
-        SET authority = 3
-        WHERE authority = 1
-    </update>
-
 </mapper>

@@ -39,9 +39,8 @@
 <hr>
 
 <div class="container">
-    <form action="/admin/update" method="POST">
+    <form action="/memberList/update" method="POST">
         <table class="table" id="table">
-
             <thead>
             <tr>
                 <th>id</th>
@@ -56,7 +55,6 @@
                 <th>정지 회원 처리</th>
             </tr>
             </thead>
-
             <tbody class="tbody" id="tbody">
             <tr th:each="member :${members}" class="member">
                 <td th:text="${member.id}" class="memberCenter"></td>
@@ -74,8 +72,5 @@
         </table>
     </form>
 </div>
-
-
-
 </body>
 </html>

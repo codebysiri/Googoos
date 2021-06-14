@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mygg.mygg.domain.repository.MemberRepository">
+
+    <select id="memberList" parameterType="Integer" resultType="java.util.HashMap" >
+        SELECT *
+        FROM member
+        ORDER BY id DESC
+            LIMIT 20 OFFSET #{member_page}
+    </select>
+
+    <select id="getTotal" resultType="Double">
+        SELECT count(*) AS total
+        FROM member
+    </select>
+
+    <update id="disableMember" parameterType="java.util.HashMap">
+        UPDATE member
+        SET authority = 3
+        WHERE authority = 1
+    </update>
+
+</mapper>
